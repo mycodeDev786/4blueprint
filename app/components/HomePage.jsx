@@ -3,49 +3,68 @@ import RecipePost from './RecipePost';
 import { assets } from '@/assets/assets';
 
 const HomePage = () => {
-  const recipes = [
+ 
+ 
+  
+  const bakers = [
     {
       id: 1,
-      title: "Delicious Chocolate Cake",
-      description: "Rich cocoa flavor with a moist texture...",
-      image: assets.Ad1,
-      profileImage: "https://randomuser.me/api/portraits/women/10.jpg",
-      baker: "Jane Doe",
-      date: "February 19, 2025 - 10:30 AM",
+      name: "John Doe",
+      image: "https://randomuser.me/api/portraits/women/10.jpg",
+      followers: 320,
     },
     {
       id: 2,
-      title: "Homemade Croissants",
-      description: "Flaky, buttery croissants with a golden crust...",
-      image: assets.Ad2,
-      profileImage: "https://randomuser.me/api/portraits/men/15.jpg",
-      baker: "John Smith",
-      date: "February 18, 2025 - 8:00 AM",
+      name: "Jane Smith",
+      image: "https://randomuser.me/api/portraits/men/15.jpg",
+      followers: 450,
+    },
+  ];
+  
+  const recipes = [
+    {
+      id: 1,
+      date: "Feb 21, 2025",
+      bakerId: 1, // Linking baker dynamically
+      image: assets.Ad1,
+      title: "Chocolate Cake",
+      description: "A delicious homemade chocolate cake with rich flavors...",
+      ingredients: ["Flour", "Sugar", "Cocoa Powder", "Eggs", "Butter"],
+      price: 12.99,
+      rating: 4.5, // ⭐⭐⭐⭐✨
     },
     {
-      id: 3,
+      id: 2,
+      date: "Feb 22, 2025",
+      bakerId: 2,
+      image: assets.Ad2,
       title: "Strawberry Cheesecake",
-      description: "Creamy cheesecake with fresh strawberries...",
-      image: assets.Ad3,
-      profileImage: "https://randomuser.me/api/portraits/women/25.jpg",
-      baker: "Alice Brown",
-      date: "February 17, 2025 - 2:45 PM",
+      description: "A creamy cheesecake topped with fresh strawberries...",
+      ingredients: ["Cream Cheese", "Strawberries", "Sugar", "Eggs", "Crust"],
+      price: 15.99,
+      rating: 5, // ⭐⭐⭐⭐⭐
     },
   ];
   return (
     <div className="max-w-3xl mx-auto my-6 space-y-6">
-    <h1 className="text-2xl font-bold text-center">All Recipes</h1>
-    {recipes.map((recipe) => (
-      <RecipePost
-        key={recipe.id}
-        title={recipe.title}
-        description={recipe.description}
-        image={recipe.image}
-        profileImage={recipe.profileImage}
-        baker={recipe.baker}
-        date={recipe.date}
-      />
-    ))}
+   
+   {recipes.map((recipe) => (
+        <RecipePost
+          key={recipe.id}
+          title={recipe.title}
+          description={recipe.description}
+          image={recipe.image}
+          bakerId={recipe.bakerId}
+          bakerName={recipe.bakerName} // ✅ Now passing dynamically
+          profileImage={recipe.profileImage} // ✅ Now passing dynamically
+          date={recipe.date}
+          rating={recipe.rating}
+          followersCount={recipe.followersCount} // ✅ Dynamic followers
+          ingredients={recipe.ingredients}
+          price={recipe.price}
+         
+        />
+      ))}
   </div>
   );
 }

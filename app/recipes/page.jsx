@@ -4,39 +4,34 @@ import RecipePost from "../components/RecipePost";
 import { useState, useEffect } from "react";
 
 export default function AllRecipes() {
-  const [recipes, setRecipes] = useState([]);
-
+ 
+ const recipes = [
+    {
+      id: 1,
+      date: "Feb 21, 2025",
+      bakerId: 1, // Linking baker dynamically
+      image: assets.Ad1,
+      title: "Chocolate Cake",
+      description: "A delicious homemade chocolate cake with rich flavors...",
+      ingredients: ["Flour", "Sugar", "Cocoa Powder", "Eggs", "Butter"],
+      price: 12.99,
+      rating: 4.5, // ⭐⭐⭐⭐✨
+    },
+    {
+      id: 2,
+      date: "Feb 22, 2025",
+      bakerId: 2,
+      image: assets.Ad2,
+      title: "Strawberry Cheesecake",
+      description: "A creamy cheesecake topped with fresh strawberries...",
+      ingredients: ["Cream Cheese", "Strawberries", "Sugar", "Eggs", "Crust"],
+      price: 15.99,
+      rating: 5, // ⭐⭐⭐⭐⭐
+    },
+  ];
   // ✅ Fetching sample recipe data
   useEffect(() => {
-    setRecipes([
-      {
-        id: 1,
-        title: "Chocolate Cake",
-        description: "A delicious homemade chocolate cake with rich frosting.",
-        date: "Feb 19, 2025",
-        bakerName: "Emma Baker",
-        bakerImage: "",
-        image: assets.Ad1,
-      },
-      {
-        id: 2,
-        title: "French Croissants",
-        description: "Crispy, buttery croissants baked fresh every morning.",
-        date: "Feb 18, 2025",
-        bakerName: "Liam Chef",
-        bakerImage: "",
-        image: assets.Ad2,
-      },
-      {
-        id: 3,
-        title: "Strawberry Cheesecake",
-        description: "Classic cheesecake topped with fresh strawberries.",
-        date: "Feb 17, 2025",
-        bakerName: "Sophia Sweets",
-        bakerImage: "",
-        image: assets.Ad3,
-      },
-    ]);
+    
   }, []);
 
   return (
@@ -46,16 +41,21 @@ export default function AllRecipes() {
       {/* ✅ Grid Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {recipes.map((recipe) => (
-              <RecipePost
-                key={recipe.id}
-                title={recipe.title}
-                description={recipe.description}
-                image={recipe.image}
-                profileImage={recipe.profileImage}
-                baker={recipe.baker}
-                date={recipe.date}
-              />
-            ))}
+                 <RecipePost
+                   key={recipe.id}
+                   title={recipe.title}
+                   description={recipe.description}
+                   image={recipe.image}
+                   bakerId={recipe.bakerId}
+                   bakerName={recipe.bakerName} // ✅ Now passing dynamically
+                   profileImage={recipe.profileImage} // ✅ Now passing dynamically
+                   date={recipe.date}
+                   rating={recipe.rating}
+                   followersCount={recipe.followersCount} // ✅ Dynamic followers
+                   ingredients={recipe.ingredients}
+                   price={recipe.price}
+                 />
+               ))}
       </div>
     </div>
   );

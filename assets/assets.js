@@ -6,17 +6,25 @@ import user_icon from "./user_icon.svg";
 import Ad1 from './Ad1.jpg';
 import Ad2 from './Ad2.jpg';
 import Ad3 from './Ad3.jpg';
-import arrow_icon from './arrow_icon.svg'
+import arrow_icon from './arrow_icon.svg';
+import facebook_icon from './facebook.svg';
+import x_icon from './x_icon.svg';
+import instagram_icon from './instagram.png';
+import linkedin_icon from './linkdin.png'
 
 
 export const assets = {
-    logo,
-   menu_black,
+logo,
+menu_black,
 close_black,
 search_icon,
 user_icon,
 Ad1,
 Ad2,
 Ad3,
-arrow_icon
+arrow_icon,
+facebook_icon,
+x_icon,
+instagram_icon,
+linkedin_icon
 };
