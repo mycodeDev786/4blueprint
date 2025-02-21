@@ -8,10 +8,11 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [userType, setUserType] = useState("customer"); // Default to customer
 
   const handleSignup = (e) => {
     e.preventDefault();
-    console.log("Signing up with:", name, email, password);
+    console.log("Signing up with:", name, email, password, userType);
     router.push("/signin");
   };
 
@@ -20,18 +21,51 @@ export default function SignUp() {
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold mb-4 text-center">Create Account</h2>
         <form onSubmit={handleSignup} className="space-y-4">
-          <input type="text" placeholder="Full Name" className="w-full border p-2 rounded-md"
-            value={name} onChange={(e) => setName(e.target.value)} required />
-          <input type="email" placeholder="Email" className="w-full border p-2 rounded-md"
-            value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Password" className="w-full border p-2 rounded-md"
-            value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button type="submit" className="w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700">
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="w-full border p-2 rounded-md"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full border p-2 rounded-md"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full border p-2 rounded-md"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <select
+            className="w-full border p-2 rounded-md"
+            value={userType}
+            onChange={(e) => setUserType(e.target.value)}
+            required
+          >
+            <option value="customer">Customer</option>
+            <option value="baker">Baker</option>
+          </select>
+          <button
+            type="submit"
+            className="w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700"
+          >
             Sign Up
           </button>
         </form>
         <p className="text-sm text-center mt-4">
-          Already have an account? <Link href="/signin" className="text-blue-600">Sign In</Link>
+          Already have an account?{" "}
+          <Link href="/signin" className="text-blue-600">
+            Sign In
+          </Link>
         </p>
       </div>
     </div>
