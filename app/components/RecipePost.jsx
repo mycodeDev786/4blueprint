@@ -3,8 +3,16 @@ import { useState } from "react";
 import Image from "next/image";
 import { bakers } from "../constants/bakers";
 
-export default function RecipePost({ title, description, image, bakerId, date, ingredients, price, rating }) {
-  // ... [keep all the existing state and handler functions] ...
+export default function RecipePost({
+  title,
+  description,
+  image,
+  bakerId,
+  date,
+  ingredients,
+  price,
+  rating,
+}) {
   const [expanded, setExpanded] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [followers, setFollowers] = useState(() => {
@@ -37,6 +45,10 @@ export default function RecipePost({ title, description, image, bakerId, date, i
     }
   };
 
+  const handleReport = () => {
+    alert("Report submitted! Thank you for your feedback.");
+  };
+
   const handleFlagClick = () => {
     setIsPopupOpen(true);
   };
@@ -48,22 +60,59 @@ export default function RecipePost({ title, description, image, bakerId, date, i
   const renderStars = (rating) => {
     return "★".repeat(Math.floor(rating)) + (rating % 1 !== 0 ? "☆" : "");
   };
+
   return (
     <div className="max-w-lg mx-auto p-4 bg-white shadow-lg rounded-2xl relative w-full sm:w-11/12 md:w-10/12 lg:w-9/12 xl:w-8/12">
       {/* Top Section */}
       <div className="flex justify-between items-center mb-2">
         <div className="text-gray-500 text-xs sm:text-sm">⏰ {date}</div>
         <div className="flex gap-2 sm:gap-3">
-          <button onClick={handleWishlist} className="text-lg sm:text-xl" title="Add to Wishlist">
+          <button
+            onClick={handleWishlist}
+            className="text-lg sm:text-xl"
+            title="Add to Wishlist"
+          >
             {isWishlisted ? "❤️" : "🤍"}
           </button>
-          <button onClick={handleShare} className="text-lg sm:text-xl" title="Share Recipe">
-            📢
+          <button
+            onClick={handleShare}
+            className="text-lg sm:text-xl"
+            title="Share Recipe"
+          >
+            <svg
+              className="w-5 h-5 ml-1 text-blue-600"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M16 6l-4-4m0 0L8 6m4-4v14"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={handleReport}
+            className="text-lg sm:text-xl"
+            title="Report Recipe"
+          >
+            🚩
           </button>
         </div>
       </div>
 
-      {/* Baker Profile Section - Improved for mobile */}
+      {/* Baker Profile Section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
         <div className="flex items-center gap-2 flex-1 min-w-0">
           <img
@@ -73,25 +122,48 @@ export default function RecipePost({ title, description, image, bakerId, date, i
           />
           <div className="min-w-0">
             <h2 className="text-base sm:text-lg font-semibold flex items-center gap-1 flex-wrap">
-              <span className="truncate">{baker?.name} ✅</span>
-              <span className="flex items-center gap-1 cursor-pointer" onClick={handleFlagClick}>
+              <span className="truncate">{baker?.name}</span>
+              {baker?.isVerified && (
+                <span title="Verified" className="text-blue-500">
+                  {" "}
+                  <svg
+                    className="w-5 h-5 ml-1 text-violet-700 fill-current"
+                    viewBox="0 0 20 20"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </span>
+              )}
+              <span
+                className=" ml-3 flex items-center gap-1 cursor-pointer"
+                onClick={handleFlagClick}
+              >
                 {baker?.flag && (
-                  <Image 
-                    src={baker?.flag} 
-                    alt={baker?.country} 
-                    width={24} 
-                    height={16} 
+                  <Image
+                    src={baker?.flag}
+                    alt={baker?.country}
+                    width={24}
+                    height={16}
                     className="rounded-sm flex-shrink-0"
                   />
                 )}
-                <span className="text-sm sm:text-base truncate">{baker?.country}</span>
+                <span className="text-sm sm:text-base truncate">
+                  {baker?.country}
+                </span>
               </span>
             </h2>
-            <p className="text-gray-500 text-xs sm:text-sm">{followers} Followers</p>
+            <p className="text-gray-500 text-xs sm:text-sm">
+              {followers} Followers
+            </p>
           </div>
         </div>
 
-        <button 
+        <button
           className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-lg text-xs sm:text-sm whitespace-nowrap"
           onClick={handleFollow}
         >
@@ -101,18 +173,24 @@ export default function RecipePost({ title, description, image, bakerId, date, i
 
       {/* Recipe Reviews */}
       <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-yellow-500 mb-2 justify-center text-center">
-        <h4 className="text-sm sm:text-lg font-semibold">Overall Recipe Reviews:</h4>
+        <h4 className="text-sm sm:text-lg font-semibold">
+          Overall Recipe Reviews:
+        </h4>
         <div className="flex items-center gap-1">
           <span className="text-sm sm:text-lg">{renderStars(rating)}</span>
-          <span className="text-gray-600 text-xs sm:text-sm">({rating.toFixed(1)})</span>
+          <span className="text-gray-600 text-xs sm:text-sm">
+            ({rating.toFixed(1)})
+          </span>
         </div>
       </div>
 
       {/* Title and Description */}
       <h3 className="text-lg sm:text-xl font-bold mb-2">{title}</h3>
-      <p className="text-gray-700 text-justify text-sm sm:text-base">{description}</p>
+      <p className="text-gray-700 text-justify text-sm sm:text-base">
+        {description}
+      </p>
 
-      <button 
+      <button
         className="mt-2 px-3 py-1 text-xs sm:text-sm font-semibold text-blue-600 border border-blue-500 rounded-lg 
                    hover:bg-blue-500 hover:text-white transition-all duration-300 ease-in-out w-full sm:w-auto"
         onClick={() => setExpanded(!expanded)}
@@ -120,47 +198,102 @@ export default function RecipePost({ title, description, image, bakerId, date, i
         {expanded ? "Show Less" : "See More"}
       </button>
 
-      {/* Expanded Content */}
-      {expanded && (
-        <div className="mt-3 p-2 bg-gray-100 rounded-lg text-sm sm:text-base">
-          <h4 className="font-semibold mb-1">Ingredients:</h4>
-          <p className="text-gray-600 whitespace-pre-line">{ingredients}</p>
-          <p className="mt-2 text-gray-500 italic text-sm">
-            If you’d like to know how to prepare this delicious recipe, just purchase it from this baker. We really appreciate your support!
-          </p>
-          <p className="mt-2 font-semibold text-orange-500">Price: ${price.toFixed(2)}</p>
-        </div>
-      )}
-
-      {/* Recipe Image */}
-      <div className="mt-4 aspect-video overflow-hidden">
-        <Image 
-          src={image} 
-          alt={title} 
-          width={600} 
-          height={400} 
-          className="w-full h-full object-cover rounded-lg"
+      {/* Recipe Image with Overlay Content */}
+      <div className="mt-4 aspect-video overflow-hidden relative">
+        <Image
+          src={image}
+          alt={title}
+          width={600}
+          height={400}
+          className={`w-full h-full object-cover rounded-lg transition-all duration-300 ${
+            expanded ? "opacity-30 scale-90" : ""
+          }`}
         />
+
+        {/* Expanded Content Overlay */}
+        {expanded && (
+          <div className="absolute inset-0 p-4 flex flex-col">
+            {/* Close Button */}
+            <button
+              onClick={() => setExpanded(false)}
+              className="absolute top-2 right-2 rounded-full p-1 shadow-sm hover:bg-gray-100 transition-colors z-10 "
+            >
+              <svg
+                className="w-8 h-8 ml-1"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" className="fill-red-600" />
+                <path
+                  d="M15.5 8.5l-7 7M8.5 8.5l7 7"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+
+            {/* Overlay Content */}
+            <div className="bg-white/30 backdrop-blur-sm p-4 rounded-lg overflow-auto flex-1">
+              <h4 className="font-semibold mb-2">Ingredients:</h4>
+              <p className="text-gray-700 font-medium whitespace-pre-line">
+                {ingredients}
+              </p>
+              <p className="mt-3 text-gray-600 italic text-sm">
+                If you’d like to know how to prepare this delicious recipe, just
+                purchase it from this baker. We really appreciate your support!
+              </p>
+              <p className="mt-3 font-semibold text-orange-500">
+                Price: ${price.toFixed(2)}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-2 mt-4 w-full">
+        <button className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg text-sm sm:text-base flex-1 w-full sm:w-auto text-center transition-colors duration-300">
+          Tip the Baker
+        </button>
+        <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-sm sm:text-base flex-1 w-full sm:w-auto text-center transition-colors duration-300">
+          Buy this Recipe
+        </button>
       </div>
 
-     {/* Action Buttons */}
-<div className="flex flex-col sm:flex-row gap-2 mt-4 w-full">
-  <button className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg text-sm sm:text-base flex-1 w-full sm:w-auto text-center transition-colors duration-300">
-    Tip the Baker
-  </button>
-  <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-sm sm:text-base flex-1 w-full sm:w-auto text-center transition-colors duration-300">
-    Buy this Recipe
-  </button>
-</div>
-
-      {/* Popup Modal (unchanged) */}
+      {/* Popup Modal */}
       {isPopupOpen && (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg w-80 text-center">
-            <p className="text-lg font-semibold">This baker is from {baker?.country}.</p>
-            <button className="mt-3 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg" onClick={closePopup}>
-              Close
-            </button>
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all duration-300 animate-scaleIn">
+            <div className="p-6 space-y-4">
+              <h3 className="text-2xl font-semibold text-gray-800 pb-2 border-b border-gray-200 text-center">
+                Baker's Origin
+              </h3>
+
+              <div className="space-y-3">
+                <p className="text-lg font-medium text-indigo-700 text-center">
+                  <span className="font-semibold">
+                    This baker is from {baker?.country}
+                  </span>
+                </p>
+
+                <p className="text-gray-600 leading-relaxed text-justify">
+                  Understanding a baker's cultural background enhances your
+                  appreciation of their craft. Each region brings unique flavors
+                  and traditions to their recipes. We recommend trying this
+                  creation — it might just become a new favorite in your
+                  culinary repertoire.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 px-6 py-4 rounded-b-xl">
+              <button
+                onClick={closePopup}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+              >
+                Continue Exploring
+              </button>
+            </div>
           </div>
         </div>
       )}
