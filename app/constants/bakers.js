@@ -1,17 +1,62 @@
-import { assets } from "@/assets/assets";
-
+// Sample Bakers Data
 export const bakers = [
-    {
-      id: 1,
-      name: "John Doe",
-      image: assets.Ad1,
-      followers: 320,
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      image: assets.Ad3,
-      followers: 450,
-    },
-  ];
-  
+  {
+    id: 1,
+    name: "John Doe",
+    image: "https://randomuser.me/api/portraits/men/10.jpg",
+    followers: 320,
+    country: "USA",
+    flag: "https://flagcdn.com/w40/us.png",
+    isVerified: true,
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    image: "https://randomuser.me/api/portraits/women/15.jpg",
+    followers: 450,
+    country: "UK",
+    flag: "https://flagcdn.com/w40/gb.png",
+    isVerified: true,
+  },
+
+  {
+    id: 3,
+    name: "Liam Johnson",
+    image: "https://randomuser.me/api/portraits/men/20.jpg",
+    followers: 290,
+    country: "Canada",
+    flag: "https://flagcdn.com/w40/ca.png",
+  },
+  {
+    id: 4,
+    name: "Emma Brown",
+    image: "https://randomuser.me/api/portraits/women/25.jpg",
+    followers: 510,
+    country: "Australia",
+    flag: "https://flagcdn.com/w40/au.png",
+  },
+  {
+    id: 5,
+    name: "Noah Wilson",
+    image: "https://randomuser.me/api/portraits/men/30.jpg",
+    followers: 370,
+    country: "Germany",
+    flag: "https://flagcdn.com/w40/de.png",
+  },
+  {
+    id: 6,
+    name: "Olivia Martinez",
+    image: "https://randomuser.me/api/portraits/women/35.jpg",
+    followers: 410,
+    country: "France",
+    flag: "https://flagcdn.com/w40/fr.png",
+  },
+  {
+    id: 7,
+    name: "Ethan Davis",
+    image: "https://randomuser.me/api/portraits/men/40.jpg",
+    followers: 280,
+    country: "Italy",
+    flag: "https://flagcdn.com/w40/it.png",
+  },
+];

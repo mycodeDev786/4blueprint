@@ -20,10 +20,16 @@ export default function BakerProfileCard({ baker }) {
         height={80}
         className="w-20 h-20 mx-auto rounded-full object-cover border border-gray-300"
       />
-      
+
       {/* Baker Name & Followers */}
       <h2 className="text-lg font-semibold mt-2">{baker.name}</h2>
       <p className="text-gray-500 text-sm">{followers} Followers</p>
+
+      {/* Country & Flag */}
+      <div className="flex items-center justify-center mt-2 gap-2">
+        <Image src={baker.flag} alt={baker.country} width={20} height={15} className="w-6 h-4" />
+        <span className="text-gray-600 text-sm">{baker.country}</span>
+      </div>
 
       {/* Follow Button */}
       <button
@@ -35,3 +41,5 @@ export default function BakerProfileCard({ baker }) {
     </div>
   );
 }
+
+

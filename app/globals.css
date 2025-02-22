@@ -3,8 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-color: #1E3A8A; /* Default blue */
+  --primary-hover: #1E40AF; /* Darker shade for hover */
+  --background-color: #F3F4F6; /* Light gray */
+  --text-color: #000000; /* Black */
 }
 
 @media (prefers-color-scheme: dark) {

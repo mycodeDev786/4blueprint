@@ -30,7 +30,7 @@ const Navbar = () => {
       >
         {/* ✅ Logo */}
         <Link href="/">
-          <Image className="cursor-pointer h-16 w-16 md:w-16" src={assets.logo} alt="logo" width={100} height={40} />
+          <Image className="cursor-pointer h-10 w-16 md:w-16" src={assets.logo} alt="logo" width={100} height={40} />
         </Link>
 
         {/* ✅ Desktop Menu */}

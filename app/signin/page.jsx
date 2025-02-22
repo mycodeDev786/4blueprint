@@ -15,20 +15,23 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">Sign In</h2>
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "var(--background-color)" }}>
+      <div className="p-8 rounded-lg shadow-lg w-96 bg-white">
+        <h2 className="text-2xl font-bold mb-4 text-center" style={{ color: "var(--primary-color)" }}>Sign In</h2>
         <form onSubmit={handleLogin} className="space-y-4">
           <input type="email" placeholder="Email" className="w-full border p-2 rounded-md"
             value={email} onChange={(e) => setEmail(e.target.value)} required />
           <input type="password" placeholder="Password" className="w-full border p-2 rounded-md"
             value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">
+          <button type="submit" className="w-full p-2 rounded-md text-white"
+            style={{ backgroundColor: "var(--primary-color)" }}
+            onMouseOver={(e) => e.target.style.backgroundColor = "var(--primary-hover)"}
+            onMouseOut={(e) => e.target.style.backgroundColor = "var(--primary-color)"}>
             Login
           </button>
         </form>
         <p className="text-sm text-center mt-4">
-          Don't have an account? <Link href="/signup" className="text-blue-600">Sign Up</Link>
+          Don't have an account? <Link href="/" className="text-blue-600">Sign Up</Link>
         </p>
       </div>
     </div>
