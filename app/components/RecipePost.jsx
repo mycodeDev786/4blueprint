@@ -143,15 +143,15 @@ export default function RecipePost({ title, description, image, bakerId, date, i
         />
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row gap-2 mt-4">
-        <button className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg text-sm sm:text-base">
-          Tip the Baker
-        </button>
-        <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-sm sm:text-base">
-          Buy this Recipe
-        </button>
-      </div>
+     {/* Action Buttons */}
+<div className="flex flex-col sm:flex-row gap-2 mt-4 w-full">
+  <button className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg text-sm sm:text-base flex-1 w-full sm:w-auto text-center transition-colors duration-300">
+    Tip the Baker
+  </button>
+  <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-sm sm:text-base flex-1 w-full sm:w-auto text-center transition-colors duration-300">
+    Buy this Recipe
+  </button>
+</div>
 
       {/* Popup Modal (unchanged) */}
       {isPopupOpen && (
