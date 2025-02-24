@@ -24,7 +24,8 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-16 lg:px-32 h-16 bg-white text-gray-700 border-b border-gray-300 transition-all ${
+        style={{ backgroundColor: "#673AB7" }}
+        className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-16 lg:px-32 h-16  text-gray-700 border-b border-gray-300 transition-all ${
           isScrolled ? "shadow-lg" : "shadow-md"
         }`}
       >
@@ -43,23 +44,20 @@ const Navbar = () => {
         </Link>
 
         {/* ✅ Desktop Menu */}
-        <div className="hidden md:flex items-center gap-6 text-[16px] font-medium">
-          <Link href="/" className="hover:text-gray-900 transition">
-            Home
-          </Link>
-          <Link href="/recipes" className="hover:text-gray-900 transition">
+        <div className="hidden md:flex items-center gap-6 text-[16px] font-medium text-white">
+          <Link href="/recipes" className="hover:text-orange-300 transition">
             All Recipes
           </Link>
           <Link
             href="/verifiedbakers"
-            className="hover:text-gray-900 transition"
+            className="hover:text-orange-300 transition"
           >
             Verified Bakers
           </Link>
-          <Link href="/faq" className="hover:text-gray-900 transition">
+          <Link href="/faq" className="hover:text-orange-300 transition">
             FAQ
           </Link>
-          <Link href="/support" className="hover:text-gray-900 transition">
+          <Link href="/support" className="hover:text-orange-300 transition">
             Support
           </Link>
         </div>
