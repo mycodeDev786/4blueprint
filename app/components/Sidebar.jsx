@@ -12,7 +12,7 @@ import {
 
 const Sidebar = ({ isArtist }) => {
   return (
-    <aside className="w-64 h-[calc(100vh-4rem)] text-purple-700 border-r border-gray-300 fixed left-0 top-16 bottom-16 p-6 bg-white shadow-lg z-40">
+    <aside className="hidden md:block  w-64 h-[calc(100vh-4rem)] text-purple-700 border-r border-gray-300 fixed left-0 top-16 bottom-16 p-6 bg-white shadow-lg z-40">
       <h2 className="text-2xl font-bold mb-6">Menu</h2>
       <ul className="space-y-4 ">
         <li>

@@ -19,6 +19,7 @@ const HomePage = () => {
       {recipes.map((recipe) => (
         <RecipePost
           key={recipe.id}
+          id={recipe.id}
           title={recipe.title}
           description={recipe.description}
           image={recipe.image}

@@ -3,10 +3,21 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { bakers } from "../constants/bakers";
 import { assets } from "@/assets/assets";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import { addToCart } from "../store/cartSlice";
 import dayjs from "dayjs";
-import { FaEyeSlash } from "react-icons/fa";
+import {
+  FaEyeSlash,
+  FaShareAlt,
+  FaRegHeart,
+  FaHeart,
+  FaShoppingCart,
+  FaMoneyBillWave,
+} from "react-icons/fa";
 
 export default function RecipePost({
+  id,
   title,
   description,
   image,
@@ -19,7 +30,9 @@ export default function RecipePost({
   const [expanded, setExpanded] = useState(false);
   const [displayDate, setDisplayDate] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
+  const [isHidden, setIsHidden] = useState(false);
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [followers, setFollowers] = useState(() => {
     const baker = bakers.find((b) => b.id === bakerId);
     return baker ? baker.followers : 0;
@@ -44,6 +57,26 @@ export default function RecipePost({
   const handleFollow = () => {
     setFollowers((prev) => prev + 1);
     setIsFollowed((prev) => !prev);
+  };
+  const handleHide = () => {
+    setIsHidden(true);
+  };
+  const handleBuyNow = () => {
+    // Dispatching the item details to the cart
+    dispatch(
+      addToCart({
+        id,
+        title,
+        description,
+        image,
+        price,
+        bakerId,
+        quantity: 1, // Default quantity set to 1
+      })
+    );
+
+    // Redirect to the cart page
+    // router.push("/cart");
   };
 
   const handleWishlist = () => {
@@ -88,7 +121,7 @@ export default function RecipePost({
     return "★".repeat(Math.floor(rating)) + (rating % 1 !== 0 ? "☆" : "");
   };
 
-  return (
+  return !isHidden ? (
     <div className="max-w-lg mx-auto p-4 bg-white shadow-lg rounded-2xl relative w-full sm:w-11/12 md:w-10/12 lg:w-9/12 xl:w-8/12">
       {/* Top Section */}
       <div className="flex justify-between items-center mb-2">
@@ -119,7 +152,7 @@ export default function RecipePost({
             </svg>
           </button>
           <button
-            // onClick={handleHide} // Add your hide functionality here
+            onClick={handleHide} // Add your hide functionality here
             className="flex items-center justify-center text-lg sm:text-xl"
             title="Hide Post"
           >
@@ -314,74 +347,51 @@ export default function RecipePost({
         )}
       </div>
       {/* Action Buttons */}
-      <div className="flex items-center gap-2 sm:gap-3 mt-4 w-full overflow-x-auto sm:overflow-visible pb-1">
+      <div className="flex items-center gap-3 mt-4 w-full overflow-x-auto sm:overflow-visible pb-1">
         {/* Share Button */}
         <button
           onClick={handleShare}
-          className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
+          className="flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
           title="Share Recipe"
         >
-          <Image
-            src={assets.share_icon}
-            alt="Share"
-            width={20}
-            height={20}
-            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-          />
+          <FaShareAlt className="text-gray-700 text-lg" />
         </button>
 
         {/* Tip Button */}
         <button
-          // onClick={handleTip}
-          className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
+          className="flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
           title="Leave Tip"
         >
-          <Image
-            src={assets.tip_icon}
-            alt="Tip"
-            width={20}
-            height={20}
-            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-          />
+          <FaMoneyBillWave className="text-gray-700 text-lg" />
         </button>
 
         {/* Wishlist */}
         <button
           onClick={handleWishlist}
-          className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-full transition-colors"
           title="Add to Wishlist"
         >
-          <span className="font-normal text-xs sm:text-sm text-gray-700">
-            Wishlist
-          </span>
-          <span
-            className={`text-lg sm:text-xl ${
-              isWishlisted ? "text-red-700" : "text-gray-500"
-            }`}
-          >
-            {isWishlisted ? "❤️" : "🤍"}
-          </span>
+          <span className="font-medium text-sm text-gray-700">CookBook</span>
+          {isWishlisted ? (
+            <FaHeart className="text-red-600 text-lg" />
+          ) : (
+            <FaRegHeart className="text-gray-500 text-lg" />
+          )}
         </button>
 
         {/* Cart & Price */}
-
         <button
-          //onClick={handleShare}
-          className="hover:scale-105  flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
+          onClick={handleBuyNow}
+          className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-full transition-transform transform hover:scale-105 transition-colors"
           title="Add to Cart"
         >
-          <Image
-            src={assets.cart}
-            alt="Cart"
-            width={20}
-            height={20}
-            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-          />
-          <span className="font-medium text-xs sm:text-sm text-gray-900">
-            ${price.toFixed(3)}
+          <FaShoppingCart className="text-gray-700 text-lg" />
+          <span className="font-medium text-sm text-gray-900">
+            ${price.toFixed(2)}
           </span>
         </button>
       </div>
+
       {/* Popup Modal */}
       {isPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
@@ -420,5 +430,5 @@ export default function RecipePost({
         </div>
       )}
     </div>
-  );
+  ) : null;
 }

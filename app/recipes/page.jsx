@@ -8,7 +8,7 @@ export default function AllRecipes() {
   useEffect(() => {}, []);
 
   return (
-    <div className="px-6 md:px-16 lg:px-32 py-8">
+    <div className="px-0 sm:px-6 md:px-12 lg:px-16 xl:px-24">
       {/* ✅ Grid Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
         {recipes.map((recipe) => (

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { assets } from "@/assets/assets";
 import { FaShoppingCart } from "react-icons/fa";
 
-const Navbar = () => {
+const Navbar = ({ cartCount }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState("");
@@ -72,7 +72,7 @@ const Navbar = () => {
   }, [lastScrollY]);
 
   const handlecart = () => {
-    // Cart logic here
+    //router.push("/cart");
   };
 
   return (
@@ -161,7 +161,7 @@ const Navbar = () => {
         >
           <FaShoppingCart className="text-2xl text-white" />
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-            1
+            {cartCount}
           </span>
         </div>
 
