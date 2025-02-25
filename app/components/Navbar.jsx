@@ -174,7 +174,7 @@ const Navbar = ({ cartCount }) => {
           >
             <FaShoppingCart className="text-2xl text-white" />
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-              1
+              {cartCount}
             </span>
           </div>
 
