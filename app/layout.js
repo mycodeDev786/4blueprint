@@ -40,7 +40,7 @@ export default function RootLayout({ children }) {
     pathname === "/faq" ||
     pathname === "/support";
   return (
-    <html lang="en">
+    <html className="m-0 p-0" lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen w-full mx-0 sm:mx-auto m-0 `}
       >

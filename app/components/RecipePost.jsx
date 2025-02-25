@@ -78,7 +78,7 @@ export default function RecipePost({
   };
 
   return (
-    <div className="w-full mx-0 p-0 py-4 sm:p-4 shadow-lg rounded-2xl sm:mx-auto sm:w-11/12 md:w-10/12 lg:w-9/12 xl:w-8/12">
+    <div className="w-full mx-0 p-4 shadow-lg rounded-2xl sm:mx-auto sm:w-11/12 md:w-10/12 lg:w-9/12 xl:w-8/12">
       {/* Top Section */}
       <div className="flex justify-between items-center mb-2">
         <div className="text-[#673AB7] font-semibold text-xs sm:text-sm">
