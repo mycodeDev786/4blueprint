@@ -14,6 +14,8 @@ const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
 
@@ -51,6 +53,23 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  // Handle scrolling behavior for mobile
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerWidth <= 768) {
+        const currentScrollY = window.scrollY;
+        if (currentScrollY > lastScrollY) {
+          setIsVisible(false); // Hide navbar on scroll down
+        } else {
+          setIsVisible(true); // Show navbar on scroll up
+        }
+        setLastScrollY(currentScrollY);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   const handlecart = () => {
     // Cart logic here
@@ -59,9 +78,10 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`bg-[#673AB7] fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-16 lg:px-32 h-16 text-gray-700 border-b border-gray-300 transition-all ${
-          isScrolled ? "shadow-lg" : "shadow-md"
-        }`}
+        className={`bg-[#673AB7] fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-16 lg:px-32 h-16 text-gray-700 border-b border-gray-300 transition-all duration-300
+          ${isScrolled ? "shadow-lg" : "shadow-md"} 
+          ${!isVisible && "translate-y-[-100%] md:translate-y-0"}`} // Hide on mobile when scrolling down
+        style={{ transition: "transform 0.3s ease-in-out" }}
       >
         {/* Logo with menu close handler */}
         <Link
@@ -80,9 +100,7 @@ const Navbar = () => {
         </Link>
 
         {/* Mobile Page Title */}
-        <span className="md:hidden text-[#ecd4be] font-medium mx-2 truncate">
-          {getPageTitle()}
-        </span>
+        <span className="md:hidden text-[#ecd4be] font-medium mx-2 truncate"></span>
 
         {/* Desktop Elements */}
         <div className="hidden md:flex items-center gap-6 text-[16px] font-medium text-white">
@@ -317,8 +335,17 @@ const Navbar = () => {
         )}
       </nav>
 
-      {/* Spacer */}
-      <div className="pt-16"></div>
+      {/* ✅ Spacer Section */}
+      <div
+        className={`pt-16 h-24 bg-indigo-800 flex justify-center items-center 
+           ${isScrolled ? "shadow-lg" : "shadow-md"} 
+          ${!isVisible && "translate-y-[-100%] md:translate-y-[-100%]"}`}
+        style={{ transition: "transform 0.3s ease-in-out" }}
+      >
+        <span className="text-[#ecd4be] font-semibold mx-2  truncate">
+          {getPageTitle()}
+        </span>
+      </div>
     </>
   );
 };

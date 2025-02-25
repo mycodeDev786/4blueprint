@@ -25,6 +25,11 @@ export default {
           "100%": { opacity: 1 },
         },
       },
+      /** ✅ Add this container configuration */
+      container: {
+        center: true,
+        padding: "0rem", // No padding on mobile
+      },
     },
   },
   plugins: [],

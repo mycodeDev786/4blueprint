@@ -4,32 +4,43 @@ import { FaBook, FaBell, FaPlus, FaHeart, FaUser } from "react-icons/fa";
 const BottomTab = () => {
   return (
     <nav className="fixed bottom-0 left-0 w-full bg-[#673AB7] text-white flex justify-between items-center px-4 py-2 md:hidden">
-      <Link href="/cookbook" className="flex flex-col items-center">
-        <FaBook className="text-xl" />
-        <span className="text-xs">Cookbook</span>
-      </Link>
+      <div className="flex justify-between w-full relative">
+        <Link href="/cookbook" className="flex flex-col items-center flex-1">
+          <FaBook className="text-xl" />
+          <span className="text-xs">Cookbook</span>
+        </Link>
 
-      <Link href="/notifications" className="flex flex-col items-center">
-        <FaBell className="text-xl" />
-        <span className="text-xs">Notifications</span>
-      </Link>
+        <Link
+          href="/notifications"
+          className="flex flex-col items-center flex-1"
+        >
+          <FaBell className="text-xl" />
+          <span className="text-xs">Notifications</span>
+        </Link>
 
-      <Link
-        href="/add-recipe"
-        className="bg-green-500 text-white p-3 rounded-full shadow-lg -mt-6"
-      >
-        <FaPlus className="text-2xl" />
-      </Link>
+        {/* Placeholder for the center item to maintain spacing */}
+        <div className="flex-1 relative">
+          <Link
+            href="/add-recipe"
+            className="absolute left-1/2 transform -translate-x-1/2 bg-green-500 text-white p-3 rounded-full shadow-lg -top-5"
+          >
+            <FaPlus className="text-2xl" />
+          </Link>
+        </div>
 
-      <Link href="/followed-artists" className="flex flex-col items-center">
-        <FaHeart className="text-xl" />
-        <span className="text-xs">Artists</span>
-      </Link>
+        <Link
+          href="/followed-artists"
+          className="flex flex-col items-center flex-1"
+        >
+          <FaHeart className="text-xl" />
+          <span className="text-xs">Artists</span>
+        </Link>
 
-      <Link href="/profile" className="flex flex-col items-center">
-        <FaUser className="text-xl" />
-        <span className="text-xs">Profile</span>
-      </Link>
+        <Link href="/profile" className="flex flex-col items-center flex-1">
+          <FaUser className="text-xl" />
+          <span className="text-xs">Profile</span>
+        </Link>
+      </div>
     </nav>
   );
 };

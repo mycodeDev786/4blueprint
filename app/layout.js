@@ -40,15 +40,15 @@ export default function RootLayout({ children }) {
     pathname === "/faq" ||
     pathname === "/support";
   return (
-    <html className="m-0 p-0" lang="en">
+    <html className="m-0 p-0 " lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen w-full mx-0 sm:mx-auto m-0 `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen w-full  max-w-none overflow-x-hidden m-0 p-0 `}
       >
-        <Navbar />
+        {<Navbar />}
         {!isMobile && !hideSidebars && <Sidebar isArtist={isArtist} />}
         {children}
         {!isMobile && <Footer />}
-        {isMobile && !hideSidebars && <BottomTab />}
+        {<BottomTab />}
         {/* {!isMobile && !hideSidebars && <RightSidebar />} */}
       </body>
     </html>

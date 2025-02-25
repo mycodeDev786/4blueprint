@@ -78,7 +78,7 @@ export default function RecipePost({
   };
 
   return (
-    <div className="w-full mx-0 p-4 shadow-lg rounded-2xl sm:mx-auto sm:w-11/12 md:w-10/12 lg:w-9/12 xl:w-8/12">
+    <div className="max-w-lg mx-auto p-4 bg-white shadow-lg rounded-2xl relative w-full sm:w-11/12 md:w-10/12 lg:w-9/12 xl:w-8/12">
       {/* Top Section */}
       <div className="flex justify-between items-center mb-2">
         <div className="text-[#673AB7] font-semibold text-xs sm:text-sm">
@@ -238,7 +238,7 @@ export default function RecipePost({
       </p>
 
       <button
-        className="mt-2 px-3 py-1 text-xs sm:text-sm font-semibold rder  border-blue-500 rounded-lg 
+        className="mt-2 px-3 py-1 text-xs sm:text-sm font-semibold border  border-blue-500 rounded-lg 
                     transition-all duration-300 ease-in-out w-full sm:w-auto"
         onClick={() => setExpanded(!expanded)}
       >

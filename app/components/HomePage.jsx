@@ -12,7 +12,10 @@ const HomePage = () => {
   };
 
   return (
-    <div className="max-w-full sm:max-w-3xl mx-0 sm:mx-auto my-0 sm:my-6 space-y-6">
+    <div
+      className="container w-full mx-0 sm:max-w-3xl sm:mx-auto my-0 sm:my-6 space-y-6
+"
+    >
       {recipes.map((recipe) => (
         <RecipePost
           key={recipe.id}
