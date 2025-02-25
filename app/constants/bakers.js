@@ -8,6 +8,9 @@ export const bakers = [
     country: "USA",
     flag: "https://flagcdn.com/w40/us.png",
     isVerified: true,
+    isTop10Sales: true,
+    isTop10Followers: true,
+    newPosts: 4,
   },
   {
     id: 2,
@@ -17,6 +20,9 @@ export const bakers = [
     country: "UK",
     flag: "https://flagcdn.com/w40/gb.png",
     isVerified: true,
+    isTop10Sales: true,
+    isTop10Followers: true,
+    newPosts: 2,
   },
 
   {
@@ -26,6 +32,10 @@ export const bakers = [
     followers: 290,
     country: "Canada",
     flag: "https://flagcdn.com/w40/ca.png",
+    isVerified: false,
+    isTop10Sales: false,
+    isTop10Followers: true,
+    newPosts: 20,
   },
   {
     id: 4,

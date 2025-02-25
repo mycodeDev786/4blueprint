@@ -9,10 +9,6 @@ export default function AllRecipes() {
 
   return (
     <div className="px-6 md:px-16 lg:px-32 py-8">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-        All Recipes
-      </h1>
-
       {/* ✅ Grid Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
         {recipes.map((recipe) => (

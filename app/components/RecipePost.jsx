@@ -1,8 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { bakers } from "../constants/bakers";
 import { assets } from "@/assets/assets";
+import dayjs from "dayjs";
+import { FaEyeSlash } from "react-icons/fa";
 
 export default function RecipePost({
   title,
@@ -15,6 +17,7 @@ export default function RecipePost({
   rating,
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [displayDate, setDisplayDate] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [followers, setFollowers] = useState(() => {
     const baker = bakers.find((b) => b.id === bakerId);
@@ -23,7 +26,19 @@ export default function RecipePost({
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const baker = bakers.find((b) => b.id === bakerId);
+  useEffect(() => {
+    const formattedDate = dayjs(date);
+    const today = dayjs();
+    const yesterday = today.subtract(1, "day");
 
+    if (formattedDate.isSame(today, "day")) {
+      setDisplayDate("Today");
+    } else if (formattedDate.isSame(yesterday, "day")) {
+      setDisplayDate("Yesterday");
+    } else {
+      setDisplayDate(formattedDate.format("MMM D, YYYY"));
+    }
+  }, [date]);
   const handleFollow = () => {
     setFollowers((prev) => prev + 1);
   };
@@ -67,18 +82,9 @@ export default function RecipePost({
       {/* Top Section */}
       <div className="flex justify-between items-center mb-2">
         <div className="text-[#673AB7] font-semibold text-xs sm:text-sm">
-          {" "}
-          {date}
+          {displayDate}
         </div>
         <div className="flex gap-2 sm:gap-3">
-          <button
-            onClick={handleWishlist}
-            className="text-lg sm:text-xl"
-            title="Add to Wishlist"
-          >
-            {isWishlisted ? "❤️" : "🤍"}
-          </button>
-
           <button
             onClick={handleReport}
             className="text-lg sm:text-xl"
@@ -101,11 +107,18 @@ export default function RecipePost({
               <path d="M5 4H15L12 7.5L15 11H5V4Z" />
             </svg>
           </button>
+          <button
+            // onClick={handleHide} // Add your hide functionality here
+            className="flex items-center justify-center text-lg sm:text-xl"
+            title="Hide Post"
+          >
+            <FaEyeSlash className="w-6 h-6 text-gray-600 hover:text-gray-800 transition-colors" />
+          </button>
         </div>
       </div>
 
       {/* Baker Profile Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1 gap-2">
         <div className="flex items-center gap-2 flex-1 min-w-0">
           <div className="relative flex-shrink-0">
             <img
@@ -153,6 +166,46 @@ export default function RecipePost({
             <p className="text-gray-500 text-xs sm:text-sm">
               {followers} Followers
             </p>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {baker?.isTop10Sales && (
+                <span className="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-semibold text-purple-800">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="mr-1 h-3 w-3"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                    />
+                  </svg>
+                  Top 10 Sales
+                </span>
+              )}
+              {baker?.isTop10Followers && (
+                <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="mr-1 h-3 w-3"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                  Top 10 Followers
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -166,14 +219,14 @@ export default function RecipePost({
       </div>
 
       {/* Recipe Reviews */}
-      <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-yellow-500 mb-2 justify-center text-center">
-        <h4 className="text-sm sm:text-lg font-semibold">
+      <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-[#9c51ac] mb-2  ">
+        <h4 className=" text-xs text-black sm:text-xs font-semibold">
           Overall Recipe Reviews:
         </h4>
         <div className="flex items-center gap-1">
           <span className="text-sm sm:text-lg">{renderStars(rating)}</span>
           <span className="text-gray-600 text-xs sm:text-sm">
-            ({rating.toFixed(1)})
+            ({rating.toFixed(1)}/5.0)
           </span>
         </div>
       </div>
@@ -185,8 +238,8 @@ export default function RecipePost({
       </p>
 
       <button
-        className="mt-2 px-3 py-1 text-xs sm:text-sm font-semibold text-white bg-[#673AB7] border border-blue-500 rounded-lg 
-                   hover:bg-[#673AB7] hover:text-white transition-all duration-300 ease-in-out w-full sm:w-auto"
+        className="mt-2 px-3 py-1 text-xs sm:text-sm font-semibold rder  border-blue-500 rounded-lg 
+                    transition-all duration-300 ease-in-out w-full sm:w-auto"
         onClick={() => setExpanded(!expanded)}
       >
         {expanded ? "Show Less" : "See More"}
@@ -237,56 +290,79 @@ export default function RecipePost({
                 If you’d like to know how to prepare this delicious recipe, just
                 purchase it from this artist. We really appreciate your support!
               </p>
-              <p className="mt-3 font-semibold text-orange-500">
-                Price: ${price.toFixed(2)}
-              </p>
             </div>
           </div>
         )}
       </div>
       {/* Action Buttons */}
-      <div className="flex  flex-row gap-2 mt-4 w-full">
+      <div className="flex items-center gap-2 sm:gap-3 mt-4 w-full overflow-x-auto sm:overflow-visible pb-1">
+        {/* Share Button */}
         <button
           onClick={handleShare}
-          className="text-lg sm:text-xl"
-          title="Share Recipe"
-        >
-          <Image
-            src={assets.tip_icon}
-            alt="Upload Icon"
-            width={20}
-            height={20}
-            className="ml-2"
-          />
-        </button>
-        <button
-          onClick={handleShare}
-          className="text-lg sm:text-xl"
+          className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
           title="Share Recipe"
         >
           <Image
             src={assets.share_icon}
-            alt="Share Icon"
+            alt="Share"
             width={20}
             height={20}
-            className="ml-2"
+            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
           />
         </button>
+
+        {/* Tip Button */}
         <button
-          onClick={handleShare}
-          className="text-lg sm:text-xl"
-          title="Share Recipe"
+          // onClick={handleTip}
+          className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
+          title="Leave Tip"
+        >
+          <Image
+            src={assets.tip_icon}
+            alt="Tip"
+            width={20}
+            height={20}
+            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+          />
+        </button>
+
+        {/* Wishlist */}
+        <button
+          onClick={handleWishlist}
+          className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
+          title="Add to Wishlist"
+        >
+          <span className="font-normal text-xs sm:text-sm text-gray-700">
+            Wishlist
+          </span>
+          <span
+            className={`text-lg sm:text-xl ${
+              isWishlisted ? "text-red-700" : "text-gray-500"
+            }`}
+          >
+            {isWishlisted ? "❤️" : "🤍"}
+          </span>
+        </button>
+
+        {/* Cart & Price */}
+
+        <button
+          //onClick={handleShare}
+          className="hover:scale-105  flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
+          title="Add to Cart"
         >
           <Image
             src={assets.cart}
-            alt="Upload Icon"
+            alt="Cart"
             width={20}
             height={20}
-            className="ml-2"
+            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
           />
+          <span className="font-medium text-xs sm:text-sm text-gray-900">
+            ${price.toFixed(3)}
+          </span>
         </button>
       </div>
-
       {/* Popup Modal */}
       {isPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">

@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { assets } from "@/assets/assets";
@@ -8,83 +8,42 @@ import { FaShoppingCart } from "react-icons/fa";
 
 const Navbar = () => {
   const router = useRouter();
-  const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState("");
   const [user, setUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const menuRef = useRef(null);
-  const buttonRef = useRef(null);
-
-  // Get page title from pathname
-  const getPageTitle = () => {
-    if (pathname === "/") return "Home";
-    const segments = pathname.split("/").filter((segment) => segment);
-    const lastSegment = segments[segments.length - 1];
-    return lastSegment
-      .replace(/([a-z])([A-Z])/g, "$1 $2")
-      .replace(/-/g, " ")
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
-
-  // Close menu when clicking outside
+  const handlecart = () => {};
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (
-        menuOpen &&
-        !menuRef.current?.contains(e.target) &&
-        !buttonRef.current?.contains(e.target)
-      ) {
-        setMenuOpen(false);
-      }
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [menuOpen]);
-
-  // Scroll effect
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handlecart = () => {
-    // Cart logic here
-  };
-
   return (
     <>
       <nav
-        className={`bg-[#673AB7] fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-16 lg:px-32 h-16 text-gray-700 border-b border-gray-300 transition-all ${
+        className={` bg-[#673AB7] fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-16 lg:px-32 h-16  text-gray-700 border-b border-gray-300 transition-all ${
           isScrolled ? "shadow-lg" : "shadow-md"
         }`}
       >
-        {/* Logo with menu close handler */}
-        <Link
-          href="/"
-          onClick={() => setMenuOpen(false)}
-          className="flex items-center"
-        >
+        {/* ✅ Logo */}
+        <Link href="/">
           <Image
-            className="cursor-pointer h-12 w-auto object-contain transition-all duration-300 hover:scale-105"
+            className="cursor-pointer h-12 w-auto object-contain transition-all duration-300 
+            hover:scale-105 hover:opacity-90 focus:outline-none focus:ring-2 
+            focus:ring-blue-500 focus:ring-offset-2"
             src={assets.logo}
             alt="Company Logo"
-            width={160}
-            height={48}
-            priority
+            width={160} // Increased for better clarity
+            height={48} // Maintain 3.33:1 aspect ratio (same as 160x48)
+            priority // Optional: if it's above-the-fold content
           />
         </Link>
 
-        {/* Mobile Page Title */}
-        <span className="md:hidden text-[#ecd4be] font-medium mx-2 truncate">
-          {getPageTitle()}
-        </span>
-
-        {/* Desktop Elements */}
+        {/* ✅ Desktop Menu */}
         <div className="hidden md:flex items-center gap-6 text-[16px] font-medium text-white">
           <Link href="/recipes" className="hover:text-orange-300 transition">
             All Recipes
@@ -103,7 +62,6 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Desktop Search */}
         {/* ✅ Search Bar */}
         <form
           onSubmit={(e) => {
@@ -130,82 +88,59 @@ const Navbar = () => {
             />
           </button>
         </form>
-
-        {/* Desktop Cart */}
-        <div
-          className="hidden md:block relative cursor-pointer"
-          onClick={handlecart}
-        >
+        {/* Cart Icon */}
+        <div onClick={handlecart} className="relative cursor-pointer">
           <FaShoppingCart className="text-2xl text-white" />
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
             1
           </span>
         </div>
-
-        {/* Right Section (Mobile & Desktop) */}
+        {/* ✅ Account & Mobile Menu Button */}
         <div className="flex items-center gap-4">
-          {/* Mobile Cart */}
-          <div
-            className="md:hidden relative cursor-pointer"
-            onClick={handlecart}
-          >
-            <FaShoppingCart className="text-2xl text-white" />
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-              1
-            </span>
-          </div>
+          <div className="relative">
+            {user ? (
+              <div
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="cursor-pointer flex items-center gap-2"
+              >
+                <Image
+                  src={user.profilePic}
+                  alt="User"
+                  width={36}
+                  height={36}
+                  className="rounded-full border"
+                />
+              </div>
+            ) : (
+              <button
+                onClick={() => router.push("/signin")}
+                className="hidden md:block  text-white px-4 py-2 rounded-lg transition"
+              >
+                Sign In
+              </button>
+            )}
 
-          {/* Desktop Account */}
-          <div className="relative hidden md:block">
-            <div className="relative">
-              {user ? (
-                <div
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="cursor-pointer flex items-center gap-2"
+            {/* Account Dropdown */}
+            {dropdownOpen && user && (
+              <div className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md p-2">
+                <Link
+                  href="/profile"
+                  className="block px-4 py-2 hover:bg-gray-100"
                 >
-                  <Image
-                    src={user.profilePic}
-                    alt="User"
-                    width={36}
-                    height={36}
-                    className="rounded-full border"
-                  />
-                </div>
-              ) : (
+                  Profile
+                </Link>
                 <button
-                  onClick={() => router.push("/signin")}
-                  className="hidden md:block  text-white px-4 py-2 rounded-lg transition"
+                  onClick={() => setUser(null)}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
                 >
-                  Sign In
+                  Logout
                 </button>
-              )}
-
-              {/* Account Dropdown */}
-              {dropdownOpen && user && (
-                <div className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md p-2">
-                  <Link
-                    href="/profile"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Profile
-                  </Link>
-                  <button
-                    onClick={() => setUser(null)}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            ref={buttonRef}
-            className="md:hidden text-white"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
+          {/* ✅ Mobile Menu Button */}
+          <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -214,9 +149,11 @@ const Navbar = () => {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             ) : (
               <svg
@@ -226,21 +163,20 @@ const Navbar = () => {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
               </svg>
             )}
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* ✅ Mobile Dropdown Menu */}
         {menuOpen && (
-          <div
-            ref={menuRef}
-            className="md:hidden absolute top-16 left-0 w-full bg-white shadow-md flex flex-col py-4 z-50"
-          >
+          <div className="absolute top-16 left-0 w-full bg-white shadow-md flex flex-col py-4 z-50 md:hidden">
             <Link
               href="/"
               className="py-2 px-6 hover:bg-gray-100"
@@ -311,7 +247,7 @@ const Navbar = () => {
         )}
       </nav>
 
-      {/* Spacer */}
+      {/* Push content down so it doesn't get hidden behind navbar */}
       <div className="pt-16"></div>
     </>
   );

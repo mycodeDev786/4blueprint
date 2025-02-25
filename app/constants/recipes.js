@@ -3,7 +3,7 @@ import { assets } from "@/assets/assets";
 const recipes = [
   {
     id: 1,
-    date: "Feb 21, 2025",
+    date: "Feb 24, 2025",
     bakerId: 1, // John Doe
     image: assets.Ad1,
     title: "Chocolate Cake",
@@ -16,7 +16,7 @@ const recipes = [
   },
   {
     id: 2,
-    date: "Feb 22, 2025",
+    date: "Feb 23, 2025",
     bakerId: 2, // Jane Smith
     image: assets.Ad2,
     title: "Strawberry Cheesecake",
