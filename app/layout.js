@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
   return (
     <html className="m-0 p-0 " lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen w-full  max-w-none overflow-x-hidden m-0 p-0 `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen w-full pb-16  max-w-none overflow-x-hidden m-0 p-0 `}
       >
         {<Navbar />}
         {!isMobile && !hideSidebars && <Sidebar isArtist={isArtist} />}

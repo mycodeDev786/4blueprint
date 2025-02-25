@@ -124,7 +124,7 @@ export default function RecipePost({
             <img
               src={baker?.image}
               alt={baker?.name}
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border border-gray-300"
+              className="w-14 h-14 sm:w-12 sm:h-12 rounded-full object-cover border border-gray-300"
             />
             {baker?.isVerified && (
               <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-px shadow-sm">
