@@ -19,6 +19,7 @@ export default function RecipePost({
   const [expanded, setExpanded] = useState(false);
   const [displayDate, setDisplayDate] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   const [followers, setFollowers] = useState(() => {
     const baker = bakers.find((b) => b.id === bakerId);
     return baker ? baker.followers : 0;
@@ -26,6 +27,7 @@ export default function RecipePost({
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const baker = bakers.find((b) => b.id === bakerId);
+  const [isFollowed, setIsFollowed] = useState(baker?.isFollowed);
   useEffect(() => {
     const formattedDate = dayjs(date);
     const today = dayjs();
@@ -41,6 +43,7 @@ export default function RecipePost({
   }, [date]);
   const handleFollow = () => {
     setFollowers((prev) => prev + 1);
+    setIsFollowed((prev) => !prev);
   };
 
   const handleWishlist = () => {
@@ -67,6 +70,14 @@ export default function RecipePost({
 
   const handleFlagClick = () => {
     setIsPopupOpen(true);
+  };
+  const getRatingLabel = (rating) => {
+    if (rating > 90) return "Excellent";
+    if (rating > 80) return "Very Good";
+    if (rating > 70) return "Good";
+    if (rating > 60) return "Best";
+    if (rating > 50) return "Satisfactory";
+    return "Poor";
   };
 
   const closePopup = () => {
@@ -124,10 +135,10 @@ export default function RecipePost({
             <img
               src={baker?.image}
               alt={baker?.name}
-              className="w-14 h-14 sm:w-12 sm:h-12 rounded-full object-cover border border-gray-300"
+              className="w-14 h-14 sm:w-14 sm:h-14 rounded-full object-cover border border-gray-300"
             />
             {baker?.isVerified && (
-              <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-px shadow-sm">
+              <div className="absolute -bottom-0 -right-0 bg-white rounded-full p-px shadow-sm">
                 <svg
                   className="w-4 h-4 text-blue-600 fill-current"
                   viewBox="0 0 20 20"
@@ -164,7 +175,15 @@ export default function RecipePost({
               </span>
             </h2>
             <p className="text-gray-500 text-xs sm:text-sm">
-              {followers} Followers
+              <strong>{followers}</strong> Followers || Artist Rating:{" "}
+              {baker?.rating ? (
+                <>
+                  <strong>{baker.rating}%</strong> (
+                  {getRatingLabel(baker.rating)})
+                </>
+              ) : (
+                <strong>No Rating</strong>
+              )}
             </p>
             <div className="flex flex-wrap gap-2 mt-1">
               {baker?.isTop10Sales && (
@@ -210,11 +229,11 @@ export default function RecipePost({
         </div>
 
         <button
-          style={{ backgroundColor: "#673AB7" }}
-          className="  text-white px-2 py-1 sm:px-3 sm:py-1 rounded-lg text-xs sm:text-sm whitespace-nowrap"
+          style={{ backgroundColor: isFollowed ? "#4CAF50" : "#673AB7" }} // Green when followed
+          className="text-white px-2 py-1 sm:px-3 sm:py-1 rounded-lg text-xs sm:text-sm whitespace-nowrap transition-colors duration-300"
           onClick={handleFollow}
         >
-          Follow
+          {isFollowed ? "Followed" : "Follow"}
         </button>
       </div>
 

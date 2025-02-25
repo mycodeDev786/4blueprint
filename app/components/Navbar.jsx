@@ -79,8 +79,7 @@ const Navbar = () => {
     <>
       <nav
         className={`bg-[#673AB7] fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-16 lg:px-32 h-16 text-gray-700 border-b border-gray-300 transition-all duration-300
-          ${isScrolled ? "shadow-lg" : "shadow-md"} 
-          ${!isVisible && "translate-y-[-100%] md:translate-y-0"}`} // Hide on mobile when scrolling down
+          `} // Hide on mobile when scrolling down
         style={{ transition: "transform 0.3s ease-in-out" }}
       >
         {/* Logo with menu close handler */}

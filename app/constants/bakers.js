@@ -11,6 +11,8 @@ export const bakers = [
     isTop10Sales: true,
     isTop10Followers: true,
     newPosts: 4,
+    rating: 94,
+    isFollowed: true,
   },
   {
     id: 2,
@@ -23,6 +25,8 @@ export const bakers = [
     isTop10Sales: true,
     isTop10Followers: true,
     newPosts: 2,
+    rating: 83,
+    isFollowed: false,
   },
 
   {
@@ -36,6 +40,7 @@ export const bakers = [
     isTop10Sales: false,
     isTop10Followers: true,
     newPosts: 20,
+    rating: 75,
   },
   {
     id: 4,
@@ -44,6 +49,7 @@ export const bakers = [
     followers: 510,
     country: "Australia",
     flag: "https://flagcdn.com/w40/au.png",
+    rating: 65,
   },
   {
     id: 5,
