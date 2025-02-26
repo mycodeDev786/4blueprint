@@ -17,7 +17,7 @@ const Sidebar = ({ isArtist }) => {
       <ul className="space-y-4 ">
         <li>
           <Link
-            href="/"
+            href="/cookbook"
             className="flex items-center space-x-3 hover:text-gray-300"
           >
             <FaBook /> <span>My Cookbook</span>

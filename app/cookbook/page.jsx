@@ -10,11 +10,9 @@ export default function Cookbook() {
   const wishlist = wishlistState?.items ?? []; // Ensures wishlist is always an array
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">My Wishlist</h1>
-
+    <div className="max-w-4xl mx-auto p-6 px-0 sm:px-6 md:px-12 lg:px-16 xl:px-24">
       {wishlist.length === 0 ? (
-        <p className="text-gray-500">No items in your wishlist.</p>
+        <p className="text-gray-500">No items in your CookBook.</p>
       ) : (
         <div className="space-y-4">
           {wishlist.map((recipe) => (

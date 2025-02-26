@@ -21,7 +21,7 @@ export default function RightSidebar() {
   }, []);
 
   return (
-    <div className="w-80 bg-gray-100 p-4 fixed right-0 top-16 h-[calc(100vh-4rem)] shadow-lg overflow-y-auto z-40">
+    <div className=" hidden md:block w-80 bg-white p-4 fixed right-0 top-16 h-[calc(100vh-4rem)] shadow-lg overflow-y-auto z-40">
       <h2 className="text-lg font-semibold mb-4">Followed Artists</h2>
 
       {/* Scrollable Artist List */}

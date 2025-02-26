@@ -50,7 +50,7 @@ export default function RootLayout({ children }) {
         {/* Wrap everything in Provider */}
         <Provider store={store}>
           <NavbarWithCart />
-          {<Sidebar isArtist={isArtist} />}
+          {!isMobile && !hideSidebars && <Sidebar isArtist={isArtist} />}
           {children}
           {!isMobile && <Footer />}
           <BottomTab />

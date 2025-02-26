@@ -15,6 +15,7 @@ const wishlistSlice = createSlice({
           id: action.payload.id,
           title: action.payload.title,
           description: action.payload.description,
+          ingredients: action.payload.ingredients,
           image: action.payload.image,
           price: action.payload.price,
           bakerId: action.payload.bakerId,

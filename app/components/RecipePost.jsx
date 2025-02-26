@@ -98,6 +98,7 @@ export default function RecipePost({
           id,
           title,
           description,
+          ingredients,
           image,
           price,
           bakerId,
@@ -290,11 +291,14 @@ export default function RecipePost({
             backgroundColor: isFollowed ? "#ffff" : "#673AB7",
             color: isFollowed ? "#808080" : "white", // Gray text if followed
             fontWeight: isFollowed ? "bold" : "normal", // Bold text if followed
+            cursor: isFollowed ? "not-allowed" : "pointer", // Change cursor to indicate it's disabled
+            opacity: isFollowed ? 0.6 : 1, // Reduce opacity when disabled
           }}
           className={`py-1 sm:px-3 sm:py-1 rounded-lg text-xs sm:text-sm whitespace-nowrap transition-colors duration-300 ${
             isFollowed ? "w-[40px] px-0 sm:w-auto" : "px-2"
           }`}
           onClick={handleFollow}
+          disabled={isFollowed} // Disables the button when isFollowed is true
         >
           {isFollowed ? "Followed" : "Follow"}
         </button>
@@ -322,8 +326,11 @@ export default function RecipePost({
       </p>
 
       <button
-        className="mt-2 px-3 py-1 text-xs sm:text-sm font-semibold border  border-blue-500 rounded-lg 
-                    transition-all duration-300 ease-in-out w-full sm:w-auto"
+        className={`mt-2 px-3 py-1 text-xs sm:text-sm font-semibold border-2 border-black rounded-lg 
+              transition-all duration-300 ease-in-out w-full sm:w-auto 
+              ${
+                !expanded ? "bg-black text-white" : "bg-transparent text-black"
+              }`}
         onClick={() => setExpanded(!expanded)}
       >
         {expanded ? "Show Less" : "See More"}
@@ -452,18 +459,18 @@ export default function RecipePost({
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all duration-300 animate-scaleIn">
             <div className="p-6 space-y-4">
               <h3 className="text-2xl font-semibold text-gray-800 pb-2 border-b border-gray-200 text-center">
-                Baker's Origin
+                Artist's Origin
               </h3>
 
               <div className="space-y-3">
                 <p className="text-lg font-medium text-indigo-700 text-center">
                   <span className="font-semibold">
-                    This baker is from {baker?.country}
+                    This artist is from <strong>{baker?.country}</strong>
                   </span>
                 </p>
 
                 <p className="text-gray-600 leading-relaxed text-justify">
-                  Understanding a baker's cultural background enhances your
+                  Understanding a artist's cultural background enhances your
                   appreciation of their craft. Each region brings unique flavors
                   and traditions to their recipes. We recommend trying this
                   creation — it might just become a new favorite in your
@@ -475,7 +482,7 @@ export default function RecipePost({
             <div className="bg-gray-50 px-6 py-4 rounded-b-xl">
               <button
                 onClick={closePopup}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                className="w-full bg-[#673AB7] hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-300"
               >
                 Continue Exploring
               </button>

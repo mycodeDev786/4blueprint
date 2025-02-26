@@ -72,7 +72,7 @@ const Navbar = ({ cartCount }) => {
   }, [lastScrollY]);
 
   const handlecart = () => {
-    //router.push("/cart");
+    router.push("/cart");
   };
 
   return (
@@ -106,17 +106,18 @@ const Navbar = ({ cartCount }) => {
           <Link href="/recipes" className="hover:text-orange-300 transition">
             All Recipes
           </Link>
-          <Link
-            href="/verifiedbakers"
-            className="hover:text-orange-300 transition"
-          >
-            LeadBoard
-          </Link>
+
           <Link
             href="/verifiedbakers"
             className="hover:text-orange-300 transition"
           >
             Verified Artists
+          </Link>
+          <Link
+            href="/leaderboard"
+            className="hover:text-orange-300 transition"
+          >
+            LeaderBoard
           </Link>
           <Link href="/faq" className="hover:text-orange-300 transition">
             FAQ
@@ -271,19 +272,20 @@ const Navbar = ({ cartCount }) => {
             >
               All Recipes
             </Link>
-            <Link
-              href="/"
-              className="py-2 px-6 hover:bg-gray-100"
-              onClick={() => setMenuOpen(false)}
-            >
-              Leadboard
-            </Link>
+
             <Link
               href="/verifiedbakers"
               className="py-2 px-6 hover:bg-gray-100"
               onClick={() => setMenuOpen(false)}
             >
               Verified Artists
+            </Link>
+            <Link
+              href="/"
+              className="py-2 px-6 hover:bg-gray-100"
+              onClick={() => setMenuOpen(false)}
+            >
+              Leaderboard
             </Link>
             <Link
               href="/faq"
@@ -336,14 +338,14 @@ const Navbar = ({ cartCount }) => {
 
       {/* ✅ Floating Spacer Section */}
       <div
-        className={`fixed  top-16 left-0 w-full z-40 bg-indigo-800 flex justify-center items-center h-10 transition-transform duration-300 ease-in-out
+        className={`fixed  top-16 left-0 w-full z-40 bg-white md:bg-white flex justify-center items-center h-10 transition-transform duration-300 ease-in-out
           ${isScrolled ? "shadow-lg" : "shadow-md"} 
           ${!isVisible ? "-translate-y-full" : "translate-y-0"}
           md:static md:translate-y-0 md:h-24 md:pt-16`}
         style={{ transition: "transform 0.3s ease-in-out" }}
       >
-        <span className="text-[#ecd4be] font-semibold mx-2 truncate">
-          {getPageTitle()}
+        <span className="text-black font-semibold mx-2 md:mt-1 truncate">
+          {getPageTitle().toUpperCase()}
         </span>
       </div>
       <div
