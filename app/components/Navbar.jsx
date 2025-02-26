@@ -334,17 +334,22 @@ const Navbar = ({ cartCount }) => {
         )}
       </nav>
 
-      {/* ✅ Spacer Section */}
+      {/* ✅ Floating Spacer Section */}
       <div
-        className={`pt-16 h-24 bg-indigo-800 flex justify-center items-center 
-           ${isScrolled ? "shadow-lg" : "shadow-md"} 
-          ${!isVisible && "translate-y-[-100%] md:translate-y-[-100%]"}`}
+        className={`fixed  top-16 left-0 w-full z-40 bg-indigo-800 flex justify-center items-center h-10 transition-transform duration-300 ease-in-out
+          ${isScrolled ? "shadow-lg" : "shadow-md"} 
+          ${!isVisible ? "-translate-y-full" : "translate-y-0"}
+          md:static md:translate-y-0 md:h-24 md:pt-16`}
         style={{ transition: "transform 0.3s ease-in-out" }}
       >
-        <span className="text-[#ecd4be] font-semibold mx-2  truncate">
+        <span className="text-[#ecd4be] font-semibold mx-2 truncate">
           {getPageTitle()}
         </span>
       </div>
+      <div
+        className={`w-full pt-24 h-28  flex justify-center items-center md:hidden
+        `}
+      ></div>
     </>
   );
 };

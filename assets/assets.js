@@ -14,6 +14,8 @@ import linkedin_icon from "./linkdin.png";
 import cart from "./cart.png";
 import tip_icon from "./tip_icon.png";
 import share_icon from "./share_icon.png";
+import addcook from "./addcook.jpg";
+import removecook from "./removecook.jpg";
 
 export const assets = {
   logo,
@@ -32,4 +34,6 @@ export const assets = {
   cart,
   share_icon,
   tip_icon,
+  addcook,
+  removecook,
 };

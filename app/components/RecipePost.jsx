@@ -291,8 +291,8 @@ export default function RecipePost({
             color: isFollowed ? "#808080" : "white", // Gray text if followed
             fontWeight: isFollowed ? "bold" : "normal", // Bold text if followed
           }}
-          className={`py-0 sm:px-3 sm:py-1 rounded-lg text-xs sm:text-sm whitespace-nowrap transition-colors duration-300 ${
-            isFollowed ? "w-[40px] sm:w-auto" : "px-2"
+          className={`py-1 sm:px-3 sm:py-1 rounded-lg text-xs sm:text-sm whitespace-nowrap transition-colors duration-300 ${
+            isFollowed ? "w-[40px] px-0 sm:w-auto" : "px-2"
           }`}
           onClick={handleFollow}
         >
@@ -403,15 +403,23 @@ export default function RecipePost({
           className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-full transition-colors"
           title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
         >
+          {isWishlisted ? (
+            // Solid book icon
+            <Image
+              src={assets.removecook}
+              alt="Custom Icon"
+              className="w-5 h-5"
+            /> // Outlined book icon
+          ) : (
+            <Image
+              src={assets.addcook}
+              alt="Custom Icon"
+              className="w-5 h-5 bg-white "
+            /> // Outlined book icon
+          )}
           <span className="font-medium text-[7px] sm:text-xs text-gray-700">
             {isWishlisted ? "Remove from CookBook" : "Add to CookBook"}
           </span>
-          {isWishlisted ? (
-            // Solid book icon
-            <PiBookOpenTextLight className="text-gray-500 text-lg" /> // Outlined book icon
-          ) : (
-            <FaBookMedical className="text-red-600 text-lg" />
-          )}
         </button>
 
         {/* Cart & Price */}
