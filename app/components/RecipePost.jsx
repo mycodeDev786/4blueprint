@@ -3,18 +3,20 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { bakers } from "../constants/bakers";
 import { assets } from "@/assets/assets";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { addToCart } from "../store/cartSlice";
+import { addToWishlist, removeFromWishlist } from "../store/wishlistSlice";
 import dayjs from "dayjs";
 import {
   FaEyeSlash,
   FaShareAlt,
-  FaRegHeart,
-  FaHeart,
+  FaBookMedical,
   FaShoppingCart,
   FaMoneyBillWave,
 } from "react-icons/fa";
+
+import { PiBookOpenTextLight } from "react-icons/pi";
 
 export default function RecipePost({
   id,
@@ -31,13 +33,16 @@ export default function RecipePost({
   const [displayDate, setDisplayDate] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
+
   const dispatch = useDispatch();
   const router = useRouter();
   const [followers, setFollowers] = useState(() => {
     const baker = bakers.find((b) => b.id === bakerId);
     return baker ? baker.followers : 0;
   });
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const wishlist = useSelector((state) => state.wishlist.items);
+  const isWishlisted = wishlist.some((item) => item.id === id);
 
   const baker = bakers.find((b) => b.id === bakerId);
   const [isFollowed, setIsFollowed] = useState(baker?.isFollowed);
@@ -80,7 +85,26 @@ export default function RecipePost({
   };
 
   const handleWishlist = () => {
-    setIsWishlisted((prev) => !prev);
+    setShowPrompt(true);
+
+    setTimeout(() => {
+      setShowPrompt(false);
+    }, 2500);
+    if (isWishlisted) {
+      dispatch(removeFromWishlist(id));
+    } else {
+      dispatch(
+        addToWishlist({
+          id,
+          title,
+          description,
+          image,
+          price,
+          bakerId,
+          // Default quantity
+        })
+      );
+    }
   };
 
   const handleShare = () => {
@@ -262,8 +286,14 @@ export default function RecipePost({
         </div>
 
         <button
-          style={{ backgroundColor: isFollowed ? "#4CAF50" : "#673AB7" }} // Green when followed
-          className="text-white px-2 py-1 sm:px-3 sm:py-1 rounded-lg text-xs sm:text-sm whitespace-nowrap transition-colors duration-300"
+          style={{
+            backgroundColor: isFollowed ? "#ffff" : "#673AB7",
+            color: isFollowed ? "#808080" : "white", // Gray text if followed
+            fontWeight: isFollowed ? "bold" : "normal", // Bold text if followed
+          }}
+          className={`py-0 sm:px-3 sm:py-1 rounded-lg text-xs sm:text-sm whitespace-nowrap transition-colors duration-300 ${
+            isFollowed ? "w-[40px] sm:w-auto" : "px-2"
+          }`}
           onClick={handleFollow}
         >
           {isFollowed ? "Followed" : "Follow"}
@@ -271,10 +301,14 @@ export default function RecipePost({
       </div>
 
       {/* Recipe Reviews */}
-      <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-[#9c51ac] mb-2  ">
-        <h4 className=" text-xs text-black sm:text-xs font-semibold">
+
+      {/* Title and Description */}
+
+      <div className="flex flex-row sm:flex-row justify-between  gap-1 sm:gap-2 text-[#9c51ac] mb-2  ">
+        <h3 className="text-lg sm:text-xl font-bold  text-black">{title}</h3>
+        {/* <h4 className=" text-xs text-black sm:text-xs font-semibold">
           Overall Recipe Reviews:
-        </h4>
+        </h4> */}
         <div className="flex items-center gap-1">
           <span className="text-sm sm:text-lg">{renderStars(rating)}</span>
           <span className="text-gray-600 text-xs sm:text-sm">
@@ -283,8 +317,6 @@ export default function RecipePost({
         </div>
       </div>
 
-      {/* Title and Description */}
-      <h3 className="text-lg sm:text-xl font-bold mb-2 text-black">{title}</h3>
       <p className="text-gray-700 text-justify text-sm sm:text-base">
         {description}
       </p>
@@ -369,13 +401,16 @@ export default function RecipePost({
         <button
           onClick={handleWishlist}
           className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-full transition-colors"
-          title="Add to Wishlist"
+          title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
         >
-          <span className="font-medium text-sm text-gray-700">CookBook</span>
+          <span className="font-medium text-[7px] sm:text-xs text-gray-700">
+            {isWishlisted ? "Remove from CookBook" : "Add to CookBook"}
+          </span>
           {isWishlisted ? (
-            <FaHeart className="text-red-600 text-lg" />
+            // Solid book icon
+            <PiBookOpenTextLight className="text-gray-500 text-lg" /> // Outlined book icon
           ) : (
-            <FaRegHeart className="text-gray-500 text-lg" />
+            <FaBookMedical className="text-red-600 text-lg" />
           )}
         </button>
 
@@ -391,6 +426,17 @@ export default function RecipePost({
           </span>
         </button>
       </div>
+
+      {/* Prompt Message */}
+      {showPrompt && (
+        <>
+          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-sm px-4 py-2 rounded shadow-md z-50 animate-fade-in-out">
+            {isWishlisted
+              ? "This recipe has been added to your Cookbook"
+              : "This recipe has been remove from your Cookbook"}
+          </div>
+        </>
+      )}
 
       {/* Popup Modal */}
       {isPopupOpen && (

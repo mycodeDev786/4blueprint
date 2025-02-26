@@ -8,7 +8,7 @@ export default function RecipeCard({ recipe }) {
       {/* Recipe Image */}
       <Image
         src={recipe.image}
-        alt={recipe.name}
+        alt={recipe.title}
         className="w-32 h-32 rounded-lg object-cover"
       />
 
@@ -16,7 +16,7 @@ export default function RecipeCard({ recipe }) {
       <div className="flex-1 ml-4">
         <h3 className="text-lg font-semibold">{recipe.name}</h3>
         <p className="text-sm text-gray-600">
-          Ingredients: {recipe.ingredients.join(", ")}
+          Ingredients: {recipe.ingredients}
         </p>
 
         {/* Purchase Status (Same Line, "Buy Now" Right-Aligned) */}

@@ -5,7 +5,7 @@ const BottomTab = () => {
   return (
     <nav className="fixed bottom-0 left-0 w-full bg-[#673AB7] text-white flex justify-between items-center px-4 py-2 md:hidden">
       <div className="flex justify-between w-full relative">
-        <Link href="/cookbook" className="flex flex-col items-center flex-1">
+        <Link href="/" className="flex flex-col items-center flex-1">
           <FaBook className="text-xl" />
           <span className="text-xs">Cookbook</span>
         </Link>
