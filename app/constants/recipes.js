@@ -13,6 +13,7 @@ const recipes = [
     price: 12.99,
     rating: 4.5, // ⭐⭐⭐⭐✨
     isVerified: true,
+    isPurchased: true,
   },
   {
     id: 2,
@@ -26,6 +27,7 @@ const recipes = [
     price: 15.99,
     rating: 5, // ⭐⭐⭐⭐⭐
     isVerified: true,
+    isPurchased: true,
   },
   {
     id: 3,

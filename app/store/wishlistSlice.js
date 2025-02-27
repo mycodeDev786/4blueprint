@@ -19,6 +19,8 @@ const wishlistSlice = createSlice({
           image: action.payload.image,
           price: action.payload.price,
           bakerId: action.payload.bakerId,
+          isPurchased: action.payload.isPurchased,
+          artistName: action.payload.artistName,
         });
       }
     },

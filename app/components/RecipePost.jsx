@@ -29,6 +29,7 @@ export default function RecipePost({
   ingredients,
   price,
   rating,
+  isPurchased,
 }) {
   const [expanded, setExpanded] = useState(false);
   const [displayDate, setDisplayDate] = useState("");
@@ -110,6 +111,8 @@ export default function RecipePost({
           image,
           price,
           bakerId,
+          isPurchased,
+          artistName: baker.name,
           // Default quantity
         })
       );
@@ -321,7 +324,7 @@ export default function RecipePost({
         {/* <h4 className=" text-xs text-black sm:text-xs font-semibold">
           Overall Recipe Reviews:
         </h4> */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center border rounded px-1 border-purple-700 gap-1">
           <button onClick={handleRatingClick}>
             <span className="text-sm sm:text-lg">{renderStars(rating)}</span>
             <span className="text-gray-600 text-xs sm:text-sm">

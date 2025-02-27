@@ -31,6 +31,7 @@ const HomePage = () => {
           followersCount={recipe.followersCount}
           ingredients={recipe.ingredients}
           price={recipe.price}
+          isPurchased={recipe.isPurchased}
         />
       ))}
     </div>
