@@ -33,7 +33,7 @@ export default function Cart() {
   );
 
   return (
-    <div className="max-w-4xl mx-auto p-4 bg-gray-100 min-h-screen border border-gray-300 rounded-lg shadow-sm">
+    <div className="w-full md:max-w-xl mx-0 md:mx-auto p-4  min-h-screen border border-gray-300 rounded-lg shadow-sm">
       {cartItems.length === 0 ? (
         <p className="text-center text-gray-600">Your cart is empty.</p>
       ) : (
@@ -41,7 +41,7 @@ export default function Cart() {
           {cartItems.map((item) => (
             <div
               key={item.id}
-              className="flex flex-col md:flex-row items-center gap-4 bg-white p-4 shadow-md rounded-lg border border-gray-200"
+              className="flex flex-col w-full md:flex-row items-center gap-4 bg-white p-4 shadow-md rounded-lg border border-gray-200"
             >
               <Image
                 src={item.image}

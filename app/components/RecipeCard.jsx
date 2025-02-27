@@ -42,9 +42,9 @@ export default function RecipeCard({ recipe }) {
         {/* Purchase Status (Same Line, "Buy Now" Right-Aligned) */}
         <div className=" mt-2 flex items-center">
           {!recipe.purchased && (
-            <p className="text-white  bg-black h-8 px-2 py-1.5 font-semibold text-sm">
+            <button className="bg-black text-white h-8 px-4 py-1.5 font-semibold text-xs md:text-sm rounded-md flex items-center justify-center">
               RECIPE LOCKED
-            </p>
+            </button>
           )}
           {recipe.purchased ? (
             <button className="bg-[#673AB7] text-white px-3 py-1 hover:bg-blue-700 rounded-lg ml-auto">

@@ -40,6 +40,7 @@ export default function RootLayout({ children }) {
     pathname === "/signup" ||
     pathname === "/verifiedbakers" ||
     pathname === "/faq" ||
+    pathname === "/leaderboard" ||
     pathname === "/support";
 
   return (

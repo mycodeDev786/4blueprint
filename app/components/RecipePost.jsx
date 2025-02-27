@@ -6,6 +6,7 @@ import { assets } from "@/assets/assets";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { addToCart } from "../store/cartSlice";
+import { ratings } from "../constants/rating";
 import { addToWishlist, removeFromWishlist } from "../store/wishlistSlice";
 import dayjs from "dayjs";
 import {
@@ -43,7 +44,7 @@ export default function RecipePost({
   });
   const wishlist = useSelector((state) => state.wishlist.items);
   const isWishlisted = wishlist.some((item) => item.id === id);
-
+  const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
   const baker = bakers.find((b) => b.id === bakerId);
   const [isFollowed, setIsFollowed] = useState(baker?.isFollowed);
   useEffect(() => {
@@ -82,6 +83,13 @@ export default function RecipePost({
 
     // Redirect to the cart page
     // router.push("/cart");
+  };
+  const handleRatingClick = () => {
+    setIsRatingModalOpen(true); // Open modal to display existing ratings
+  };
+
+  const closeRatingModal = () => {
+    setIsRatingModalOpen(false);
   };
 
   const handleWishlist = () => {
@@ -314,10 +322,12 @@ export default function RecipePost({
           Overall Recipe Reviews:
         </h4> */}
         <div className="flex items-center gap-1">
-          <span className="text-sm sm:text-lg">{renderStars(rating)}</span>
-          <span className="text-gray-600 text-xs sm:text-sm">
-            ({rating.toFixed(1)}/5.0)
-          </span>
+          <button onClick={handleRatingClick}>
+            <span className="text-sm sm:text-lg">{renderStars(rating)}</span>
+            <span className="text-gray-600 text-xs sm:text-sm">
+              ({rating.toFixed(1)}/5.0)
+            </span>
+          </button>
         </div>
       </div>
 
@@ -329,7 +339,7 @@ export default function RecipePost({
         className={`mt-2 px-3 py-1 text-xs sm:text-sm font-semibold border-2 border-black rounded-lg 
               transition-all duration-300 ease-in-out w-full sm:w-auto 
               ${
-                !expanded ? "bg-black text-white" : "bg-transparent text-black"
+                expanded ? "bg-black text-white" : "bg-transparent text-black"
               }`}
         onClick={() => setExpanded(!expanded)}
       >
@@ -451,6 +461,92 @@ export default function RecipePost({
               : "This recipe has been remove from your Cookbook"}
           </div>
         </>
+      )}
+
+      {isRatingModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all duration-300 animate-scaleIn">
+            <div className="p-6 space-y-4">
+              <h3 className="text-2xl font-semibold text-gray-800 pb-2 border-b border-gray-200 text-center">
+                All Reviews
+              </h3>
+
+              {/* Display All Ratings */}
+              <div className="space-y-4 max-h-80 overflow-y-auto">
+                {ratings.length > 0 ? (
+                  ratings.map((review) => (
+                    <div key={review.id} className="border p-4 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        {/* User Profile Picture */}
+                        <div className="relative flex-shrink-0">
+                          <img
+                            src={baker?.image}
+                            alt={baker?.name}
+                            className="w-14 h-14 sm:w-14 sm:h-14 rounded-full object-cover border border-gray-300"
+                          />
+                          {baker?.isVerified && (
+                            <div className="absolute -bottom-0 -right-0 bg-white rounded-full p-px shadow-sm">
+                              <svg
+                                className="w-4 h-4 text-blue-600 fill-current"
+                                viewBox="0 0 20 20"
+                                aria-label="Verified Account"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                        {/* User Name & Rating */}
+                        <div>
+                          <h4 className="font-medium">{baker.name}</h4>
+                          <span className=" text-[#9c51ac]">
+                            {renderStars(review.rating)}
+                          </span>
+                          <span className=" text-[#9c51ac] text-xs ml-1 sm:text-sm">
+                            ({review.rating.toFixed(1)}/5.0)
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Review Comment */}
+                      <p className="text-gray-600 mt-2">{review.review}</p>
+
+                      {/* Review Images */}
+                      {review.images.length > 0 && (
+                        <div className="flex gap-2 mt-2">
+                          {review.images.map((img, index) => (
+                            <Image
+                              key={index}
+                              src={img}
+                              alt="Review"
+                              className="w-16 h-16 object-cover rounded-md border"
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center text-gray-500">No reviews yet.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Close Button */}
+            <div className="bg-gray-50 px-6 py-4 rounded-b-xl">
+              <button
+                onClick={closeRatingModal}
+                className="w-full bg-gray-400 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded-lg"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Popup Modal */}

@@ -301,7 +301,7 @@ const Navbar = ({ cartCount }) => {
             >
               Support
             </Link>
-            <hr className="my-2 border-gray-300" />
+            <hr className="my-2 border-gray-300 " />
             {user ? (
               <>
                 <Link
