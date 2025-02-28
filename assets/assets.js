@@ -16,6 +16,7 @@ import tip_icon from "./tip_icon.png";
 import share_icon from "./share_icon.png";
 import addcook from "./addcook.jpg";
 import removecook from "./removecook.jpg";
+import read_icon from "./read_icon.jpg";
 
 export const assets = {
   logo,
@@ -36,4 +37,5 @@ export const assets = {
   tip_icon,
   addcook,
   removecook,
+  read_icon,
 };

@@ -1,6 +1,6 @@
 "use client";
 import { assets } from "@/assets/assets";
-import RecipePost from "../components/RecipePost";
+import AllRecipePageCard from "../components/AllRecipePageCard";
 import { useState, useEffect } from "react";
 import recipes from "../constants/recipes";
 export default function AllRecipes() {
@@ -8,22 +8,16 @@ export default function AllRecipes() {
   useEffect(() => {}, []);
 
   return (
-    <div className="px-0 sm:px-6 md:px-12 lg:px-16 xl:px-24">
+    <div className="  px-0 mt-5 sm:px-6 md:px-12 lg:px-16 xl:px-24 ">
       {/* ✅ Grid Layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
+      <div className=" max-w-lg mx-0 md:mx-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-6">
         {recipes.map((recipe) => (
-          <RecipePost
+          <AllRecipePageCard
             key={recipe.id}
             title={recipe.title}
-            description={recipe.description}
             image={recipe.image}
             bakerId={recipe.bakerId}
-            bakerName={recipe.bakerName} // ✅ Now passing dynamically
-            profileImage={recipe.profileImage} // ✅ Now passing dynamically
-            date={recipe.date}
             rating={recipe.rating}
-            followersCount={recipe.followersCount} // ✅ Dynamic followers
-            ingredients={recipe.ingredients}
             price={recipe.price}
           />
         ))}

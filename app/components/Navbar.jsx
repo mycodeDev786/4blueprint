@@ -114,7 +114,7 @@ const Navbar = ({ cartCount }) => {
 
         {/* Desktop Elements */}
         <div className="hidden md:flex items-center gap-6 text-[16px] font-medium text-white">
-          <Link href="/recipes" className="hover:text-orange-300 transition">
+          <Link href="/allrecipes" className="hover:text-orange-300 transition">
             All Recipes
           </Link>
 
@@ -277,7 +277,7 @@ const Navbar = ({ cartCount }) => {
             className="md:hidden absolute top-16 left-0 w-full bg-white shadow-md flex flex-col py-4 z-50"
           >
             <Link
-              href="/recipes"
+              href="/allrecipes"
               className="py-2 px-6 hover:bg-gray-100"
               onClick={() => setMenuOpen(false)}
             >

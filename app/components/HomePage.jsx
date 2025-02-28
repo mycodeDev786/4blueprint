@@ -43,7 +43,7 @@ const HomePage = () => {
           />
 
           {/* Insert a custom post after every 5th recipe */}
-          {(index + 1) % 5 === 0 && (
+          {index + 1 === 5 && (
             <CustomPost
               content={customPostContent}
               onRead={handleReadCustomPost}

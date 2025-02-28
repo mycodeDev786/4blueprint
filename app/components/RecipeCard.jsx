@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { addToCart } from "../store/cartSlice";
 import { useRouter } from "next/navigation";
+import { assets } from "@/assets/assets";
 
 export default function RecipeCard({ recipe }) {
   const dispatch = useDispatch();
@@ -95,8 +96,8 @@ export default function RecipeCard({ recipe }) {
             </div>
           ) : null}
           <div className="ml-auto">
-            <button className="w-20 h-20 flex items-center justify-center font-bold border-2 border-[#673AB7] text-[#673AB7] hover:bg-gray-200  rounded-full transition-transform transform hover:scale-105">
-              Read Recipe
+            <button className="w-20 h-20 flex items-center justify-center font-bold border-2  hover:bg-gray-200  rounded-full transition-transform transform hover:scale-105">
+              <Image src={assets.read_icon} alt="read icon" />
             </button>
           </div>
         </div>
