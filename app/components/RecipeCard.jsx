@@ -5,11 +5,15 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { addToCart } from "../store/cartSlice";
+import { useRouter } from "next/navigation";
 
 export default function RecipeCard({ recipe }) {
   const dispatch = useDispatch();
   const [isClicked, setIsClicked] = useState(false);
-
+  const router = useRouter();
+  const handleArtist = () => {
+    router.push(`artistProfile?name=${encodeURIComponent(recipe.artistName)}`);
+  };
   const handleBuyNow = () => {
     dispatch(
       addToCart({
@@ -61,10 +65,16 @@ export default function RecipeCard({ recipe }) {
       {/* Recipe Details */}
       <div className="flex-1 ml-4">
         <h3 className="text-lg font-semibold">{recipe.title}</h3>
-        <h4 className="text-sm font-semibold text-purple-700">
-          {" "}
-          {recipe.artistName}
-        </h4>
+        <div className="flex flex-row">
+          <h4 className="text-sm  font-semibold text-black mr-2">By</h4>
+          <button
+            onClick={handleArtist}
+            className="text-sm  font-semibold text-purple-700"
+          >
+            {recipe.artistName}
+          </button>
+        </div>
+
         <p className="text-sm text-gray-600">
           Ingredients: {recipe.ingredients}
         </p>

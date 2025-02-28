@@ -1,14 +1,20 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import {
+  useRouter,
+  usePathname,
+  useParams,
+  useSearchParams,
+} from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { assets } from "@/assets/assets";
 import { FaShoppingCart } from "react-icons/fa";
-
+import { useSelector } from "react-redux";
 const Navbar = ({ cartCount }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [user, setUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -18,6 +24,9 @@ const Navbar = ({ cartCount }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
+  const artistName = searchParams.get("name");
+  // const user = useSelector((state) => state.user.user);
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
   // Get page title from pathname
   const getPageTitle = () => {
@@ -31,6 +40,8 @@ const Navbar = ({ cartCount }) => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   };
+  const ShowUserTitle = pathname === "/cookbook";
+  const ShowArtistTitle = pathname === "/artistProfile";
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -344,10 +355,23 @@ const Navbar = ({ cartCount }) => {
           md:static md:translate-y-0 md:h-24 md:pt-16`}
         style={{ transition: "transform 0.3s ease-in-out" }}
       >
-        <span className="text-black font-semibold mx-2 md:mt-1 truncate">
-          {getPageTitle().toUpperCase()}
-        </span>
+        {!ShowUserTitle && !ShowArtistTitle && (
+          <span className="text-black font-semibold mx-2 md:mt-1 truncate">
+            {getPageTitle().toUpperCase()}
+          </span>
+        )}
+        {ShowUserTitle && (
+          <span className="text-black font-semibold mx-2 md:mt-1 truncate">
+            {user?.name.toUpperCase()} COOKBOOK
+          </span>
+        )}
+        {ShowArtistTitle && (
+          <span className="text-black font-semibold mx-2 md:mt-1 truncate">
+            {artistName.toUpperCase()} PROFILE
+          </span>
+        )}
       </div>
+
       <div
         className={`w-full pt-24 h-28  flex justify-center items-center md:hidden
         `}

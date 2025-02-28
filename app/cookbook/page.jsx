@@ -19,10 +19,10 @@ export default function Cookbook() {
   return (
     <div className="max-w-3xl mx-auto p-6 px-0 sm:px-6 md:px-12 lg:px-16 xl:px-24">
       {wishlist.length === 0 ? (
-        <p className="text-gray-500 px-1">
+        <p className="text-gray-500 px-2 text-justify">
           It looks like your cookbook is empty right now, but that’s totally
-          okay! You can quickly fill it up with your favorite recipes. Just
-          click "Add to Cookbook" below any recipe you love to get started!
+          okay! ,<br /> You can quickly fill it up with your favorite recipes.
+          Just click "Add to Cookbook" below any recipe you love to get started!
         </p>
       ) : (
         <div className="space-y-4">

@@ -48,6 +48,33 @@ export default function RecipePost({
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
   const baker = bakers.find((b) => b.id === bakerId);
   const [isFollowed, setIsFollowed] = useState(baker?.isFollowed);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [isSliderOpen, setIsSliderOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const openImageSlider = (images, index) => {
+    setSelectedImages(images);
+    setCurrentIndex(index);
+    setIsSliderOpen(true);
+  };
+
+  const closeImageSlider = () => {
+    setIsSliderOpen(false);
+    setSelectedImages([]);
+  };
+
+  const prevImage = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? selectedImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  const nextImage = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === selectedImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
   useEffect(() => {
     const formattedDate = dayjs(date);
     const today = dayjs();
@@ -65,6 +92,10 @@ export default function RecipePost({
     setFollowers((prev) => prev + 1);
     setIsFollowed((prev) => !prev);
   };
+  const handleArtist = () => {
+    router.push(`artistProfile?name=${encodeURIComponent(baker.name)}`);
+  };
+
   const handleHide = () => {
     setIsHidden(true);
   };
@@ -196,7 +227,6 @@ export default function RecipePost({
           </button>
         </div>
       </div>
-
       {/* Baker Profile Section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1 gap-2">
         <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -224,7 +254,9 @@ export default function RecipePost({
           </div>
           <div className="min-w-0">
             <h2 className="text-base sm:text-lg font-semibold flex items-center gap-1 flex-wrap text-black">
-              <span className="truncate">{baker?.name}</span>
+              <button onClick={handleArtist} className="truncate">
+                {baker?.name}
+              </button>
               <span
                 className="ml-3 flex items-center gap-1 cursor-pointer"
                 onClick={handleFlagClick}
@@ -314,18 +346,18 @@ export default function RecipePost({
           {isFollowed ? "Followed" : "Follow"}
         </button>
       </div>
-
       {/* Recipe Reviews */}
-
       {/* Title and Description */}
-
       <div className="flex flex-row sm:flex-row justify-between  gap-1 sm:gap-2 text-[#9c51ac] mb-2  ">
         <h3 className="text-lg sm:text-xl font-bold  text-black">{title}</h3>
         {/* <h4 className=" text-xs text-black sm:text-xs font-semibold">
           Overall Recipe Reviews:
         </h4> */}
-        <div className="flex items-center border rounded px-1 border-purple-700 gap-1">
-          <button onClick={handleRatingClick}>
+        <div className="flex items-center  gap-1">
+          <button
+            className="border rounded-md px-1 border-purple-700"
+            onClick={handleRatingClick}
+          >
             <span className="text-sm sm:text-lg">{renderStars(rating)}</span>
             <span className="text-gray-600 text-xs sm:text-sm">
               ({rating.toFixed(1)}/5.0)
@@ -333,11 +365,9 @@ export default function RecipePost({
           </button>
         </div>
       </div>
-
       <p className="text-gray-700 text-justify text-sm sm:text-base">
         {description}
       </p>
-
       <button
         className={`mt-2 px-3 py-1 text-xs sm:text-sm font-semibold border-2 border-black rounded-lg 
               transition-all duration-300 ease-in-out w-full sm:w-auto 
@@ -348,7 +378,6 @@ export default function RecipePost({
       >
         {expanded ? "Show Less" : "See More"}
       </button>
-
       {/* Recipe Image with Overlay Content */}
       <div className="mt-4 aspect-video overflow-hidden relative">
         <Image
@@ -403,7 +432,7 @@ export default function RecipePost({
         {/* Share Button */}
         <button
           onClick={handleShare}
-          className="flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+          className="flex items-center justify-center w-10 h-10 bg-white hover:bg-gray-200 rounded-full transition-colors"
           title="Share Recipe"
         >
           <FaShareAlt className="text-gray-700 text-lg" />
@@ -411,7 +440,7 @@ export default function RecipePost({
 
         {/* Tip Button */}
         <button
-          className="flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+          className="flex items-center justify-center w-10 h-10 bg-white hover:bg-gray-200 rounded-full transition-colors"
           title="Leave Tip"
         >
           <FaMoneyBillWave className="text-gray-700 text-lg" />
@@ -420,7 +449,7 @@ export default function RecipePost({
         {/* Wishlist */}
         <button
           onClick={handleWishlist}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-full transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-200 border border-gray-300 rounded-full transition-colors"
           title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
         >
           {isWishlisted ? (
@@ -445,7 +474,7 @@ export default function RecipePost({
         {/* Cart & Price */}
         <button
           onClick={handleBuyNow}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-full transition-transform transform hover:scale-105 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-200 border border-gray-300 rounded-full transition-transform transform hover:scale-105 transition-colors"
           title="Add to Cart"
         >
           <FaShoppingCart className="text-gray-700 text-lg" />
@@ -454,7 +483,6 @@ export default function RecipePost({
           </span>
         </button>
       </div>
-
       {/* Prompt Message */}
       {showPrompt && (
         <>
@@ -465,13 +493,46 @@ export default function RecipePost({
           </div>
         </>
       )}
-
       {isRatingModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all duration-300 animate-scaleIn">
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex flex-col items-center justify-center p-4 animate-fadeIn">
+          {/* Image Slider */}
+          {isSliderOpen && (
+            <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-white p-4 rounded-xl shadow-lg z-50 w-3/4 max-w-3xl">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-semibold"></h3>
+                <button
+                  onClick={closeImageSlider}
+                  className="text-red-600 font-bold"
+                >
+                  ✕
+                </button>
+              </div>
+              <div className="relative flex items-center justify-center">
+                <button
+                  onClick={prevImage}
+                  className="absolute left-2 text-xl font-bold bg-gray-200 px-2 py-1 rounded-full"
+                >
+                  ◀
+                </button>
+                <Image
+                  src={selectedImages[currentIndex]}
+                  alt="Review"
+                  className="w-64 h-64 object-cover rounded-md border"
+                />
+                <button
+                  onClick={nextImage}
+                  className="absolute right-2 text-xl font-bold bg-gray-200 px-2 py-1 rounded-full"
+                >
+                  ▶
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="bg-white rounded-xl shadow-2xl max-w-xl w-full transform transition-all duration-300 animate-scaleIn">
             <div className="p-6 space-y-4">
               <h3 className="text-2xl font-semibold text-gray-800 pb-2 border-b border-gray-200 text-center">
-                All Reviews
+                {title + "'s"} Reviews
               </h3>
 
               {/* Display All Ratings */}
@@ -506,15 +567,14 @@ export default function RecipePost({
                         {/* User Name & Rating */}
                         <div>
                           <h4 className="font-medium">{baker.name}</h4>
-                          <span className=" text-[#9c51ac]">
+                          <span className="text-[#9c51ac]">
                             {renderStars(review.rating)}
                           </span>
-                          <span className=" text-[#9c51ac] text-xs ml-1 sm:text-sm">
+                          <span className="text-[#9c51ac] text-xs ml-1 sm:text-sm">
                             ({review.rating.toFixed(1)}/5.0)
                           </span>
                         </div>
                       </div>
-
                       {/* Review Comment */}
                       <p className="text-gray-600 mt-2">{review.review}</p>
 
@@ -526,7 +586,10 @@ export default function RecipePost({
                               key={index}
                               src={img}
                               alt="Review"
-                              className="w-16 h-16 object-cover rounded-md border"
+                              className="w-16 h-16 object-cover rounded-md border cursor-pointer"
+                              onClick={() =>
+                                openImageSlider(review.images, index)
+                              }
                             />
                           ))}
                         </div>
@@ -538,12 +601,11 @@ export default function RecipePost({
                 )}
               </div>
             </div>
-
             {/* Close Button */}
             <div className="bg-gray-50 px-6 py-4 rounded-b-xl">
               <button
                 onClick={closeRatingModal}
-                className="w-full bg-gray-400 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded-lg"
+                className="w-full bg-purple-700 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg"
               >
                 Close
               </button>
@@ -551,7 +613,6 @@ export default function RecipePost({
           </div>
         </div>
       )}
-
       {/* Popup Modal */}
       {isPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
