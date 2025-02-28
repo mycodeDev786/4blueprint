@@ -49,15 +49,17 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen w-full pb-16 max-w-none overflow-x-hidden m-0 p-0`}
       >
-        {/* Wrap everything in Provider */}
-        <Provider store={store}>
-          <NavbarWithCart />
-          {!isMobile && !hideSidebars && <Sidebar isArtist={isArtist} />}
-          <Suspense> {children}</Suspense>
-          {!isMobile && <Footer />}
-          <BottomTab />
-          {/* {!isMobile && !hideSidebars && <RightSidebar />} */}
-        </Provider>
+        <Suspense>
+          {/* Wrap everything in Provider */}
+          <Provider store={store}>
+            <NavbarWithCart />
+            {!isMobile && !hideSidebars && <Sidebar isArtist={isArtist} />}
+            {children}
+            {!isMobile && <Footer />}
+            <BottomTab />
+            {/* {!isMobile && !hideSidebars && <RightSidebar />} */}
+          </Provider>
+        </Suspense>
       </body>
     </html>
   );
