@@ -14,11 +14,14 @@ export default function AllRecipes() {
         {recipes.map((recipe) => (
           <AllRecipePageCard
             key={recipe.id}
+            id={recipe.id}
             title={recipe.title}
+            ingredients={recipe.ingredients}
             image={recipe.image}
             bakerId={recipe.bakerId}
             rating={recipe.rating}
             price={recipe.price}
+            isPurchased={recipe.isPurchased}
           />
         ))}
       </div>
