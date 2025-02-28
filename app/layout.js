@@ -10,6 +10,7 @@ import { Provider, useSelector } from "react-redux";
 import { store } from "./store/store";
 import BottomTab from "./components/BottomTab";
 import { useEffect, useState } from "react";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,7 +53,7 @@ export default function RootLayout({ children }) {
         <Provider store={store}>
           <NavbarWithCart />
           {!isMobile && !hideSidebars && <Sidebar isArtist={isArtist} />}
-          {children}
+          <Suspense> {children}</Suspense>
           {!isMobile && <Footer />}
           <BottomTab />
           {/* {!isMobile && !hideSidebars && <RightSidebar />} */}
