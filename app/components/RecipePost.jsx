@@ -17,8 +17,6 @@ import {
   FaMoneyBillWave,
 } from "react-icons/fa";
 
-import { PiBookOpenTextLight } from "react-icons/pi";
-
 export default function RecipePost({
   id,
   title,
@@ -353,9 +351,9 @@ export default function RecipePost({
         {/* <h4 className=" text-xs text-black sm:text-xs font-semibold">
           Overall Recipe Reviews:
         </h4> */}
-        <div className="flex items-center  gap-1">
+        <div className="flex items-center py-0 md:py-1  gap-1">
           <button
-            className="border rounded-md px-1 border-purple-700"
+            className="border rounded-lg px-1 border-purple-700"
             onClick={handleRatingClick}
           >
             <span className="text-sm sm:text-lg">{renderStars(rating)}</span>
