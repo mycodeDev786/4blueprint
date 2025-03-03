@@ -36,14 +36,7 @@ export default function RootLayout({ children }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const hideSidebars =
-    pathname === "/signin" ||
-    pathname === "/signup" ||
-    pathname === "/verifiedbakers" ||
-    pathname === "/faq" ||
-    pathname === "/leaderboard" ||
-    pathname === "/support";
-
+  const ShowSidebars = pathname === "/" || pathname === "/categories";
   return (
     <html className="m-0 p-0 " lang="en">
       <body
@@ -53,11 +46,11 @@ export default function RootLayout({ children }) {
           {/* Wrap everything in Provider */}
           <Provider store={store}>
             <NavbarWithCart />
-            {!isMobile && !hideSidebars && <Sidebar isArtist={isArtist} />}
+            {!isMobile && ShowSidebars && <Sidebar isArtist={isArtist} />}
             {children}
             {!isMobile && <Footer />}
             <BottomTab />
-            {/* {!isMobile && !hideSidebars && <RightSidebar />} */}
+            {!isMobile && ShowSidebars && <RightSidebar />}
           </Provider>
         </Suspense>
       </body>
