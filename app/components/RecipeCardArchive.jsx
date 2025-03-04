@@ -11,7 +11,7 @@ import { removeFromWishlist } from "../store/wishlistSlice";
 import { addToArchive, removeFromArchive } from "../store/archiveSlice";
 import { bakers } from "../constants/bakers";
 
-export default function RecipeCard({ recipe }) {
+export default function RecipeCardArchive({ recipe }) {
   const dispatch = useDispatch();
   const [isClicked, setIsClicked] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -131,7 +131,7 @@ export default function RecipeCard({ recipe }) {
         >
           <FaEllipsisH className="text-gray-700 text-lg" />
         </button>
-        {menuOpen && (
+        {menuOpen && isWishlisted && (
           <div className="absolute top-[-1px] right-0 w-52 bg-white border border-gray-300 shadow-lg rounded-lg z-50">
             <button
               className="w-full text-left px-4 py-2 hover:bg-gray-100"
@@ -140,16 +140,7 @@ export default function RecipeCard({ recipe }) {
                 setMenuOpen(false);
               }}
             >
-              Archive
-            </button>
-            <button
-              className="w-full text-sm text-left px-4 py-2 hover:bg-gray-100"
-              onClick={() => {
-                setMenuOpen(false);
-                handleRemove();
-              }}
-            >
-              Remove from CookBook
+              {isWishlisted ? "Remove from wishlist" : ""}
             </button>
           </div>
         )}

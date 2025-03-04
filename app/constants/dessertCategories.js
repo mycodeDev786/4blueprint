@@ -17,6 +17,17 @@ const dessertCategories = [
       { id: "1.9", name: "Traditional and Cultural Desserts" },
     ],
   },
+  {
+    id: 2,
+    name: "Drinks",
+    image: assets.Ad3,
+    subcategories: [
+      { id: "2.1", name: "gO" },
+      { id: "2.2", name: "Cookies " },
+      { id: "2.3", name: "Past" },
+      { id: "2.4", name: "Pies and " },
+    ],
+  },
 ];
 
 export default dessertCategories;

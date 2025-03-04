@@ -430,7 +430,7 @@ export default function RecipePost({
         {/* Share Button */}
         <button
           onClick={handleShare}
-          className="flex items-center justify-center w-10 h-10 bg-white hover:bg-gray-200 rounded-full transition-colors"
+          className="flex items-center justify-center w-10 h-10 bg-white rounded-full transition-colors"
           title="Share Recipe"
         >
           <FaShareAlt className="text-gray-700 text-lg" />
@@ -438,7 +438,7 @@ export default function RecipePost({
 
         {/* Tip Button */}
         <button
-          className="flex items-center justify-center w-10 h-10 bg-white hover:bg-gray-200 rounded-full transition-colors"
+          className="flex items-center justify-center w-10 h-10 bg-white  rounded-full transition-colors"
           title="Leave Tip"
         >
           <FaMoneyBillWave className="text-gray-700 text-lg" />
@@ -447,7 +447,7 @@ export default function RecipePost({
         {/* Wishlist */}
         <button
           onClick={handleWishlist}
-          className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-200 border border-gray-300 rounded-full transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-white  border border-gray-300 rounded-full transition-colors"
           title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
         >
           {isWishlisted ? (

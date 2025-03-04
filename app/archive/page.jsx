@@ -2,15 +2,14 @@
 
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import RecipeCard from "../components/RecipeCard";
+import RecipeCardArchive from "../components/RecipeCardArchive";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
-export default function Cookbook() {
-  const wishlistState = useSelector((state) => state.wishlist);
+export default function Archive() {
+  const wishlistState = useSelector((state) => state.archive);
   const wishlist = wishlistState?.items ?? []; // Ensures wishlist is always an array
-  const router = useRouter();
+
   const [filter, setFilter] = useState("all");
 
   const totalAll = wishlist.length;
@@ -27,28 +26,18 @@ export default function Cookbook() {
     <div className="max-w-3xl mx-auto p-6 px-0 sm:px-6 md:px-12 lg:px-16 xl:px-24">
       {wishlist.length === 0 ? (
         <p className="text-gray-500 text-justify px-4">
-          It looks like your cookbook is empty right now, but that’s totally
+          It looks like your Archive list is empty right now, but that’s totally
           okay! <br />
           <br />
           You can quickly fill it up with your favorite recipes. Just click "Add
-          to Cookbook" below any recipe you love to get started!
+          to Archive" below any recipe you love and added to CookBook!
         </p>
       ) : (
         <div className="space-y-4">
-          <div className="flex flex-row justify-center bg-violet-500">
-            <button
-              onClick={() => {
-                router.push("/archive");
-              }}
-              className="px-4 py-2 rounded-lg flex items-center gap-2"
-            >
-              <Image
-                src={assets.archive_icon}
-                alt="Custom Icon"
-                className="w-5 h-5"
-              />
-              <span className="text-white font-semibold">Archive List</span>
-            </button>
+          <div className="flex flex-row justify-center">
+            <div className="px-4 py-2 rounded-lg flex items-center gap-2">
+              <span className="text-black font-semibold">Archive List </span>
+            </div>
           </div>
           <div className="flex justify-center gap-4 p-4">
             <button
@@ -81,7 +70,7 @@ export default function Cookbook() {
             </button>
           </div>
           {filteredWishlist.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+            <RecipeCardArchive key={recipe.id} recipe={recipe} />
           ))}
         </div>
       )}
