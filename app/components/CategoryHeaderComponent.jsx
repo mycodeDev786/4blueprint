@@ -70,17 +70,17 @@ export const Header = ({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-3 md:gap-5 items-center">
-        <div className="flex-grow md:flex-grow-0 w-full md:w-auto">
+      <div className="flex flex-nowrap md:flex-wrap gap-3 md:gap-5 items-center">
+        <div className="flex-grow md:flex-grow-0 w-auto">
           <button
-            className="w-full  bg-purple-600 md:w-auto text-white text-xs md:text-sm px-4 py-2 border border-gray-300 rounded-md   transition-colors"
+            className="w-full bg-purple-600 md:w-auto text-white text-xs md:text-sm px-4 py-2 border border-gray-300 rounded-md transition-colors"
             onClick={onCountryClick}
           >
-            Select Country
+            Country
           </button>
         </div>
 
-        <div className="flex-grow md:flex-grow-0 w-full md:w-auto">
+        <div className="flex-grow md:flex-grow-0 w-auto">
           <button
             className="w-full text-white md:w-auto text-xs md:text-sm px-4 py-2 border border-gray-300 rounded-md bg-orange-500 transition-colors"
             onClick={onSortClick}
@@ -90,7 +90,7 @@ export const Header = ({
         </div>
 
         <button
-          className="w-full md:w-auto text-xs md:text-sm px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex-shrink-0"
+          className="md:w-auto text-xs md:text-sm px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex-shrink-0"
           onClick={onFilterClick}
         >
           Filters
