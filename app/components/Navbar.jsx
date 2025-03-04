@@ -42,6 +42,7 @@ const Navbar = ({ cartCount }) => {
   };
   const ShowUserTitle = pathname === "/cookbook";
   const ShowArtistTitle = pathname === "/artistProfile";
+  const ShowBackButton = pathname === "/";
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -355,6 +356,31 @@ const Navbar = ({ cartCount }) => {
           md:static md:translate-y-0 md:h-24 md:pt-16`}
         style={{ transition: "transform 0.3s ease-in-out" }}
       >
+        {!ShowBackButton && (
+          <div className="absolute left-4 md:hidden">
+            <button
+              onClick={() => {
+                router.back();
+              }}
+              className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-gray-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
         {!ShowUserTitle && !ShowArtistTitle && (
           <span className="text-black font-semibold mx-2 md:mt-1 truncate">
             {getPageTitle().toUpperCase()}

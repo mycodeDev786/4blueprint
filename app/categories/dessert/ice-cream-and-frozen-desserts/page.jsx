@@ -28,7 +28,6 @@ export default function IceCreamAndDesserts() {
     <div className="min-h-screen bg-gray-50 flex justify-center">
       <Header
         category={selectedCategory}
-        onBack={() => router.back()}
         subCategory={activeTab}
         tabs={subcategories.map((sub) => sub.name)}
         onTabChange={(tab) => dispatch(setActiveTab(tab))}

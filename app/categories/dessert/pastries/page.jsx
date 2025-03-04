@@ -29,7 +29,6 @@ export default function Pastries() {
       <Header
         category={selectedCategory}
         subCategory={activeTab}
-        onBack={() => router.back()}
         tabs={subcategories.map((sub) => sub.name)}
         onTabChange={(tab) => dispatch(setActiveTab(tab))}
         onCountryChange={(country) => console.log("Selected country:", country)}
