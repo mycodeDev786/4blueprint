@@ -1,5 +1,4 @@
 "use client";
-
 import { Header } from "@/app/components/CategoryHeaderComponent";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,7 +7,7 @@ import { useRouter } from "next/navigation";
 import recipes from "@/app/constants/recipes";
 import AllRecipePageCard from "@/app/components/AllRecipePageCard";
 
-export default function Pastries() {
+export default function AllRecipes() {
   const dispatch = useDispatch();
   const router = useRouter();
 

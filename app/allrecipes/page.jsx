@@ -17,32 +17,6 @@ export default function AllRecipes() {
 
   return (
     <div className="px-0 mt-5 sm:px-6 md:px-12 lg:px-16 xl:px-24">
-      {/* ✅ Category Menu */}
-      <div className="max-w-lg mx-0 md:mx-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-6 bg-gray-200 p-4 rounded-lg text-center">
-        {dessertCategories.map((item) => (
-          <div key={item.category} className="relative">
-            <button
-              className="w-full bg-gray-300 z-40 p-2 rounded-lg"
-              onClick={() => toggleCategory(item.category)}
-            >
-              {item.category}
-            </button>
-            {activeCategory === item.category && (
-              <ul className="absolute z-50 left-0 w-full mt-2 bg-gray-100 rounded-lg p-2 shadow-lg">
-                {item.subcategories.map((sub, index) => (
-                  <li
-                    key={index}
-                    className="py-1 hover:bg-gray-300 cursor-pointer"
-                  >
-                    {sub}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
-      </div>
-
       {/* ✅ Grid Layout */}
       <div className="max-w-lg mx-0 md:mx-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-4">
         {recipes.map((recipe) => (

@@ -16,24 +16,8 @@ export const Header = ({
   useEffect(() => {
     if (tabs.length > 0) {
       setActiveTab(subCategory);
-      onTabChange(subCategory);
     }
   }, [tabs, subCategory, onTabChange]);
-
-  useEffect(() => {
-    if (activeTab && tabsRef.current[activeTab]) {
-      const tabElement = tabsRef.current[activeTab];
-      const container = tabContainerRef.current;
-      const containerWidth = container.offsetWidth;
-      const tabLeft = tabElement.offsetLeft;
-      const tabWidth = tabElement.offsetWidth;
-
-      container.scrollTo({
-        left: tabLeft - containerWidth / 2 + tabWidth / 2,
-        behavior: "smooth",
-      });
-    }
-  }, [activeTab]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -71,30 +55,32 @@ export const Header = ({
       </div>
 
       <div className="flex flex-nowrap md:flex-wrap gap-3 md:gap-5 items-center">
-        <div className="flex-grow md:flex-grow-0 w-auto">
+        <div className="flex-1 md:flex-grow-0 w-auto">
           <button
-            className="w-full bg-purple-600 md:w-auto text-white text-xs md:text-sm px-4 py-2 border border-gray-300 rounded-md transition-colors"
+            className="w-full bg-purple-600 md:w-auto text-white text-xs md:text-sm px-4 py-2 border border-gray-300 rounded-full transition-colors"
             onClick={onCountryClick}
           >
             Country
           </button>
         </div>
 
-        <div className="flex-grow md:flex-grow-0 w-auto">
+        <div className="flex-1 md:flex-grow-0 w-auto">
           <button
-            className="w-full text-white md:w-auto text-xs md:text-sm px-4 py-2 border border-gray-300 rounded-md bg-orange-500 transition-colors"
+            className="w-full text-white md:w-auto text-xs md:text-sm px-4 py-2 border rounded-full border-gray-300  bg-orange-500 transition-colors"
             onClick={onSortClick}
           >
             Sort
           </button>
         </div>
 
-        <button
-          className="md:w-auto text-xs md:text-sm px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex-shrink-0"
-          onClick={onFilterClick}
-        >
-          Filters
-        </button>
+        <div className="flex-1 md:flex-grow-0 w-auto">
+          <button
+            className="w-full md:w-auto text-xs md:text-sm px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors"
+            onClick={onFilterClick}
+          >
+            Filters
+          </button>
+        </div>
       </div>
     </header>
   );
