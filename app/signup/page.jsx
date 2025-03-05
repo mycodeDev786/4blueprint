@@ -24,9 +24,15 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "var(--background-color)" }}>
+    <div
+      className="min-h-screen flex items-center justify-center"
+      style={{ backgroundColor: "var(--background-color)" }}
+    >
       <div className="p-8 rounded-lg shadow-lg w-96 bg-white">
-        <h2 className="text-2xl font-bold mb-4 text-center" style={{ color: "var(--primary-color)" }}>
+        <h2
+          className="text-2xl font-bold mb-4 text-center"
+          style={{ color: "var(--primary-color)" }}
+        >
           Registration
         </h2>
         <form onSubmit={handleSignup} className="space-y-4">
@@ -78,8 +84,9 @@ export default function SignUp() {
                 <div>
                   <span className="font-medium">Normal Membership Account</span>
                   <p className="text-sm" style={{ color: "var(--text-color)" }}>
-                    With this account, you can make purchases and rate other bakers.
-                    You can upgrade to a Baker Membership Account later in your profile settings.
+                    With this account, you can make purchases and rate other
+                    bakers. You can upgrade to a Baker Membership Account later
+                    in your profile settings.
                   </p>
                 </div>
               </label>
@@ -94,7 +101,8 @@ export default function SignUp() {
                 <div>
                   <span className="font-medium">Baker Membership Account</span>
                   <p className="text-sm" style={{ color: "var(--text-color)" }}>
-                    With this account, you can add recipes, manage your own baker profile, and sell your recipes.
+                    With this account, you can add recipes, manage your own
+                    baker profile, and sell your recipes.
                   </p>
                 </div>
               </label>
@@ -105,15 +113,38 @@ export default function SignUp() {
             type="submit"
             className="w-full p-2 rounded-md text-white"
             style={{ backgroundColor: "var(--primary-color)" }}
-            onMouseOver={(e) => e.target.style.backgroundColor = "var(--primary-hover)"}
-            onMouseOut={(e) => e.target.style.backgroundColor = "var(--primary-color)"}
+            onMouseOver={(e) =>
+              (e.target.style.backgroundColor = "var(--primary-hover)")
+            }
+            onMouseOut={(e) =>
+              (e.target.style.backgroundColor = "var(--primary-color)")
+            }
           >
             Sign Up
           </button>
         </form>
+
+        <div className="mt-4 space-y-2">
+          <button className="w-full p-2 rounded-md bg-red-500 text-white">
+            Sign Up with Google
+          </button>
+          <button className="w-full p-2 rounded-md bg-blue-600 text-white">
+            Sign Up with Facebook
+          </button>
+          <button className="w-full p-2 rounded-md bg-black text-white">
+            Sign Up with Apple
+          </button>
+          <button className="w-full p-2 rounded-md bg-gray-800 text-white">
+            Sign Up with X
+          </button>
+        </div>
         <p className="text-sm text-center mt-4">
           Already have an account?{" "}
-          <Link href="/signin" className="hover:underline" style={{ color: "var(--primary-color)" }}>
+          <Link
+            href="/signin"
+            className="hover:underline"
+            style={{ color: "var(--primary-color)" }}
+          >
             Sign In
           </Link>
         </p>

@@ -360,7 +360,7 @@ const Navbar = ({ cartCount }) => {
           <div className="absolute left-4 md:hidden">
             <button
               onClick={() => {
-                router.back();
+                router.push("/categories");
               }}
               className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
             >

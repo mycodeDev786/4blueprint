@@ -14,6 +14,11 @@ export default function SignIn() {
     router.push("/");
   };
 
+  const handleSocialLogin = (provider) => {
+    console.log(`Logging in with ${provider}`);
+    // Add authentication logic here
+  };
+
   return (
     <div
       className="min-h-screen flex items-center justify-center"
@@ -57,9 +62,35 @@ export default function SignIn() {
             Login
           </button>
         </form>
+        <div className="mt-4 space-y-2">
+          <button
+            onClick={() => handleSocialLogin("Google")}
+            className="w-full p-2 rounded-md bg-red-500 text-white"
+          >
+            Sign in with Google
+          </button>
+          <button
+            onClick={() => handleSocialLogin("Facebook")}
+            className="w-full p-2 rounded-md bg-blue-600 text-white"
+          >
+            Sign in with Facebook
+          </button>
+          <button
+            onClick={() => handleSocialLogin("Apple")}
+            className="w-full p-2 rounded-md bg-black text-white"
+          >
+            Sign in with Apple
+          </button>
+          <button
+            onClick={() => handleSocialLogin("X")}
+            className="w-full p-2 rounded-md bg-gray-800 text-white"
+          >
+            Sign in with X
+          </button>
+        </div>
         <p className="text-sm text-center mt-4">
           Don't have an account?{" "}
-          <Link href="/" className="text-blue-600">
+          <Link href="/signup" className="text-blue-600">
             Sign Up
           </Link>
         </p>
