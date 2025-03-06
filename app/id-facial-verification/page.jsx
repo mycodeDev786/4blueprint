@@ -95,7 +95,9 @@ export default function IdFacialVerification() {
           </select>
           <PhoneInput
             country={"us"}
+            searchPlaceholder="search"
             value={formData.phone}
+            enableSearch={true}
             onChange={handlePhoneChange}
             inputClass="w-full border p-2 rounded-md mt-1"
             required

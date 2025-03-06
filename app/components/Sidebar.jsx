@@ -9,8 +9,10 @@ import {
   FaWallet,
   FaPlus,
 } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const Sidebar = ({ isArtist }) => {
+  const router = useRouter();
   return (
     <aside className="hidden md:block  w-64 h-[calc(100vh-4rem)] text-purple-700 border-r border-gray-300 fixed left-0 top-16 bottom-16 p-6 bg-white shadow-lg z-40">
       <h2 className="text-2xl font-bold mb-6">Menu</h2>
@@ -66,7 +68,12 @@ const Sidebar = ({ isArtist }) => {
       </ul>
 
       {isArtist && (
-        <button className="mt-6 w-full bg-[#673AB7] hover:bg-green-600 text-white flex items-center justify-center space-x-2 py-2 rounded">
+        <button
+          onClick={() => {
+            router.push("/addrecipe");
+          }}
+          className="mt-6 w-full bg-[#673AB7] hover:bg-green-600 text-white flex items-center justify-center space-x-2 py-2 rounded"
+        >
           <FaPlus />
           <span>Add Recipe</span>
         </button>

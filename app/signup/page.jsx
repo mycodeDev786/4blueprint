@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import countryList from "react-select-country-list";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import Link from "next/link";
 
 export default function SignUp() {
@@ -11,6 +12,8 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
   const [userType, setUserType] = useState("customer");
@@ -99,37 +102,61 @@ export default function SignUp() {
               ))}
             </select>
           </div>
+          {/* Password Input with Show/Hide */}
           <div>
             <label className="block font-medium">
               Password <span style={{ color: "red" }}>*</span>
             </label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              className="w-full border p-2 rounded-md mt-1"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                className="w-full border p-2 rounded-md pr-10 mt-1"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-2 flex items-center px-2 text-gray-600"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+              </button>
+            </div>
           </div>
+          {/* Confirm Password Input with Show/Hide */}
           <div>
             <label className="block font-medium">
               Confirm Password <span style={{ color: "red" }}>*</span>
             </label>
-            <input
-              type="password"
-              placeholder="Confirm your password"
-              className="w-full border p-2 rounded-md mt-1"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm your password"
+                className="w-full border p-2 rounded-md pr-10 mt-1"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-2 flex items-center px-2 text-gray-600"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? (
+                  <FiEyeOff size={20} />
+                ) : (
+                  <FiEye size={20} />
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Membership Selection */}
           <div className="mt-3">
             <label className="block font-medium">
-              Select Account Type <span style={{ color: "red" }}>*</span>{" "}
+              Select Account Type <span style={{ color: "red" }}>*</span>
             </label>
             <div className="mt-2">
               <label className="flex items-start gap-2 cursor-pointer">

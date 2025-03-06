@@ -43,6 +43,7 @@ const Navbar = ({ cartCount }) => {
   const ShowUserTitle = pathname === "/cookbook";
   const ShowArtistTitle = pathname === "/artistProfile";
   const ShowBackButton = pathname === "/";
+  const ShowAddRecipe = pathname === "/addrecipe";
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -381,7 +382,7 @@ const Navbar = ({ cartCount }) => {
             </button>
           </div>
         )}
-        {!ShowUserTitle && !ShowArtistTitle && (
+        {!ShowUserTitle && !ShowArtistTitle && !ShowAddRecipe && (
           <span className="text-black font-semibold mx-2 md:mt-1 truncate">
             {getPageTitle().toUpperCase()}
           </span>
@@ -394,6 +395,11 @@ const Navbar = ({ cartCount }) => {
         {ShowArtistTitle && (
           <span className="text-black font-semibold mx-2 md:mt-1 truncate">
             {artistName.toUpperCase()} PROFILE
+          </span>
+        )}
+        {ShowAddRecipe && (
+          <span className="text-black font-semibold mx-2 md:mt-1 truncate">
+            ADD RECIPE
           </span>
         )}
       </div>
