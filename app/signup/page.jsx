@@ -2,24 +2,41 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import countryList from "react-select-country-list";
 import Link from "next/link";
 
 export default function SignUp() {
+  const countries = countryList().getData();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
-  const [userType, setUserType] = useState("customer"); // Default to Normal Membership
+  const [country, setCountry] = useState("");
+  const [userType, setUserType] = useState("customer");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSignup = (e) => {
     e.preventDefault();
+    setError("");
+
+    if (!name || !email || !password || !confirmPassword || !country) {
+      setError("All fields are required.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     console.log("Signing up with:", name, email, password, userType);
 
-    // Redirect based on membership type
     if (userType === "customer") {
-      router.push("/email-verification"); // Normal account email verification
+      router.push("/email-verification");
     } else if (userType === "baker") {
-      router.push("/id-facial-verification"); // Baker account ID & facial verification
+      router.push("/id-facial-verification");
     }
   };
 
@@ -35,9 +52,12 @@ export default function SignUp() {
         >
           Registration
         </h2>
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
-            <label className="block font-medium">Full Name</label>
+            <label className="block font-medium">
+              Full Name <span style={{ color: "red" }}>*</span>
+            </label>
             <input
               type="text"
               placeholder="Enter your full name"
@@ -48,7 +68,9 @@ export default function SignUp() {
             />
           </div>
           <div>
-            <label className="block font-medium">Email</label>
+            <label className="block font-medium">
+              Email <span style={{ color: "red" }}>*</span>
+            </label>
             <input
               type="email"
               placeholder="Enter your email"
@@ -59,7 +81,28 @@ export default function SignUp() {
             />
           </div>
           <div>
-            <label className="block font-medium">Password</label>
+            <label className="block font-medium">
+              Country <span style={{ color: "red" }}>*</span>
+            </label>
+            <select
+              name="country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              required
+              className="w-full border p-2 rounded-md mt-1"
+            >
+              <option value="">Select your country</option>
+              {countries.map((c) => (
+                <option key={c.value} value={c.label}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block font-medium">
+              Password <span style={{ color: "red" }}>*</span>
+            </label>
             <input
               type="password"
               placeholder="Enter your password"
@@ -69,10 +112,25 @@ export default function SignUp() {
               required
             />
           </div>
+          <div>
+            <label className="block font-medium">
+              Confirm Password <span style={{ color: "red" }}>*</span>
+            </label>
+            <input
+              type="password"
+              placeholder="Confirm your password"
+              className="w-full border p-2 rounded-md mt-1"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
 
           {/* Membership Selection */}
           <div className="mt-3">
-            <label className="block font-medium">Select Account Type</label>
+            <label className="block font-medium">
+              Select Account Type <span style={{ color: "red" }}>*</span>{" "}
+            </label>
             <div className="mt-2">
               <label className="flex items-start gap-2 cursor-pointer">
                 <input
@@ -82,11 +140,12 @@ export default function SignUp() {
                   className="mt-1 cursor-pointer"
                 />
                 <div>
-                  <span className="font-medium">Normal Membership Account</span>
+                  <span className="font-semibold">Standard Membership: </span>
                   <p className="text-sm" style={{ color: "var(--text-color)" }}>
-                    With this account, you can make purchases and rate other
-                    bakers. You can upgrade to a Baker Membership Account later
-                    in your profile settings.
+                    This account allows you to purchase items, access the
+                    cookbook, use your wallet, and rate artists. You can upgrade
+                    to an Artist Account through your profile settings, and
+                    email verification is required.
                   </p>
                 </div>
               </label>
@@ -99,31 +158,57 @@ export default function SignUp() {
                   className="mt-1 cursor-pointer"
                 />
                 <div>
-                  <span className="font-medium">Baker Membership Account</span>
+                  <span className="font-semibold">Artist Membership:</span>
                   <p className="text-sm" style={{ color: "var(--text-color)" }}>
-                    With this account, you can add recipes, manage your own
-                    baker profile, and sell your recipes.
+                    This account includes all the features of the Standard
+                    Membership, in addition to the ability to submit recipes,
+                    manage your artist profile, and sell your recipes. Please
+                    note that identity verification, facial verification, and
+                    email verification are required for this membership.
                   </p>
                 </div>
               </label>
             </div>
           </div>
 
+          {/* Terms and Conditions Checkbox */}
+          <div className="mt-3 flex items-center">
+            <input
+              type="checkbox"
+              checked={termsAccepted}
+              onChange={() => setTermsAccepted(!termsAccepted)}
+              id="terms"
+              className="mr-2"
+              required
+            />
+            <label htmlFor="terms" className="text-sm">
+              I agree to the{" "}
+              <Link href="/terms" className="text-blue-600 hover:underline">
+                Terms and Conditions
+              </Link>{" "}
+              and
+              <Link href="/privacy" className="text-blue-600 hover:underline">
+                {" "}
+                Privacy Policy
+              </Link>
+            </label>
+          </div>
+
+          {/* Sign Up Button */}
           <button
             type="submit"
             className="w-full p-2 rounded-md text-white"
-            style={{ backgroundColor: "var(--primary-color)" }}
-            onMouseOver={(e) =>
-              (e.target.style.backgroundColor = "var(--primary-hover)")
-            }
-            onMouseOut={(e) =>
-              (e.target.style.backgroundColor = "var(--primary-color)")
-            }
+            style={{
+              backgroundColor: termsAccepted ? "var(--primary-color)" : "gray",
+              cursor: termsAccepted ? "pointer" : "not-allowed",
+            }}
+            disabled={!termsAccepted}
           >
             Sign Up
           </button>
         </form>
 
+        {/* Social Sign Up Buttons */}
         <div className="mt-4 space-y-2">
           <button className="w-full p-2 rounded-md bg-red-500 text-white">
             Sign Up with Google
@@ -138,6 +223,7 @@ export default function SignUp() {
             Sign Up with X
           </button>
         </div>
+
         <p className="text-sm text-center mt-4">
           Already have an account?{" "}
           <Link

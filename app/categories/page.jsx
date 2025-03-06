@@ -27,7 +27,7 @@ export default function AllCategories() {
         setCategory({
           name: category.name,
           subcategories: [
-            { name: "All", id: "all" },
+            { name: "All " + category.name, id: "all" },
             ...category.subcategories,
           ],
         })
@@ -91,7 +91,7 @@ export default function AllCategories() {
             {/* Dropdown */}
             {selectedCategory === category.name && (
               <div className="absolute mb-10 top-16 left-1/2 transform z-50 -translate-x-1/2 bg-white shadow-lg rounded-md p-3 w-40">
-                {category.subcategories.map((sub) => (
+                {subcategories.map((sub) => (
                   <div
                     key={sub.id}
                     className={`px-3 py-2 hover:bg-gray-200 rounded-md cursor-pointer ${

@@ -28,7 +28,7 @@ export default function AllRecipes() {
   // ✅ Updated Filtering Logic
   const filteredRecipes = recipes.filter((recipe) => {
     const isSameCategory = recipe.categoryName === selectedCategory;
-    const isAllTab = activeTab === "All";
+    const isAllTab = activeTab === "All " + selectedCategory;
     const isSameSubcategory = recipe.subcategoryName === activeTab;
 
     return isSameCategory && (isAllTab || isSameSubcategory);
