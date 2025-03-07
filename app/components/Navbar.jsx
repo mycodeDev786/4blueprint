@@ -24,7 +24,7 @@ const Navbar = ({ cartCount }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
-  const artistName = searchParams.get("name");
+  const artistName = "Artist";
   // const user = useSelector((state) => state.user.user);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 

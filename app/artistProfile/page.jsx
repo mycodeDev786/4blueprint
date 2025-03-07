@@ -65,7 +65,7 @@ const ArtistProfile = () => {
               />
               <div className="flex-1">
                 <h4 className="font-medium">{album.title}</h4>
-                <p className="text-gray-500 text-sm">Album • Songs</p>
+                <p className="text-gray-500 text-sm">Recipe</p>
               </div>
               <button className="text-gray-500">⋮</button>
             </div>

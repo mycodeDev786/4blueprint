@@ -11,10 +11,7 @@ const BottomTab = () => {
           <span className="text-xs">Cookbook</span>
         </Link>
 
-        <Link
-          href="/notifications"
-          className="flex flex-col items-center flex-1"
-        >
+        <Link href="/userProfile" className="flex flex-col items-center flex-1">
           <FaBell className="text-xl" />
           <span className="text-xs">Notifications</span>
         </Link>
@@ -27,7 +24,7 @@ const BottomTab = () => {
           >
             <FaPlus
               className={`text-2xl  ${
-                userType === "artist" ? "text-[#673AB7]" : "text-white"
+                userType === "artist" ? "text-[#673AB7]" : "text-gray-500"
               }`}
             />
           </Link>
@@ -41,7 +38,10 @@ const BottomTab = () => {
           <span className="text-xs">Artists</span>
         </Link>
 
-        <Link href="/profile" className="flex flex-col items-center flex-1">
+        <Link
+          href={userType === "artist" ? "/artistProfile" : "/userProfile"}
+          className="flex flex-col items-center flex-1"
+        >
           <FaUser className="text-xl" />
           <span className="text-xs">Profile</span>
         </Link>
