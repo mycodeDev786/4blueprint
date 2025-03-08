@@ -363,7 +363,7 @@ export default function RecipePost({
           </button>
         </div>
       </div>
-      <p className="text-gray-700 text-justify text-sm sm:text-base">
+      <p className="text-gray-700 text-left text-sm sm:text-base">
         {description}
       </p>
       <button
@@ -417,7 +417,7 @@ export default function RecipePost({
               <p className="text-gray-700 font-medium whitespace-pre-line">
                 {ingredients}
               </p>
-              <p className="mt-3 text-gray-600 italic text-sm">
+              <p className="mt-3 text-gray-600  italic text-sm">
                 If you’d like to know how to prepare this delicious recipe, just
                 purchase it from this artist. We really appreciate your support!
               </p>

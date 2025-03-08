@@ -9,7 +9,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { assets } from "@/assets/assets";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 const Navbar = ({ cartCount }) => {
   const router = useRouter();
@@ -25,6 +25,14 @@ const Navbar = ({ cartCount }) => {
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
   const artistName = "Artist";
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+
+  const handleSearch = () => {
+    if (query.trim() !== "") {
+      onSearch(query);
+    }
+  };
   // const user = useSelector((state) => state.user.user);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
@@ -44,6 +52,7 @@ const Navbar = ({ cartCount }) => {
   const ShowArtistTitle = pathname === "/artistProfile";
   const ShowBackButton = pathname === "/";
   const ShowAddRecipe = pathname === "/addrecipe";
+  const ShowSignIn = pathname === "/signin";
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -84,7 +93,7 @@ const Navbar = ({ cartCount }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  const handlecart = () => {
+  const handleCart = () => {
     router.push("/cart");
   };
 
@@ -171,7 +180,7 @@ const Navbar = ({ cartCount }) => {
         {/* Desktop Cart */}
         <div
           className="hidden md:block relative cursor-pointer"
-          onClick={handlecart}
+          onClick={handleCart}
         >
           <FaShoppingCart className="text-2xl text-white" />
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
@@ -182,14 +191,40 @@ const Navbar = ({ cartCount }) => {
         {/* Right Section (Mobile & Desktop) */}
         <div className="flex items-center gap-4">
           {/* Mobile Cart */}
-          <div
-            className="md:hidden relative cursor-pointer"
-            onClick={handlecart}
-          >
-            <FaShoppingCart className="text-2xl text-white" />
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-              {cartCount}
-            </span>
+          <div className="md:hidden flex items-center gap-4 relative">
+            {/* Search Icon */}
+            <div
+              className="relative cursor-pointer"
+              onClick={() => setSearchOpen(!searchOpen)}
+            >
+              <FaSearch className="text-2xl text-white" />
+            </div>
+            {/* Shopping Cart */}
+            <div className="relative cursor-pointer" onClick={handleCart}>
+              <FaShoppingCart className="text-2xl text-white" />
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                {cartCount}
+              </span>
+            </div>
+
+            {/* Search Input (Appears when searchOpen is true) */}
+            {/* {searchOpen && (
+              <div className="absolute top-10 right-0 w-48 bg-white p-2 rounded shadow-lg">
+                <input
+                  type="text"
+                  className="w-full p-1 border rounded text-black"
+                  placeholder="Search..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                <button
+                  className="mt-2 w-full bg-blue-500 text-white py-1 rounded"
+                  onClick={handleSearch}
+                >
+                  Search
+                </button>
+              </div>
+            )} */}
           </div>
 
           {/* Desktop Account */}
@@ -382,11 +417,14 @@ const Navbar = ({ cartCount }) => {
             </button>
           </div>
         )}
-        {!ShowUserTitle && !ShowArtistTitle && !ShowAddRecipe && (
-          <span className="text-black font-semibold mx-2 md:mt-1 truncate">
-            {getPageTitle().toUpperCase()}
-          </span>
-        )}
+        {!ShowUserTitle &&
+          !ShowArtistTitle &&
+          !ShowAddRecipe &&
+          !ShowSignIn && (
+            <span className="text-black font-semibold mx-2 md:mt-1 truncate">
+              {getPageTitle().toUpperCase()}
+            </span>
+          )}
         {ShowUserTitle && (
           <span className="text-black font-semibold mx-2 md:mt-1 truncate">
             {user?.name.toUpperCase()} COOKBOOK
@@ -400,6 +438,11 @@ const Navbar = ({ cartCount }) => {
         {ShowAddRecipe && (
           <span className="text-black font-semibold mx-2 md:mt-1 truncate">
             ADD RECIPE
+          </span>
+        )}
+        {ShowSignIn && (
+          <span className="text-black font-semibold mx-2 md:mt-1 truncate">
+            SIGN IN
           </span>
         )}
       </div>

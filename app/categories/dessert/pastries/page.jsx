@@ -63,7 +63,7 @@ export default function Pastries() {
         />
       </div>
       {/* ✅ Grid Layout */}
-      <div className="max-w-lg mx-0 md:mx-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-4">
+      <div className="max-w-lg md:max-w-full  mx-0 md:mx-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
         {filteredRecipes.map((recipe) => (
           <AllRecipePageCard
             key={recipe.id}

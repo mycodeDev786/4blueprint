@@ -31,7 +31,7 @@ export const Header = ({
           className="relative w-full overflow-x-auto scrollbar-none "
           ref={tabContainerRef}
         >
-          <div className="flex gap-4 md:gap-6 px-4 md:px-6">
+          <div className="flex gap-4  md:gap-6  md:px-6">
             {tabs.length > 0 ? (
               tabs.map((tab) => (
                 <button
@@ -54,10 +54,10 @@ export const Header = ({
         </div>
       </div>
 
-      <div className="flex flex-nowrap md:flex-wrap gap-3 md:gap-5 items-center">
+      <div className="flex md:ml-6 flex-nowrap md:flex-wrap gap-3 md:gap-5 items-center">
         <div className="flex-1 md:flex-grow-0 w-auto">
           <button
-            className="w-full bg-purple-600 md:w-auto text-white text-xs md:text-sm px-4 py-2 border border-gray-300 rounded-full transition-colors"
+            className="w-full  bg-purple-600 md:w-auto text-white text-xs md:text-sm px-4 py-2 border border-gray-300 rounded-full transition-colors"
             onClick={onCountryClick}
           >
             Country

@@ -99,7 +99,7 @@ export default function RecipeCard({ recipe }) {
           className="w-32 h-32 rounded-lg object-cover transition-transform duration-300"
         />
         {!recipe.isPurchased && (
-          <div className="absolute bottom-7 left-0 w-full bg-transparent text-black text-center text-xs md:text-sm font-semibold rounded-b-lg">
+          <div className="absolute bottom-7 left-0 w-full bg-white bg-transparent bg-opacity-60 text-black text-center text-xs md:text-sm font-semibold rounded-b-lg">
             RECIPE LOCKED
           </div>
         )}
