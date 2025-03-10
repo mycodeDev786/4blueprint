@@ -130,7 +130,7 @@ const Navbar = ({ cartCount }) => {
           </Link>
 
           <Link
-            href="/verifiedbakers"
+            href="/verified-bakers"
             className="hover:text-orange-300 transition"
           >
             Verified Artists
@@ -322,7 +322,7 @@ const Navbar = ({ cartCount }) => {
             </Link>
 
             <Link
-              href="/verifiedbakers"
+              href="/verified-bakers"
               className="py-2 px-6 hover:bg-gray-100"
               onClick={() => setMenuOpen(false)}
             >

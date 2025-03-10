@@ -42,7 +42,7 @@ export default function BakerProfileCard({ baker }) {
 
       {/* Baker Name & Followers */}
       <div className="flex justify-center items-center mt-2">
-        <h2 className="text-lg font-semibold">{baker.name}</h2>
+        <h4 className="text-lg font-semibold">{baker.name}</h4>
       </div>
 
       <p className="text-gray-500 text-sm">{followers} Followers</p>

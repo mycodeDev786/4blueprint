@@ -11,7 +11,10 @@ const BottomTab = () => {
           <span className="text-xs">Cookbook</span>
         </Link>
 
-        <Link href="/userProfile" className="flex flex-col items-center flex-1">
+        <Link
+          href="/notifications"
+          className="flex flex-col items-center flex-1"
+        >
           <FaBell className="text-xl" />
           <span className="text-xs">Notifications</span>
         </Link>
