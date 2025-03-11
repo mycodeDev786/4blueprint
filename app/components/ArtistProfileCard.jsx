@@ -14,7 +14,7 @@ export default function ArtistProfileCard({ artist }) {
   return (
     <div className="relative p-3 bg-white rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
       {/* Country Flag - Top Right */}
-      <div className="absolute pl-3 top-4 z-50 left-0 flex items-center gap-1 backdrop-blur-sm  py-1 rounded-full">
+      <div className="absolute pl-3 top-4  left-0 flex items-center gap-1 backdrop-blur-sm  py-1 rounded-full">
         <Image
           src={artist.flag}
           alt={artist.country}
@@ -25,7 +25,7 @@ export default function ArtistProfileCard({ artist }) {
       </div>
 
       {/* Profile Image */}
-      <div className="relative left-0 mx-auto mb-4 w-32 h-32">
+      <div className="relative left-0 mx-auto mb-1 w-32 h-32">
         <Image
           src={artist.image}
           alt={artist.name}

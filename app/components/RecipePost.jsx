@@ -219,37 +219,19 @@ export default function RecipePost({
               setMenuOpen(!menuOpen);
             }}
           >
-            <FaEllipsisH className="text-gray-700 text-lg" />
+            <FaEllipsisH size={12} className="text-gray-700 text-lg" />
           </button>
           {menuOpen && (
-            <div className="absolute top-[-1px] right-0 w-20 bg-white border border-gray-300 shadow-lg rounded-lg z-50 flex flex-row items-center justify-end space-x-2 p-2">
-              <button
-                onClick={handleReport}
-                className="text-lg sm:text-xl"
-                title="Report Recipe"
-              >
-                <svg
-                  className="w-6 h-6 text-black-600"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M5 21V3"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                  <path d="M5 4H15L12 7.5L15 11H5V4Z" />
-                </svg>
+            <div className="absolute top-[-1px] right-0 w-16  bg-white border border-gray-300 shadow-lg rounded-lg z-50 flex flex-col items-center justify-end space-x-2 p-2">
+              <button onClick={handleReport}>
+                <span className=" text-[12px] font-semibold text-gray-600 hover:text-gray-800 transition-colors">
+                  Report
+                </span>
               </button>
-              <button
-                onClick={handleHide}
-                className="flex items-center justify-center text-lg sm:text-xl"
-                title="Hide Post"
-              >
-                <FaEyeSlash className="w-6 h-6 text-gray-600 hover:text-gray-800 transition-colors" />
+              <button onClick={handleHide}>
+                <span className=" text-[12px] font-semibold text-gray-600 hover:text-gray-800 transition-colors">
+                  Hide
+                </span>
               </button>
             </div>
           )}

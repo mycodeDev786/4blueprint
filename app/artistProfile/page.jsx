@@ -4,7 +4,7 @@ import recipes from "../constants/recipes";
 
 const ArtistProfile = () => {
   return (
-    <div className="max-w-md md:max-w-6xl mx-auto  rounded-xl shadow-lg overflow-hidden p-6">
+    <div className="max-w-md md:max-w-6xl mx-2  rounded-xl shadow-lg overflow-hidden p-2">
       {/* Artist Section */}
       <div className="relative h-64 rounded-xl overflow-hidden">
         {/* Background Image */}
