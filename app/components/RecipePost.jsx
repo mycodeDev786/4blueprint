@@ -15,6 +15,7 @@ import {
   FaBookMedical,
   FaShoppingCart,
   FaMoneyBillWave,
+  FaEllipsisH,
 } from "react-icons/fa";
 
 export default function RecipePost({
@@ -34,6 +35,7 @@ export default function RecipePost({
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -55,6 +57,21 @@ export default function RecipePost({
     setCurrentIndex(index);
     setIsSliderOpen(true);
   };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (!event.target.closest(".menu-container")) {
+        setMenuOpen(false);
+      }
+    };
+    if (menuOpen) {
+      document.addEventListener("click", handleOutsideClick);
+    } else {
+      document.removeEventListener("click", handleOutsideClick);
+    }
+
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, [menuOpen]);
 
   const closeImageSlider = () => {
     setIsSliderOpen(false);
@@ -193,36 +210,49 @@ export default function RecipePost({
         <div className="text-[#673AB7] font-semibold text-xs sm:text-sm">
           {displayDate}
         </div>
-        <div className="flex gap-2 sm:gap-3">
+        {/* Three-dot Menu */}
+        <div className="absolute top-2 right-2 menu-container">
           <button
-            onClick={handleReport}
-            className="text-lg sm:text-xl"
-            title="Report Recipe"
+            className="p-2 rounded-full hover:bg-gray-200"
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuOpen(!menuOpen);
+            }}
           >
-            <svg
-              className="w-6 h-6 text-black-600"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M5 21V3"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-
-              <path d="M5 4H15L12 7.5L15 11H5V4Z" />
-            </svg>
+            <FaEllipsisH className="text-gray-700 text-lg" />
           </button>
-          <button
-            onClick={handleHide} // Add your hide functionality here
-            className="flex items-center justify-center text-lg sm:text-xl"
-            title="Hide Post"
-          >
-            <FaEyeSlash className="w-6 h-6 text-gray-600 hover:text-gray-800 transition-colors" />
-          </button>
+          {menuOpen && (
+            <div className="absolute top-[-1px] right-0 w-20 bg-white border border-gray-300 shadow-lg rounded-lg z-50 flex flex-row items-center justify-end space-x-2 p-2">
+              <button
+                onClick={handleReport}
+                className="text-lg sm:text-xl"
+                title="Report Recipe"
+              >
+                <svg
+                  className="w-6 h-6 text-black-600"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M5 21V3"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path d="M5 4H15L12 7.5L15 11H5V4Z" />
+                </svg>
+              </button>
+              <button
+                onClick={handleHide}
+                className="flex items-center justify-center text-lg sm:text-xl"
+                title="Hide Post"
+              >
+                <FaEyeSlash className="w-6 h-6 text-gray-600 hover:text-gray-800 transition-colors" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
       {/* Baker Profile Section */}

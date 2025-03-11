@@ -12,7 +12,7 @@ export default function ArtistProfileCard({ artist }) {
   };
 
   return (
-    <div className="relative p-3 bg-gray-300 rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
+    <div className="relative p-3 bg-white rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
       {/* Country Flag - Top Right */}
       <div className="absolute pl-3 top-4 z-50 left-0 flex items-center gap-1 backdrop-blur-sm  py-1 rounded-full">
         <Image

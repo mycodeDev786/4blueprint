@@ -90,7 +90,7 @@ export default function AllCategories() {
 
             {/* Dropdown */}
             {selectedCategory === category.name && (
-              <div className="absolute mb-10 top-16 left-1/2 transform z-50 -translate-x-1/2 bg-white shadow-lg rounded-md p-3 w-40">
+              <div className="absolute mb-10 top-16 left-36 transform z-50 -translate-x-1/2 bg-white shadow-lg rounded-md p-3 w-80">
                 {subcategories.map((sub) => (
                   <div
                     key={sub.id}

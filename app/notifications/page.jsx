@@ -23,14 +23,14 @@ export default function Notifications() {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <div className=" md:block w-80  p-4 flex items-center justify-center     h-[calc(100vh-4rem)] shadow-lg ">
+      <div className=" md:block w-full p-4 flex items-center justify-center     h-[calc(100vh-4rem)] shadow-lg ">
         {/* Scrollable Artist List */}
 
-        <ul className="pr-2">
+        <ul className="pr-2 w-full px-4">
           {bakers.map((artist) => (
             <li
               key={artist.id}
-              className="relative flex items-center justify-between mb-3 p-2 bg-white rounded-lg shadow-sm hover:bg-gray-50"
+              className="relative flex items-center justify-between mb-3 p-2 rounded-lg shadow-sm hover:bg-gray-50"
             >
               <div className="flex items-center space-x-3 flex-1">
                 <Image
