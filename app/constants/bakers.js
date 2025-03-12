@@ -13,6 +13,7 @@ export const bakers = [
     newPosts: 4,
     rating: 94,
     isFollowed: true,
+    score: 670,
   },
   {
     id: 2,
@@ -27,6 +28,7 @@ export const bakers = [
     newPosts: 2,
     rating: 83,
     isFollowed: false,
+    score: 410,
   },
 
   {
@@ -41,6 +43,7 @@ export const bakers = [
     isTop10Followers: true,
     newPosts: 20,
     rating: 75,
+    score: 300,
   },
   {
     id: 4,
@@ -50,6 +53,7 @@ export const bakers = [
     country: "Australia",
     flag: "https://flagcdn.com/w40/au.png",
     rating: 65,
+    score: 400,
   },
   {
     id: 5,
@@ -58,6 +62,7 @@ export const bakers = [
     followers: 370,
     country: "Germany",
     flag: "https://flagcdn.com/w40/de.png",
+    score: 670,
   },
   {
     id: 6,
@@ -66,6 +71,7 @@ export const bakers = [
     followers: 410,
     country: "France",
     flag: "https://flagcdn.com/w40/fr.png",
+    score: 456,
   },
   {
     id: 7,
@@ -74,5 +80,6 @@ export const bakers = [
     followers: 280,
     country: "Italy",
     flag: "https://flagcdn.com/w40/it.png",
+    score: 456,
   },
 ];

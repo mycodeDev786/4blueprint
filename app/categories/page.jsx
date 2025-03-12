@@ -94,7 +94,7 @@ export default function AllCategories() {
                 {subcategories.map((sub) => (
                   <div
                     key={sub.id}
-                    className={`px-3 py-2 hover:bg-gray-200 rounded-md cursor-pointer ${
+                    className={`px-3 py-2 hover:bg-gray-200 rounded-md border-b-2 cursor-pointer ${
                       activeTab === sub.name ? "bg-blue-300" : ""
                     }`}
                     onClick={() => handleSubcategoryClick(category, sub)}
