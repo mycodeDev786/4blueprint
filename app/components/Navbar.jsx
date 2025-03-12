@@ -329,7 +329,7 @@ const Navbar = ({ cartCount }) => {
               Verified Artists
             </Link>
             <Link
-              href="/"
+              href="/leaderboard"
               className="py-2 px-6 hover:bg-gray-100"
               onClick={() => setMenuOpen(false)}
             >
