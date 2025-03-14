@@ -4,7 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import countryList from "react-select-country-list";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import API_ENDPOINTS from "../utils/api";
+import { apiRequest } from "../utils/apiHelper";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/authSlice";
 
 export default function SignUp() {
   const countries = countryList().getData();
@@ -19,30 +23,78 @@ export default function SignUp() {
   const [userType, setUserType] = useState("customer");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     setError("");
+    //    setLoading(true);
 
     if (!name || !email || !password || !confirmPassword || !country) {
       setError("All fields are required.");
+      //    setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
+      //  setLoading(false);
       return;
     }
 
-    console.log("Signing up with:", name, email, password, userType);
+    try {
+      const data = { name, email, password, country, userType };
+      const response = await apiRequest(
+        API_ENDPOINTS.AUTH.SIGNUP,
+        "POST",
+        data
+      );
 
-    if (userType === "customer") {
-      router.push("/email-verification");
-    } else if (userType === "baker") {
-      router.push("/id-facial-verification");
+      if (response.token) {
+        dispatch(
+          setUser({
+            user: { name, email, country, userType },
+            token: response.token,
+          })
+        );
+      }
+
+      console.log("Signup Success:", response);
+
+      if (userType === "customer") {
+        handleRequestOTP();
+        router.push(`/email-verification?email=${encodeURIComponent(email)}`);
+      } else {
+        router.push("/id-facial-verification");
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      //setLoading(false);
     }
   };
 
+  const handleRequestOTP = async (e) => {
+    // e.preventDefault();
+    setError("");
+    //setMessage("");
+    // setLoading(true);
+
+    try {
+      const data = { email };
+      const response = await apiRequest(
+        API_ENDPOINTS.AUTH.GENERATE_OTP,
+        "POST",
+        data
+      );
+      //setMessage(response.message);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      console.log(error);
+      //  setLoading(false);
+    }
+  };
   return (
     <div
       className="min-h-screen flex items-center justify-center"

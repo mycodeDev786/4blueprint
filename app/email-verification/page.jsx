@@ -1,22 +1,36 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import API_ENDPOINTS from "../utils/api";
+import { apiRequest } from "../utils/apiHelper";
 
 export default function EmailVerification() {
   const router = useRouter();
   const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email"); // Get email from URL
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
+    console.log(email);
     e.preventDefault();
-    console.log("Verifying OTP:", otp);
+    setLoading(true);
+    setError("");
 
-    // Simulate OTP verification (Replace with API call)
-    if (otp === "123456") {
+    try {
+      const response = await apiRequest(API_ENDPOINTS.AUTH.VERIFY_OTP, "POST", {
+        email: email,
+        otp,
+      });
+
       alert("Email verified successfully!");
-      router.push("/dashboard"); // Redirect after verification
-    } else {
-      alert("Invalid OTP. Please try again.");
+      router.push("/"); // Redirect after successful verification
+    } catch (err) {
+      setError(err.message || "Invalid OTP. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -27,6 +41,8 @@ export default function EmailVerification() {
         <p className="text-gray-600 text-center mt-2">
           Enter the 6-digit code sent to your email.
         </p>
+
+        {error && <p className="text-red-500 text-center">{error.error}</p>}
 
         <form onSubmit={handleVerify} className="mt-4 space-y-4">
           <input
@@ -42,16 +58,15 @@ export default function EmailVerification() {
           <button
             type="submit"
             className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700"
+            disabled={loading}
           >
-            Verify
+            {loading ? "Verifying..." : "Verify"}
           </button>
         </form>
 
         <p className="text-sm text-center mt-4 text-gray-600">
           Didn't receive the code?{" "}
-          <button className="text-blue-600 hover:underline">
-            Resend OTP
-          </button>
+          <button className="text-blue-600 hover:underline">Resend OTP</button>
         </p>
       </div>
     </div>

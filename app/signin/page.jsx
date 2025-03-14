@@ -1,19 +1,48 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { setUser } from "../store/authSlice";
 import Link from "next/link";
+import API_ENDPOINTS from "../utils/api";
+import { apiRequest } from "../utils/apiHelper";
 
 export default function SignIn() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const dispatch = useDispatch();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
+    console.log("GO");
     e.preventDefault();
-    console.log("Logging in with:", email, password);
-    router.push("/");
+    setError("");
+
+    try {
+      const response = await apiRequest(API_ENDPOINTS.AUTH.SIGNIN, "POST", {
+        email,
+        password,
+      });
+      console.log(response);
+      if (response.token) {
+        // Save user data in Redux
+        dispatch(setUser({ token: response.token, user: response.user }));
+
+        // Save session in local storage
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
+        console.log(response.user);
+
+        // Redirect to homepage
+        router.push("/");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   const handleSocialLogin = (provider) => {

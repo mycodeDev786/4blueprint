@@ -8,15 +8,17 @@ import {
 } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { logout } from "../store/authSlice";
+
 import { assets } from "@/assets/assets";
 import { FaShoppingCart, FaSearch } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 const Navbar = ({ cartCount }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.auth.user);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -27,6 +29,7 @@ const Navbar = ({ cartCount }) => {
   const artistName = "Artist";
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const dispatch = useDispatch();
 
   const handleSearch = () => {
     if (query.trim() !== "") {
@@ -236,7 +239,7 @@ const Navbar = ({ cartCount }) => {
                   className="cursor-pointer flex items-center gap-2"
                 >
                   <Image
-                    src={user.profilePic}
+                    src={assets.user_icon}
                     alt="User"
                     width={36}
                     height={36}
@@ -262,7 +265,7 @@ const Navbar = ({ cartCount }) => {
                     Profile
                   </Link>
                   <button
-                    onClick={() => setUser(null)}
+                    onClick={() => dispatch(logout())}
                     className="w-full text-left px-4 py-2 hover:bg-gray-100"
                   >
                     Logout

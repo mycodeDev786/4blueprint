@@ -4,6 +4,7 @@ import wishlistReducer from "./wishlistSlice";
 import userSlice from "./userSlice";
 import archiveSlice from "./archiveSlice";
 import categoriesSlice from "./categoriesSlice";
+import authReducer from "./authSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     user: userSlice,
     category: categoriesSlice,
     archive: archiveSlice,
+    auth: authReducer,
   },
 });
