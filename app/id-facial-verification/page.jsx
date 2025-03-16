@@ -2,14 +2,19 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux"; // Import Redux hook
 import countryList from "react-select-country-list";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import API_ENDPOINTS from "../utils/api";
 
 export default function IdFacialVerification() {
   const router = useRouter();
   const countries = countryList().getData();
 
+  // Get user_id and email from Redux state
+  const user_id = useSelector((state) => state.auth.user.id);
+  const email = useSelector((state) => state.auth.user?.email);
   const [formData, setFormData] = useState({
     fullName: "",
     age: "",
@@ -24,6 +29,7 @@ export default function IdFacialVerification() {
   const [selfie, setSelfie] = useState(null);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isAccepted, setIsAccepted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -44,16 +50,53 @@ export default function IdFacialVerification() {
     }
   };
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
     if (!isAccepted) {
       alert("Please accept the terms and conditions.");
       return;
     }
 
-    console.log("Verifying ID & Face:", { ...formData, idCard, selfie });
-    alert("Verification successful!");
-    router.push("/dashboard");
+    if (!user_id || !email) {
+      console.log(email);
+      alert("User authentication error. Please log in again.");
+      return;
+    }
+
+    setLoading(true);
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("user_id", user_id);
+    formDataToSend.append("email", email);
+    formDataToSend.append("fullName", formData.fullName);
+    formDataToSend.append("age", formData.age);
+    formDataToSend.append("country", formData.country);
+    formDataToSend.append("phone", formData.phone);
+    formDataToSend.append("address", formData.address);
+    formDataToSend.append("bankName", formData.bankName);
+    formDataToSend.append("bankAccount", formData.bankAccount);
+    formDataToSend.append("idCard", idCard);
+    formDataToSend.append("selfie", selfie);
+
+    try {
+      const response = await fetch(API_ENDPOINTS.AUTH.FACE_ID_VERIFICATION, {
+        method: "POST",
+        body: formDataToSend,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Verification failed.");
+      }
+
+      router.push("/submitted");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Verification failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -188,14 +231,14 @@ export default function IdFacialVerification() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={!isAccepted}
+            disabled={!isAccepted || loading}
             className={`w-full p-2 rounded-md ${
               isAccepted
                 ? "bg-green-600 hover:bg-green-700 text-white"
                 : "bg-gray-400 text-gray-700 cursor-not-allowed"
             }`}
           >
-            Verify & Proceed
+            {loading ? "Verifying..." : "Verify & Proceed"}
           </button>
         </form>
       </div>

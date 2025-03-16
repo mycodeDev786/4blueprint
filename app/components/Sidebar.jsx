@@ -10,10 +10,12 @@ import {
   FaPlus,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
 
-const Sidebar = ({ isArtist }) => {
+const Sidebar = () => {
   const router = useRouter();
-  return (
+  const user = useSelector((state) => state.auth.user);
+  return user ? (
     <aside className="hidden md:block  w-64 h-[calc(100vh-4rem)] text-purple-700 border-r border-gray-300 fixed left-0 top-16 bottom-16 p-6 bg-white shadow-lg z-40">
       <h2 className="text-2xl font-bold mb-6">Menu</h2>
       <ul className="space-y-4 ">
@@ -67,7 +69,7 @@ const Sidebar = ({ isArtist }) => {
         </li>
       </ul>
 
-      {isArtist && (
+      {user?.userType === "baker" ? (
         <button
           onClick={() => {
             router.push("/addrecipe");
@@ -77,9 +79,11 @@ const Sidebar = ({ isArtist }) => {
           <FaPlus />
           <span>Add Recipe</span>
         </button>
+      ) : (
+        ""
       )}
     </aside>
-  );
+  ) : null;
 };
 
 export default Sidebar;

@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    //: "export",  // <=== enables static exports
+  //: "export",  // <=== enables static exports
   //reactStrictMode: true,
   images: {
-    domains: ["flagcdn.com", "randomuser.me"], // Allow external images from flagcdn.com
+    domains: ["flagcdn.com", "randomuser.me", "localhost"], // Allow external images from flagcdn.com
   },
 };
 

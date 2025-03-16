@@ -51,9 +51,10 @@ export default function SignUp() {
       );
 
       if (response.token) {
+        const id = response.userId;
         dispatch(
           setUser({
-            user: { name, email, country, userType },
+            user: { id, name, email, country, userType },
             token: response.token,
           })
         );

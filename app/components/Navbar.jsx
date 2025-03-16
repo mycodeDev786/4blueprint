@@ -265,7 +265,10 @@ const Navbar = ({ cartCount }) => {
                     Profile
                   </Link>
                   <button
-                    onClick={() => dispatch(logout())}
+                    onClick={() => {
+                      dispatch(logout());
+                      router.push("/signin");
+                    }}
                     className="w-full text-left px-4 py-2 hover:bg-gray-100"
                   >
                     Logout
@@ -364,7 +367,8 @@ const Navbar = ({ cartCount }) => {
                 </Link>
                 <button
                   onClick={() => {
-                    setUser(null);
+                    dispatch(logout());
+                    router.push("/signin");
                     setMenuOpen(false);
                   }}
                   className="py-2 px-6 text-left hover:bg-gray-100 w-full"

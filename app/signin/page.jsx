@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -8,6 +8,7 @@ import { setUser } from "../store/authSlice";
 import Link from "next/link";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
+import { getVerificationStatus } from "../utils/apiHelper";
 
 export default function SignIn() {
   const router = useRouter();
@@ -15,10 +16,69 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [isClient, setIsClient] = useState(false);
   const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
 
+  const [status, setStatus] = useState(null);
+
+  const fetchStatus = async (userId) => {
+    try {
+      const response = await apiRequest(
+        API_ENDPOINTS.AUTH.GET_STATUS(userId),
+        "GET",
+        null
+      );
+      console.log(response.status);
+      setStatus(response.status);
+    } catch (error) {
+      console.error("Error fetching verification status:", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    console.log("Updated status:", status);
+  }, [status]);
+  useEffect(() => {
+    // Redirect if user is already logged in
+    if (auth.token) {
+      console.log(auth.user);
+      if (auth.user.userType === "customer") {
+        router.push("/");
+      } else {
+        // Define an async function inside useEffect
+        const fetchVerificationStatus = async () => {
+          try {
+            const response = await apiRequest(
+              API_ENDPOINTS.AUTH.GET_STATUS(auth.user.id),
+              "GET",
+              null
+            );
+
+            console.log("Verification Status:", response.status);
+
+            if (response.status === "approved") {
+              router.push("/");
+            } else {
+              router.push("/submitted");
+            }
+          } catch (error) {
+            console.error("Error fetching verification status:", error);
+          }
+        };
+
+        if (auth.user.id) {
+          fetchVerificationStatus(); // Call the async function
+        }
+      }
+    }
+  }, [auth.token, auth.user?.userType, auth.user?.id, router]);
+
+  useEffect(() => {
+    setIsClient(true); // Ensures client-side rendering
+  }, []);
   const handleLogin = async (e) => {
-    console.log("GO");
     e.preventDefault();
     setError("");
 
@@ -35,10 +95,7 @@ export default function SignIn() {
         // Save session in local storage
         localStorage.setItem("token", response.token);
         localStorage.setItem("user", JSON.stringify(response.user));
-        console.log(response.user);
-
-        // Redirect to homepage
-        router.push("/");
+        fetchStatus(response.user.id);
       }
     } catch (error) {
       setError(error.message);
@@ -49,7 +106,7 @@ export default function SignIn() {
     console.log(`Logging in with ${provider}`);
     // Add authentication logic here
   };
-
+  if (!isClient) return null;
   return (
     <div
       className="min-h-screen flex items-center justify-center"

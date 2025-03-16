@@ -2,10 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import { FaBell } from "react-icons/fa";
 import Image from "next/image";
 import { bakers } from "../constants/bakers";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function RightSidebar() {
   const [popup, setPopup] = useState(null);
   const popupRef = useRef(null);
+  const user = useSelector((state) => state.auth.user);
 
   // Close popup when clicking outside
   useEffect(() => {
@@ -20,7 +22,7 @@ export default function RightSidebar() {
     };
   }, []);
 
-  return (
+  return user ? (
     <div className=" hidden md:block w-80 bg-white p-4 fixed right-0 top-16 h-[calc(100vh-4rem)] shadow-lg overflow-y-auto z-40">
       <h2 className="text-lg font-semibold mb-4">Followed Artists</h2>
 
@@ -78,5 +80,5 @@ export default function RightSidebar() {
         ))}
       </ul>
     </div>
-  );
+  ) : null;
 }
