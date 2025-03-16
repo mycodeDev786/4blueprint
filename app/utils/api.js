@@ -1,6 +1,7 @@
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3307/api";
-const STORAGE_URL = NEXT_PUBLIC_API_BASE_URL_STORAGE || "http://localhost:3307";
+const STORAGE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL_STORAGE || "http://localhost:3307";
 const API_ENDPOINTS = {
   STORAGE_URL,
   AUTH: {
