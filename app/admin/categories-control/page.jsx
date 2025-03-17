@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import API_ENDPOINTS from "../../utils/api";
 import { apiRequest } from "../../utils/apiHelper";
+import Image from "next/image";
 
 export default function AdminDashboard() {
   const [categories, setCategories] = useState([]);
@@ -101,7 +102,9 @@ export default function AdminDashboard() {
               <div className="flex justify-between items-center">
                 <span className="font-semibold">{category.name}</span>
                 {category.image && (
-                  <img
+                  <Image
+                    width={12}
+                    height={12}
                     src={category.image}
                     alt={category.name}
                     className="w-12 h-12 object-cover rounded"

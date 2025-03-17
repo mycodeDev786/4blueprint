@@ -99,8 +99,8 @@ export default function AllCategories() {
                 <img
                   src={`${API_ENDPOINTS.STORAGE_URL}${category.image}`} // Load image from API
                   alt={category.name}
-                  width={128}
-                  height={80}
+                  width={100}
+                  height={60}
                   className="rounded-md shadow-md"
                 />
 
