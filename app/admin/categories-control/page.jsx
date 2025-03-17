@@ -102,10 +102,8 @@ export default function AdminDashboard() {
               <div className="flex justify-between items-center">
                 <span className="font-semibold">{category.name}</span>
                 {category.image && (
-                  <Image
-                    width={12}
-                    height={12}
-                    src={category.image}
+                  <img
+                    src={`${API_ENDPOINTS.STORAGE_URL}${category.image}`}
                     alt={category.name}
                     className="w-12 h-12 object-cover rounded"
                   />
