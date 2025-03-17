@@ -4,21 +4,20 @@ export async function apiRequest(
   data = null,
   token = null
 ) {
-  const headers = {
-    "Content-Type": "application/json",
-  };
+  const options = { method, headers: {} };
 
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+    options.headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const options = {
-    method,
-    headers,
-  };
-
+  // If data is FormData, do not set Content-Type
   if (data) {
-    options.body = JSON.stringify(data);
+    if (data instanceof FormData) {
+      options.body = data;
+    } else {
+      options.headers["Content-Type"] = "application/json";
+      options.body = JSON.stringify(data);
+    }
   }
 
   try {

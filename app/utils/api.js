@@ -20,6 +20,16 @@ const API_ENDPOINTS = {
     PROFILE: `${BASE_URL}/user/profile`,
     UPDATE_PROFILE: `${BASE_URL}/user/update-profile`,
   },
+  CATEGORY: {
+    GET_ALL: `${BASE_URL}/categories`, // Get all categories
+    GET_BY_ID: (id) => `${BASE_URL}/categories/${id}`, // Get category by ID
+    CREATE: `${BASE_URL}/categories`, // Create a new category
+    UPDATE: (id) => `${BASE_URL}/categories/${id}`, // Update category by ID
+    DELETE: (id) => `${BASE_URL}/categories/${id}`, // Delete category by ID
+  },
+  SUBCATEGORY: {
+    CREATE: `${BASE_URL}/categories/subcategory`, // Create a subcategory
+  },
 };
 
 export default API_ENDPOINTS;
