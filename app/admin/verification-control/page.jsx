@@ -148,7 +148,7 @@ export default function VerificationDashboard() {
                         )
                       }
                     >
-                      <Image
+                      <img
                         src={`${API_ENDPOINTS.STORAGE_URL}${record.idCard}`}
                         alt="ID Card"
                         width={50}
@@ -164,7 +164,7 @@ export default function VerificationDashboard() {
                         )
                       }
                     >
-                      <Image
+                      <img
                         src={`${API_ENDPOINTS.STORAGE_URL}${record.selfie}`}
                         alt="Face ID"
                         width={50}
