@@ -151,9 +151,7 @@ export default function VerificationDashboard() {
                       <img
                         src={`${API_ENDPOINTS.STORAGE_URL}${record.idCard}`}
                         alt="ID Card"
-                        width={50}
-                        height={50}
-                        className="rounded shadow"
+                        className=" w-10 h-10 rounded shadow"
                       />
                     </td>
                     <td
@@ -167,9 +165,7 @@ export default function VerificationDashboard() {
                       <img
                         src={`${API_ENDPOINTS.STORAGE_URL}${record.selfie}`}
                         alt="Face ID"
-                        width={50}
-                        height={50}
-                        className="rounded-full shadow"
+                        className=" h-10  w-10 rounded-full shadow"
                       />
                     </td>
                     <td className="p-3">
@@ -225,7 +221,7 @@ export default function VerificationDashboard() {
             >
               Close
             </button>
-            <Image
+            <img
               src={modalImage}
               alt="Enlarged"
               className="max-w-full max-h-screen"
