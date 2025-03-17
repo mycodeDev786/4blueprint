@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import API_ENDPOINTS from "../utils/api";
+import API_ENDPOINTS from "../../utils/api";
 import Image from "next/image";
 
 export default function VerificationDashboard() {

@@ -18,7 +18,12 @@ export default function Admin() {
           >
             Category Control
           </button>
-          <button className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition">
+          <button
+            onClick={() => {
+              router.push("/admin/verification-control");
+            }}
+            className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition"
+          >
             Verification Control
           </button>
           <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition">
