@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import API_ENDPOINTS from "../../utils/api";
 import { apiRequest } from "../../utils/apiHelper";
-import Image from "next/image";
 
 export default function AdminDashboard() {
   const [categories, setCategories] = useState([]);
@@ -105,7 +104,7 @@ export default function AdminDashboard() {
                   <img
                     src={`${API_ENDPOINTS.STORAGE_URL}${category.image}`}
                     alt={category.name}
-                    className="w-12 h-12 object-cover rounded"
+                    className="max-w-full max-h-full object-cover rounded"
                   />
                 )}
                 <button

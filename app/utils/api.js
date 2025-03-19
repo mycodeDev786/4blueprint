@@ -30,6 +30,11 @@ const API_ENDPOINTS = {
   SUBCATEGORY: {
     CREATE: `${BASE_URL}/categories/subcategory`, // Create a subcategory
   },
+
+  RECIPE: {
+    CREATE: `${BASE_URL}/recipes`, // Create a new recipe
+    GET: `${BASE_URL}/recipes`,
+  },
 };
 
 export default API_ENDPOINTS;

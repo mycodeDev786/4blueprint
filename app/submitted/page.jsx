@@ -10,10 +10,13 @@ export default function SubmissionConfirmation() {
           Submission Successful
         </h1>
         <p className="text-gray-700 mt-3">
-          Your information has been successfully submitted. Once approved, you
-          will receive an email notification.
+          Your registration has been submitted successfully. It will be reviewed
+          within 24 hours, and you will be notified via email once the review is
+          complete.
         </p>
-        <p className="text-gray-500 mt-2">Thank you for your patience!</p>
+        <p className="text-gray-500 mt-2">
+          Thank you for your understanding and patience!
+        </p>
       </div>
     </div>
   );

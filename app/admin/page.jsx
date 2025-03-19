@@ -26,7 +26,20 @@ export default function Admin() {
           >
             Verification Control
           </button>
-          <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition">
+          <button
+            onClick={() => {
+              router.push("admin/verify-recipes");
+            }}
+            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-800 transition"
+          >
+            Recipes Control
+          </button>
+          <button
+            onClick={() => {
+              router.push("admin/verify-recipes");
+            }}
+            className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition"
+          >
             User Control
           </button>
         </div>

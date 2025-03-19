@@ -10,7 +10,6 @@ export async function apiRequest(
     options.headers["Authorization"] = `Bearer ${token}`;
   }
 
-  // If data is FormData, do not set Content-Type
   if (data) {
     if (data instanceof FormData) {
       options.body = data;
@@ -23,6 +22,8 @@ export async function apiRequest(
   try {
     const response = await fetch(endpoint, options);
     const result = await response.json();
+
+    console.log("API Response:", result); // Debugging line
 
     if (!response.ok) {
       throw new Error(result.message || "Something went wrong");
