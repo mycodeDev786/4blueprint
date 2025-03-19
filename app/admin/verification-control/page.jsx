@@ -150,7 +150,6 @@ export default function VerificationDashboard() {
                     >
                       <img
                         src={`${API_ENDPOINTS.STORAGE_URL}${record.idCard}`}
-                        unoptimized
                         alt="ID Card"
                         className=" w-10 h-10 rounded shadow"
                       />
@@ -165,7 +164,6 @@ export default function VerificationDashboard() {
                     >
                       <img
                         src={`${API_ENDPOINTS.STORAGE_URL}${record.selfie}`}
-                        unoptimized
                         alt="Face ID"
                         className=" h-10  w-10 rounded-full shadow"
                       />
