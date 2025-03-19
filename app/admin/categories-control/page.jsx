@@ -104,7 +104,7 @@ export default function AdminDashboard() {
                   <img
                     src={`${API_ENDPOINTS.STORAGE_URL}${category.image}`}
                     alt={category.name}
-                    className="max-w-full max-h-full object-cover rounded"
+                    className="w-12 h-12 object-cover rounded"
                   />
                 )}
                 <button

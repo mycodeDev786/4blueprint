@@ -96,7 +96,7 @@ export default function AllCategories() {
                     : ""
                 }`}
               >
-                <Image
+                <img
                   src={`${API_ENDPOINTS.STORAGE_URL}${category.image}`} // Load image from API
                   alt={category.name}
                   width={100}
