@@ -4,9 +4,11 @@ import { useState } from "react";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
 import { useSelector } from "react-redux";
+import Prompt from "../components/Prompt";
 
 export default function AddRecipe() {
   const [recipeType, setRecipeType] = useState("free");
+  const [showPrompt, setShowPrompt] = useState(false);
   const [price, setPrice] = useState("");
   const [buyerRestriction, setBuyerRestriction] = useState("anyone");
   const [title, setTitle] = useState("");
@@ -58,7 +60,10 @@ export default function AddRecipe() {
         "POST",
         formData
       );
-      alert(response.message);
+      setShowPrompt(true);
+      setTimeout(() => {
+        setShowPrompt(false);
+      }, 2500);
     } catch (error) {
       console.error("Error submitting recipe:", error);
       alert("Failed to submit recipe.");
@@ -233,6 +238,10 @@ export default function AddRecipe() {
           Submit Recipe
         </button>
       </form>
+      <Prompt
+        showPrompt={showPrompt}
+        message={" Your Recipe has been added successfully "}
+      />
     </div>
   );
 }

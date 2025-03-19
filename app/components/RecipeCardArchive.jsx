@@ -10,6 +10,7 @@ import { assets } from "@/assets/assets";
 import { removeFromWishlist } from "../store/wishlistSlice";
 import { addToArchive, removeFromArchive } from "../store/archiveSlice";
 import { bakers } from "../constants/bakers";
+import Prompt from "./Prompt";
 
 export default function RecipeCardArchive({ recipe }) {
   const dispatch = useDispatch();
@@ -193,15 +194,14 @@ export default function RecipeCardArchive({ recipe }) {
         </div>
       </div>
       {/* Prompt Message */}
-      {showPrompt && (
-        <>
-          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-sm px-4 py-2 rounded shadow-md z-50 animate-fade-in-out">
-            {isWishlisted
-              ? "This recipe has been added to your Archive list"
-              : "This recipe has been remove from your Archive list"}
-          </div>
-        </>
-      )}
+      <Prompt
+        showPrompt={showPrompt}
+        message={
+          isWishlisted
+            ? "This recipe has been added to your Archive list"
+            : "This recipe has been remove from your Archive list"
+        }
+      />
     </div>
   );
 }

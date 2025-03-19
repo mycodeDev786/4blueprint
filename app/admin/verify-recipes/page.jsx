@@ -1,10 +1,12 @@
 "use client";
+import Prompt from "@/app/components/Prompt";
 import API_ENDPOINTS from "@/app/utils/api";
 import { useEffect, useState } from "react";
 
 export default function RecipesVerify() {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showPrompt, setShowPrompt] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState({});
   const [selectedSubcategories, setSelectedSubcategories] = useState({});
@@ -52,6 +54,10 @@ export default function RecipesVerify() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to update category");
+      setShowPrompt(true);
+      setTimeout(() => {
+        setShowPrompt(false);
+      }, 2500);
 
       console.log("Category updated successfully:", data);
     } catch (error) {
@@ -208,6 +214,10 @@ export default function RecipesVerify() {
           );
         })}
       </div>
+      <Prompt
+        showPrompt={showPrompt}
+        message={"Category and subcategory updated "}
+      />
     </div>
   );
 }

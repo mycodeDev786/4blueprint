@@ -434,7 +434,7 @@ const Navbar = ({ cartCount }) => {
           )}
         {ShowUserTitle && (
           <span className="text-black font-semibold mx-2 md:mt-1 truncate">
-            {user?.name.toUpperCase()} COOKBOOK
+            {user?.name?.toUpperCase()} COOKBOOK
           </span>
         )}
         {ShowArtistTitle && (
