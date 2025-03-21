@@ -35,6 +35,13 @@ const API_ENDPOINTS = {
     CREATE: `${BASE_URL}/recipes`, // Create a new recipe
     GET: `${BASE_URL}/recipes`,
   },
+  BAKER: {
+    CREATE: `${BASE_URL}/bakers`, // Create a new baker
+    GET_ALL: `${BASE_URL}/bakers`, // Get all bakers
+    GET_BY_ID: (id) => `${BASE_URL}/bakers/${id}`, // Get baker by ID
+    UPDATE: (id) => `${BASE_URL}/bakers/${id}`, // Update baker
+    DELETE: (id) => `${BASE_URL}/bakers/${id}`, // Delete baker
+  },
 };
 
 export default API_ENDPOINTS;

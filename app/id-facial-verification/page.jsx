@@ -7,10 +7,20 @@ import countryList from "react-select-country-list";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import API_ENDPOINTS from "../utils/api";
+import { apiRequest } from "../utils/apiHelper";
+import iso from "iso-3166-1-alpha-2";
+
+const getFlagUrl = (countryName) => {
+  const countryCode = iso.getCode(countryName); // Convert country name to ISO code
+  if (!countryCode) return null; // Return null if the country code is not found
+  return `https://flagcdn.com/w40/${countryCode.toLowerCase()}.png`;
+};
 
 export default function IdFacialVerification() {
   const router = useRouter();
   const countries = countryList().getData();
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   // Get user_id and email from Redux state
   const user_id = useSelector((state) => state.auth.user.id);
@@ -47,6 +57,35 @@ export default function IdFacialVerification() {
       } else {
         setSelfie(file);
       }
+    }
+  };
+
+  const handleCreateArtistProfile = async () => {
+    const jsonData = {
+      user_id: user_id,
+      profile_image: "/upload/a.png",
+      country: formData.country,
+      flag: getFlagUrl(formData.country),
+      isTop10Sales: false,
+      isTop10Followers: false,
+      rating: 0,
+      score: 0,
+    };
+
+    try {
+      const response = await apiRequest(
+        API_ENDPOINTS.BAKER.CREATE,
+        "POST",
+        jsonData
+      );
+
+      console.log("Done");
+      // setSuccess("Baker created successfully!");
+    } catch (err) {
+      console.error("Request Failed:", err); // Log error details
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -89,7 +128,7 @@ export default function IdFacialVerification() {
       if (!response.ok) {
         throw new Error(data.error || "Verification failed.");
       }
-
+      handleCreateArtistProfile();
       router.push("/submitted");
     } catch (error) {
       console.error("Error:", error);
