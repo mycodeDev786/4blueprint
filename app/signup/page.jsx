@@ -108,7 +108,11 @@ export default function SignUp() {
         >
           Registration
         </h2>
-        {error && <p className="text-red-500 text-center">{error}</p>}
+        {error && (
+          <div className="text-red-600 bg-red-100 p-2 rounded-md text-center">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
             <label className="block font-medium">

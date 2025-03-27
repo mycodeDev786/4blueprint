@@ -34,6 +34,7 @@ const API_ENDPOINTS = {
   RECIPE: {
     CREATE: `${BASE_URL}/recipes`, // Create a new recipe
     GET: `${BASE_URL}/recipes`,
+    GETALL: `${BASE_URL}/recipes/all`,
   },
   BAKER: {
     CREATE: `${BASE_URL}/bakers`, // Create a new baker
@@ -41,6 +42,17 @@ const API_ENDPOINTS = {
     GET_BY_ID: (id) => `${BASE_URL}/bakers/${id}`, // Get baker by ID
     UPDATE: (id) => `${BASE_URL}/bakers/${id}`, // Update baker
     DELETE: (id) => `${BASE_URL}/bakers/${id}`, // Delete baker
+    UPDATE_PROFILE_IMAGE: (user_id) =>
+      `${BASE_URL}/bakers/${user_id}/profile-image`,
+  },
+  FOLLOWERS: {
+    FOLLOW: `${BASE_URL}/followers/follow`, // Follow a baker
+    UNFOLLOW: `${BASE_URL}/followers/unfollow`, // Unfollow a baker
+    GET_FOLLOWERS: (bakerId) => `${BASE_URL}/followers/${bakerId}`, // Get followers of a baker
+    GET_COUNT_BY_USER: (userId) =>
+      `${BASE_URL}/followers/count/by-user/${userId}`, // Get follower count for a user
+    IS_FOLLOWING: (bakerId, followerId) =>
+      `${BASE_URL}/followers/is-following/${bakerId}/${followerId}`, // Check if a user follows a baker
   },
 };
 

@@ -29,7 +29,7 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
-            href="/profile"
+            href="/artistProfile"
             className="flex items-center space-x-3 hover:text-gray-300"
           >
             <FaUser /> <span>Profile</span>

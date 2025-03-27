@@ -119,6 +119,11 @@ export default function SignIn() {
         >
           Sign In
         </h2>
+        {error && (
+          <div className="text-red-600 bg-red-100 p-2 rounded-md text-center">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"

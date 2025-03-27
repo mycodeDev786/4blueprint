@@ -26,12 +26,17 @@ export async function apiRequest(
     console.log("API Response:", result); // Debugging line
 
     if (!response.ok) {
-      throw new Error(result.message || "Something went wrong");
+      throw new Error(
+        result?.message ||
+          result?.error ||
+          JSON.stringify(result) ||
+          "Something went wrong"
+      );
     }
 
     return result;
   } catch (error) {
     console.error("API Request Error:", error);
-    throw error;
+    throw new Error(error.message || "Unknown error occurred");
   }
 }

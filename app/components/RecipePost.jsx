@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { addToCart } from "../store/cartSlice";
 import { ratings } from "../constants/rating";
+import { apiRequest } from "../utils/apiHelper";
+
 import { addToWishlist, removeFromWishlist } from "../store/wishlistSlice";
 import dayjs from "dayjs";
 import {
@@ -17,6 +19,7 @@ import {
   FaMoneyBillWave,
   FaEllipsisH,
 } from "react-icons/fa";
+import API_ENDPOINTS from "../utils/api";
 
 export default function RecipePost({
   id,
@@ -24,11 +27,16 @@ export default function RecipePost({
   description,
   image,
   bakerId,
+  bakerName,
   date,
+  bakerCountry,
   ingredients,
   price,
   rating,
   isPurchased,
+  bakerFlag,
+  profileImage,
+  followersCount,
 }) {
   const [expanded, setExpanded] = useState(false);
   const [displayDate, setDisplayDate] = useState("");
@@ -36,7 +44,7 @@ export default function RecipePost({
   const [isHidden, setIsHidden] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const router = useRouter();
   const [followers, setFollowers] = useState(() => {
@@ -47,7 +55,7 @@ export default function RecipePost({
   const isWishlisted = wishlist.some((item) => item.id === id);
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
   const baker = bakers.find((b) => b.id === bakerId);
-  const [isFollowed, setIsFollowed] = useState(baker?.isFollowed);
+  const [isFollowed, setIsFollowed] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -57,6 +65,23 @@ export default function RecipePost({
     setCurrentIndex(index);
     setIsSliderOpen(true);
   };
+
+  useEffect(() => {
+    if (!user?.id) return; // Ensure user is logged in
+
+    apiRequest(
+      `${API_ENDPOINTS.FOLLOWERS.IS_FOLLOWING(bakerId, user.id)}`,
+      "GET",
+      null
+    )
+      .then((response) => {
+        setIsFollowed(response.isFollowing);
+      })
+      .catch((error) => {
+        console.error("Error checking follow status:", error);
+      })
+      .finally(() => {});
+  }, [bakerId, user?.id]);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -103,9 +128,19 @@ export default function RecipePost({
       setDisplayDate(formattedDate.format("MMM D, YYYY"));
     }
   }, [date]);
-  const handleFollow = () => {
-    setFollowers((prev) => prev + 1);
+  const handleFollow = async () => {
     setIsFollowed((prev) => !prev);
+    try {
+      // Follow API call
+      await apiRequest(`${API_ENDPOINTS.FOLLOWERS.FOLLOW}`, "POST", {
+        baker_id: bakerId,
+        follower_id: user.id,
+      });
+      setIsFollowed(true);
+    } catch (error) {
+      console.error("Error toggling follow status:", error);
+    } finally {
+    }
   };
   const handleArtist = () => {
     router.push(`artistProfile?name=${encodeURIComponent(baker.name)}`);
@@ -200,7 +235,11 @@ export default function RecipePost({
   };
 
   const renderStars = (rating) => {
-    return "★".repeat(Math.floor(rating)) + (rating % 1 !== 0 ? "☆" : "");
+    if (rating !== 0.0) {
+      return "★".repeat(Math.floor(rating)) + (rating % 1 !== 0 ? "☆" : "");
+    } else {
+      return " No rating";
+    }
   };
 
   return !isHidden ? (
@@ -242,7 +281,7 @@ export default function RecipePost({
         <div className="flex items-center gap-2 flex-1 min-w-0">
           <div className="relative flex-shrink-0">
             <img
-              src={baker?.image}
+              src={`${API_ENDPOINTS.STORAGE_URL}${profileImage}`}
               alt={baker?.name}
               className="w-14 h-14 sm:w-14 sm:h-14 rounded-full object-cover border border-gray-300"
             />
@@ -265,28 +304,28 @@ export default function RecipePost({
           <div className="min-w-0">
             <h2 className="text-base sm:text-lg font-semibold flex items-center gap-1 flex-wrap text-black">
               <button onClick={handleArtist} className="truncate">
-                {baker?.name}
+                {bakerName}
               </button>
               <span
                 className="ml-3 flex items-center gap-1 cursor-pointer"
                 onClick={handleFlagClick}
               >
-                {baker?.flag && (
+                {bakerFlag && (
                   <Image
-                    src={baker?.flag}
-                    alt={baker?.country}
+                    src={bakerFlag}
+                    alt={bakerCountry}
                     width={24}
                     height={16}
                     className="rounded-sm flex-shrink-0"
                   />
                 )}
                 <span className="text-sm sm:text-base truncate">
-                  {baker?.country}
+                  {bakerCountry}
                 </span>
               </span>
             </h2>
             <p className="text-gray-500 text-xs sm:text-sm">
-              <strong>{followers}</strong> Followers || Artist Rating:{" "}
+              <strong>{followersCount}</strong> Followers || Artist Rating:{" "}
               {baker?.rating ? (
                 <>
                   <strong>{baker.rating}%</strong> (
@@ -363,17 +402,23 @@ export default function RecipePost({
         {/* <h4 className=" text-xs text-black sm:text-xs font-semibold">
           Overall Recipe Reviews:
         </h4> */}
-        <div className="flex items-center py-0 md:py-1  gap-1">
-          <button
-            className="border rounded-lg px-1 border-purple-700"
-            onClick={handleRatingClick}
-          >
-            <span className="text-sm sm:text-lg">{renderStars(rating)}</span>
-            <span className="text-gray-600 text-xs sm:text-sm">
-              ({rating.toFixed(1)}/5.0)
-            </span>
-          </button>
-        </div>
+        {rating === "0.00" ? (
+          <span className="text-purple-600 text-xs sm:text-sm">
+            No rating available
+          </span>
+        ) : (
+          <div className="flex items-center py-0 md:py-1  gap-1">
+            <button
+              className="border rounded-lg px-1 border-purple-700"
+              onClick={handleRatingClick}
+            >
+              <span className="text-sm sm:text-lg">{renderStars(rating)}</span>
+              <span className="text-gray-600 text-xs sm:text-sm">
+                {rating} / 5.0
+              </span>
+            </button>
+          </div>
+        )}
       </div>
       <p className="text-gray-700 text-left text-sm sm:text-base">
         {description}
@@ -391,7 +436,7 @@ export default function RecipePost({
       {/* Recipe Image with Overlay Content */}
       <div className="mt-4 aspect-video overflow-hidden relative">
         <Image
-          src={image}
+          src={`${API_ENDPOINTS.STORAGE_URL}${image}`}
           alt={title}
           width={600}
           height={400}
@@ -488,9 +533,7 @@ export default function RecipePost({
           title="Add to Cart"
         >
           <FaShoppingCart className="text-gray-700 text-lg" />
-          <span className="font-medium text-sm text-gray-900">
-            ${price.toFixed(2)}
-          </span>
+          <span className="font-medium text-sm text-gray-900">${price}</span>
         </button>
       </div>
       {/* Prompt Message */}
@@ -635,7 +678,7 @@ export default function RecipePost({
               <div className="space-y-3">
                 <p className="text-lg font-medium text-indigo-700 text-center">
                   <span className="font-semibold">
-                    This artist is from <strong>{baker?.country}</strong>
+                    This artist is from <strong>{bakerCountry}</strong>
                   </span>
                 </p>
 
