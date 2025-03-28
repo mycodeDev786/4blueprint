@@ -52,11 +52,11 @@ export default function AuthGuard({ children }) {
   }, [email, isVerified]);
 
   useEffect(() => {
-    if (user) {
-      if (!isVerified && userType === "customer") {
-        router.push("/submitted");
-      }
-    }
+    // if (user) {
+    //   if (!isVerified && userType === "customer") {
+    //     router.push("/submitted");
+    //   }
+    // }
     if (!user && PROTECTED_ROUTES.includes(pathname)) {
       router.push("/signin"); // Redirect to login if not authenticated
     }
