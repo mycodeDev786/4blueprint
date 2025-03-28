@@ -193,7 +193,7 @@ export default function RecipePost({
           price,
           bakerId,
           isPurchased,
-          artistName: baker.name,
+          artistName: bakerName,
           // Default quantity
         })
       );

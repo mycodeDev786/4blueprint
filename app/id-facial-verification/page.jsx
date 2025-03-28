@@ -9,6 +9,7 @@ import "react-phone-input-2/lib/style.css";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
 import iso from "iso-3166-1-alpha-2";
+import Loading from "../components/Loading";
 
 const getFlagUrl = (countryName) => {
   const countryCode = iso.getCode(countryName); // Convert country name to ISO code
@@ -281,6 +282,7 @@ export default function IdFacialVerification() {
           </button>
         </form>
       </div>
+      <Loading isLoading={loading} />
     </div>
   );
 }

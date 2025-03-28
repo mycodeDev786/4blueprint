@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import RecipePost from "./RecipePost";
 import CustomPost from "./CustomPost";
 import API_ENDPOINTS from "../utils/api";
+import Loading from "./Loading";
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
@@ -54,7 +55,6 @@ const HomePage = () => {
             isPurchased={recipe.isPurchased}
             bakerCountry={recipe.bakerCountry}
             bakerFlag={recipe.bakerFlag}
-            
           />
 
           {index + 1 === 5 && (

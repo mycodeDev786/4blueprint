@@ -9,6 +9,7 @@ import Link from "next/link";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
 import { getVerificationStatus } from "../utils/apiHelper";
+import Loading from "../components/Loading";
 
 export default function SignIn() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function SignIn() {
   const [isClient, setIsClient] = useState(false);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  const [loading, setLoading] = useState(false);
 
   const [status, setStatus] = useState(null);
 
@@ -79,6 +81,7 @@ export default function SignIn() {
     setIsClient(true); // Ensures client-side rendering
   }, []);
   const handleLogin = async (e) => {
+    setLoading(true);
     e.preventDefault();
     setError("");
 
@@ -96,9 +99,11 @@ export default function SignIn() {
         localStorage.setItem("token", response.token);
         localStorage.setItem("user", JSON.stringify(response.user));
         fetchStatus(response.user.id);
+        setLoading(false);
       }
     } catch (error) {
       setError(error.message);
+      setLoading(false);
     }
   };
 
@@ -197,6 +202,7 @@ export default function SignIn() {
           </Link>
         </p>
       </div>
+      <Loading isLoading={loading} />
     </div>
   );
 }

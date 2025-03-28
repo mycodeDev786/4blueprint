@@ -5,6 +5,7 @@ import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
 import { useSelector } from "react-redux";
 import Prompt from "../components/Prompt";
+import Loading from "../components/Loading";
 
 export default function AddRecipe() {
   const [recipeType, setRecipeType] = useState("free");
@@ -18,6 +19,7 @@ export default function AddRecipe() {
   const [avoid, setAvoid] = useState("");
   const [mainImage, setMainImage] = useState(null);
   const [additionalImages, setAdditionalImages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files).slice(0, 3); // Convert to array and limit to 3
@@ -35,7 +37,7 @@ export default function AddRecipe() {
       alert("Please fill in all required fields.");
       return;
     }
-
+    setLoading(true);
     const formData = new FormData();
     formData.append("user_id", user_id); // Replace with actual user ID
     formData.append("category_name", "1"); // Replace with actual category ID
@@ -60,11 +62,13 @@ export default function AddRecipe() {
         "POST",
         formData
       );
+      setLoading(false);
       setShowPrompt(true);
       setTimeout(() => {
         setShowPrompt(false);
       }, 2500);
     } catch (error) {
+      setLoading(false);
       console.error("Error submitting recipe:", error);
       alert("Failed to submit recipe.");
     }
@@ -242,6 +246,7 @@ export default function AddRecipe() {
         showPrompt={showPrompt}
         message={" Your Recipe has been added successfully "}
       />
+      <Loading isLoading={loading} />
     </div>
   );
 }

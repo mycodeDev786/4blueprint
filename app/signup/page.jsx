@@ -9,6 +9,7 @@ import { apiRequest } from "../utils/apiHelper";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/authSlice";
+import Loading from "../components/Loading";
 
 export default function SignUp() {
   const countries = countryList().getData();
@@ -24,21 +25,22 @@ export default function SignUp() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setError("");
-    //    setLoading(true);
+    setLoading(true);
 
     if (!name || !email || !password || !confirmPassword || !country) {
       setError("All fields are required.");
-      //    setLoading(false);
+      setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
-      //  setLoading(false);
+      setLoading(false);
       return;
     }
 
@@ -64,14 +66,17 @@ export default function SignUp() {
 
       if (userType === "customer") {
         handleRequestOTP();
+        setLoading(false);
         router.push(`/email-verification?email=${encodeURIComponent(email)}`);
       } else {
+        setLoading(false);
         router.push("/id-facial-verification");
       }
     } catch (error) {
       setError(error.message);
+      setLoading(false);
     } finally {
-      //setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -79,7 +84,7 @@ export default function SignUp() {
     // e.preventDefault();
     setError("");
     //setMessage("");
-    // setLoading(true);
+    setLoading(true);
 
     try {
       const data = { email };
@@ -93,7 +98,7 @@ export default function SignUp() {
       setError(error.message);
     } finally {
       console.log(error);
-      //  setLoading(false);
+      setLoading(false);
     }
   };
   return (
@@ -319,6 +324,7 @@ export default function SignUp() {
           </Link>
         </p>
       </div>
+      <Loading isLoading={loading} />
     </div>
   );
 }
