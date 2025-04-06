@@ -15,11 +15,29 @@ export default function AddRecipe() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [ingredients, setIngredients] = useState("");
+  const [ingredientList, setIngredientList] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+
   const [steps, setSteps] = useState("");
   const [avoid, setAvoid] = useState("");
   const [mainImage, setMainImage] = useState(null);
   const [additionalImages, setAdditionalImages] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const addIngredient = () => {
+    if (inputValue.trim()) {
+      const newList = [...ingredientList, inputValue.trim()];
+      setIngredientList(newList);
+      setIngredients(newList.join(", "));
+      setInputValue("");
+    }
+  };
+
+  const removeIngredient = (index) => {
+    const newList = ingredientList.filter((_, i) => i !== index);
+    setIngredientList(newList);
+    setIngredients(newList.join(", "));
+  };
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files).slice(0, 3); // Convert to array and limit to 3
@@ -93,7 +111,6 @@ export default function AddRecipe() {
             className="w-full p-2 border rounded-md"
           />
         </div>
-
         <div>
           <label className="block text-gray-700 font-medium">
             Please provide a brief introduction{" "}
@@ -106,19 +123,59 @@ export default function AddRecipe() {
             className="w-full p-2 border rounded-md"
           ></textarea>
         </div>
-
+        -{" "}
         <div>
           <label className="block text-gray-700 font-medium">
             List of ingredients <span className="text-red-500">*</span>
           </label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              className="p-2 border rounded-md w-full"
+              placeholder="Add an ingredient"
+            />
+            <button
+              onClick={addIngredient}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              Add
+            </button>
+          </div>
+          {ingredientList.length > 0 && (
+            <table className="w-full mt-2 border-collapse border border-gray-300">
+              <thead>
+                <tr>
+                  <th className="border p-2">Ingredient</th>
+                  <th className="border p-2">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ingredientList.map((ingredient, index) => (
+                  <tr key={index}>
+                    <td className="border p-2">{ingredient}</td>
+                    <td className="border p-2">
+                      <button
+                        onClick={() => removeIngredient(index)}
+                        className="bg-red-500 text-white px-2 py-1 rounded-md"
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
           <textarea
             required
             value={ingredients}
             onChange={(e) => setIngredients(e.target.value)}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border rounded-md mt-2"
+            readOnly
           ></textarea>
         </div>
-
         <div>
           <label className="block text-gray-700 font-medium">
             Steps to prepare <span className="text-red-500">*</span>
@@ -130,7 +187,6 @@ export default function AddRecipe() {
             className="w-full p-2 border rounded-md"
           ></textarea>
         </div>
-
         <div>
           <label className="block text-gray-700 font-medium">
             Things to avoid (optional)
@@ -141,7 +197,6 @@ export default function AddRecipe() {
             className="w-full p-2 border rounded-md"
           ></textarea>
         </div>
-
         <div>
           <label className="block text-gray-700 font-medium">
             Upload primary photo <span className="text-red-500">*</span>
@@ -154,7 +209,6 @@ export default function AddRecipe() {
             className="w-full p-2 border rounded-md"
           />
         </div>
-
         <div>
           <label className="block text-gray-700 font-medium">
             Upload additional photos (Optional, max 3)
@@ -203,7 +257,6 @@ export default function AddRecipe() {
             </label>
           </div>
         </div>
-
         {recipeType === "hidden" && (
           <div className="space-y-4 p-4 border rounded-md bg-gray-50">
             <div>
@@ -234,7 +287,6 @@ export default function AddRecipe() {
             </div>
           </div>
         )}
-
         <button
           type="submit"
           className="w-full bg-[#673AB7] text-white p-2 rounded-md hover:bg-[#5A2EA6]"

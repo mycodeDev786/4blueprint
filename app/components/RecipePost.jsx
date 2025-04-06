@@ -137,6 +137,7 @@ export default function RecipePost({
         follower_id: user.id,
       });
       setIsFollowed(true);
+      router.push("/");
     } catch (error) {
       console.error("Error toggling follow status:", error);
     } finally {
@@ -282,7 +283,7 @@ export default function RecipePost({
           <div className="relative flex-shrink-0">
             <img
               src={`${API_ENDPOINTS.STORAGE_URL}${profileImage}`}
-              alt={baker?.name}
+              alt={bakerName}
               className="w-14 h-14 sm:w-14 sm:h-14 rounded-full object-cover border border-gray-300"
             />
             {baker?.isVerified && (

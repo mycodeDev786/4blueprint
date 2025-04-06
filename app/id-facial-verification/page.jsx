@@ -62,23 +62,25 @@ export default function IdFacialVerification() {
   };
 
   const handleCreateArtistProfile = async () => {
-    const jsonData = {
-      user_id: user_id,
-      profile_image: "/upload/a.png",
-      country: formData.country,
-      flag: getFlagUrl(formData.country),
-      isTop10Sales: false,
-      isTop10Followers: false,
-      rating: 0,
-      score: 0,
-    };
+    const formData1 = new FormData();
+    formData1.append("user_id", user_id);
+    formData1.append("profile_image", selfie); // Assuming selectedFile is the chosen file
+    formData1.append("country", formData.country);
+    formData1.append("flag", getFlagUrl(formData.country));
+    formData1.append("isTop10Sales", false);
+    formData1.append("isTop10Followers", false);
+    formData1.append("rating", 0);
+    formData1.append("score", 0);
 
     try {
-      const response = await apiRequest(
-        API_ENDPOINTS.BAKER.CREATE,
-        "POST",
-        jsonData
-      );
+      const response = await fetch(API_ENDPOINTS.BAKER.CREATE, {
+        method: "POST",
+        body: formData1,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create baker profile");
+      }
 
       console.log("Done");
       // setSuccess("Baker created successfully!");

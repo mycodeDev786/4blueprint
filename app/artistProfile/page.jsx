@@ -2,7 +2,6 @@
 import { assets } from "@/assets/assets";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import recipes from "../constants/recipes";
 import { useSelector } from "react-redux";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
@@ -10,10 +9,27 @@ import { apiRequest } from "../utils/apiHelper";
 const ArtistProfile = () => {
   const [loading, setLoading] = useState(true);
   const [baker, setBaker] = useState(null);
+  const [recipes, setRecipes] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
   const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    async function fetchRecipes() {
+      try {
+        const Data = await apiRequest(API_ENDPOINTS.RECIPE.GET_BY_ID(user.id));
+        setRecipes(Data);
+        console.log(Data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (user.id) fetchRecipes();
+  }, [user.id]);
 
   useEffect(() => {
     async function fetchData() {
@@ -64,13 +80,13 @@ const ArtistProfile = () => {
   if (!baker || !user) return <p>Error loading data</p>;
 
   return (
-    <div className="max-w-md md:max-w-6xl mx-2 rounded-xl shadow-lg overflow-hidden p-2">
+    <div className="max-w-md md:max-w-3xl mx-2 rounded-xl justify-center shadow-lg overflow-hidden p-2 ">
       <div
         onClick={handleProfileClick}
         className="relative h-64 rounded-xl overflow-hidden"
       >
         <Image
-          src={assets.user_icon}
+          src={`${API_ENDPOINTS.STORAGE_URL}${"/" + baker.profile_image}`}
           alt="Artist background"
           fill
           className="object-cover cursor-pointer"
@@ -108,7 +124,7 @@ const ArtistProfile = () => {
           {recipes.map((album, index) => (
             <div key={index} className="flex items-center gap-4">
               <Image
-                src={album.image}
+                src={`${API_ENDPOINTS.STORAGE_URL}${album.mainImage}`}
                 alt={album.title}
                 width={50}
                 height={50}

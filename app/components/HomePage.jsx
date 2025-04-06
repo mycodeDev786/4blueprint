@@ -13,6 +13,7 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchRecipes = async () => {
+      setLoading(true);
       try {
         const res = await fetch(API_ENDPOINTS.RECIPE.GETALL);
         const data = await res.json();
@@ -65,6 +66,7 @@ const HomePage = () => {
           )}
         </div>
       ))}
+      <Loading isLoading={loading} />
     </div>
   );
 };
