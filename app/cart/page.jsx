@@ -4,11 +4,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, updateQuantity } from "../store/cartSlice";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Prompt from "../components/Prompt";
+import API_ENDPOINTS from "../utils/api";
 
 export default function Cart() {
   const cartItems = useSelector((state) => state.cart.items);
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const dispatch = useDispatch();
   const router = useRouter();
+  const [showPrompt, setShowPrompt] = useState(false);
 
   const handleRemove = (id) => {
     dispatch(removeFromCart(id));
@@ -23,7 +28,10 @@ export default function Cart() {
   };
 
   const handleCheckout = () => {
-    alert("Proceeding to checkout...");
+    if (isAuthenticated) alert("Proceeding to checkout...");
+    else {
+      setShowPrompt(true);
+    }
     // Implement actual checkout logic
   };
 
@@ -44,7 +52,7 @@ export default function Cart() {
               className="flex flex-col w-full md:flex-row items-center gap-4 bg-white p-4 shadow-md rounded-lg border border-gray-200"
             >
               <Image
-                src={item.image}
+                src={`${API_ENDPOINTS.STORAGE_URL}${item.image}`}
                 alt={item.title}
                 width={100}
                 height={100}
@@ -52,7 +60,7 @@ export default function Cart() {
               />
               <div className="flex-1 text-center md:text-left">
                 <h2 className="text-lg font-semibold">{item.title}</h2>
-                <p className="text-gray-700">${item.price.toFixed(2)}</p>
+                <p className="text-gray-700">${item.price}</p>
                 <div className="flex items-center justify-center md:justify-start gap-2 mt-3">
                   <label htmlFor={`quantity-${item.id}`} className="text-sm">
                     Qty:
@@ -97,7 +105,7 @@ export default function Cart() {
           {/* Total Price & Checkout */}
           <div className="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-md border border-gray-200">
             <h2 className="text-xl font-bold mb-4 md:mb-0">
-              Total: ${totalPrice.toFixed(2)}
+              Total: ${totalPrice}
             </h2>
             <button
               onClick={handleCheckout}
@@ -108,6 +116,7 @@ export default function Cart() {
           </div>
         </div>
       )}
+      <Prompt showPrompt={showPrompt} message={"Please login to continue"} />
     </div>
   );
 }

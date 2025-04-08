@@ -17,6 +17,9 @@ export default function AddRecipe() {
   const [ingredients, setIngredients] = useState("");
   const [ingredientList, setIngredientList] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [ingredientCount, setIngredientCount] = useState("");
+  const [showTable, setShowTable] = useState(false);
+  const [ingredientInputs, setIngredientInputs] = useState([]);
 
   const [steps, setSteps] = useState("");
   const [avoid, setAvoid] = useState("");
@@ -24,19 +27,23 @@ export default function AddRecipe() {
   const [additionalImages, setAdditionalImages] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const addIngredient = () => {
-    if (inputValue.trim()) {
-      const newList = [...ingredientList, inputValue.trim()];
-      setIngredientList(newList);
-      setIngredients(newList.join(", "));
-      setInputValue("");
+  const handleCountSubmit = () => {
+    const count = parseInt(ingredientCount);
+    if (!isNaN(count) && count > 0) {
+      setIngredientInputs(Array(count).fill(""));
+      setShowTable(true);
     }
   };
 
-  const removeIngredient = (index) => {
-    const newList = ingredientList.filter((_, i) => i !== index);
-    setIngredientList(newList);
-    setIngredients(newList.join(", "));
+  const handleInputChange = (index, value) => {
+    const newInputs = [...ingredientInputs];
+    newInputs[index] = value;
+    setIngredientInputs(newInputs);
+  };
+
+  const handleSave = () => {
+    const savedIngredients = ingredientInputs.filter(Boolean);
+    setIngredients(savedIngredients.join(", "));
   };
 
   const handleImageUpload = (e) => {
@@ -123,59 +130,75 @@ export default function AddRecipe() {
             className="w-full p-2 border rounded-md"
           ></textarea>
         </div>
-        -{" "}
-        <div>
-          <label className="block text-gray-700 font-medium">
-            List of ingredients <span className="text-red-500">*</span>
+        <div className="space-y-4">
+          <label className="block text-gray-700 font-medium text-base">
+            Number of Ingredients <span className="text-red-500">*</span>
           </label>
-          <div className="flex gap-2">
+
+          <div className="flex justify-between items-center gap-2">
             <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              className="p-2 border rounded-md w-full"
-              placeholder="Add an ingredient"
+              type="number"
+              value={ingredientCount}
+              onChange={(e) => setIngredientCount(e.target.value)}
+              className="p-1.5 border rounded-md w-28 text-sm"
+              placeholder="e.g. 4"
             />
             <button
-              onClick={addIngredient}
-              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              onClick={handleCountSubmit}
+              className="bg-green-600 hover:bg-green-700 transition text-white px-4 py-1.5 rounded-md text-sm"
             >
-              Add
+              Create Table
             </button>
           </div>
-          {ingredientList.length > 0 && (
-            <table className="w-full mt-2 border-collapse border border-gray-300">
-              <thead>
-                <tr>
-                  <th className="border p-2">Ingredient</th>
-                  <th className="border p-2">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ingredientList.map((ingredient, index) => (
-                  <tr key={index}>
-                    <td className="border p-2">{ingredient}</td>
-                    <td className="border p-2">
-                      <button
-                        onClick={() => removeIngredient(index)}
-                        className="bg-red-500 text-white px-2 py-1 rounded-md"
-                      >
-                        Remove
-                      </button>
-                    </td>
+
+          {showTable && (
+            <>
+              <table className="w-full mt-4 border border-gray-300 rounded-lg overflow-hidden">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border p-2 text-left text-gray-700 font-medium text-sm">
+                      Ingredient
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {ingredientInputs.map((value, index) => (
+                    <tr key={index} className="even:bg-gray-50">
+                      <td className="border p-2">
+                        <input
+                          type="text"
+                          value={value}
+                          onChange={(e) =>
+                            handleInputChange(index, e.target.value)
+                          }
+                          className="w-full p-2 border rounded-md text-sm"
+                          placeholder={`Ingredient ${index + 1}`}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <button
+                onClick={handleSave}
+                className="mt-4 bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-2 rounded-md text-sm"
+              >
+                Save Ingredients
+              </button>
+            </>
           )}
+
           <textarea
             required
             value={ingredients}
             onChange={(e) => setIngredients(e.target.value)}
-            className="w-full p-2 border rounded-md mt-2"
+            className="w-full p-2 border rounded-md mt-4 text-sm"
             readOnly
+            placeholder="Saved ingredients will appear here..."
           ></textarea>
         </div>
+
         <div>
           <label className="block text-gray-700 font-medium">
             Steps to prepare <span className="text-red-500">*</span>

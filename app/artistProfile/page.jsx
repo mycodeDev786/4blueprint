@@ -49,6 +49,7 @@ const ArtistProfile = () => {
   }, [user.id]);
 
   const handleProfileClick = () => {
+    console.log(user.id);
     setIsPopupOpen(true);
   };
 
@@ -63,7 +64,12 @@ const ArtistProfile = () => {
     formData.append("profilePicture", selectedFile);
 
     try {
-      await apiRequest(API_ENDPOINTS.BAKER.UPLOAD_PROFILE, "POST", formData);
+      await apiRequest(
+        API_ENDPOINTS.BAKER.UPDATE_PROFILE_IMAGE(user.id),
+        "POST",
+        formData
+      );
+
       setIsPopupOpen(false);
       setSelectedFile(null);
     } catch (error) {
@@ -86,11 +92,13 @@ const ArtistProfile = () => {
         className="relative h-64 rounded-xl overflow-hidden"
       >
         <Image
-          src={`${API_ENDPOINTS.STORAGE_URL}${"/" + baker.profile_image}`}
+          src={`${API_ENDPOINTS.STORAGE_URL}${baker.profile_image}`} // Remove the extra slash here
           alt="Artist background"
           fill
-          className="object-cover cursor-pointer"
+          className="cursor-pointer"
+          style={{ objectFit: "contain" }}
         />
+
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 z-10 p-4 text-white">
           <div className="flex items-center gap-2">
@@ -142,7 +150,7 @@ const ArtistProfile = () => {
 
       {isPopupOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+          className=" top-14 inset-0 bg-black bg-opacity-50 flex justify-center items-center"
           onClick={handleCancel} // Close popup when clicking outside
         >
           <div

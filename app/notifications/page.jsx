@@ -22,7 +22,7 @@ export default function Notifications() {
   }, []);
 
   return (
-    <div className="flex w-full  md:max-w-screen-2xl items-center justify-center h-screen">
+    <div className="flex w-full md:max-w-screen-2xl md:items-center justify-center h-screen">
       <div className=" md:block  w-full md:max-w-screen-sm flex shadow-lg ">
         {/* Scrollable Artist List */}
 

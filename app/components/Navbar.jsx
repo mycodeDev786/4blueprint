@@ -9,10 +9,12 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { logout } from "../store/authSlice";
-
+import API_ENDPOINTS from "../utils/api";
+import { apiRequest } from "../utils/apiHelper";
 import { assets } from "@/assets/assets";
 import { FaShoppingCart, FaSearch } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
+import Prompt from "./Prompt";
 const Navbar = ({ cartCount }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -30,7 +32,7 @@ const Navbar = ({ cartCount }) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const dispatch = useDispatch();
-
+  const [baker, setBaker] = useState(null);
   const handleSearch = () => {
     if (query.trim() !== "") {
       onSearch(query);
@@ -99,6 +101,23 @@ const Navbar = ({ cartCount }) => {
   const handleCart = () => {
     router.push("/cart");
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const bakerData = await apiRequest(
+          API_ENDPOINTS.BAKER.GET_BY_ID(user.id)
+        );
+        setBaker(bakerData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        // setLoading(false);
+      }
+    }
+
+    if (user?.id && user?.userType === "baker") fetchData();
+  }, [user?.id]);
 
   return (
     <>
@@ -239,7 +258,12 @@ const Navbar = ({ cartCount }) => {
                   className="cursor-pointer flex items-center gap-2"
                 >
                   <Image
-                    src={assets.user_icon}
+                    //src={assets.user_icon}
+                    src={
+                      baker?.profile_image
+                        ? `${API_ENDPOINTS.STORAGE_URL}${baker.profile_image}`
+                        : assets.user_icon // Path to your fallback image in public/assets
+                    }
                     alt="User"
                     width={36}
                     height={36}

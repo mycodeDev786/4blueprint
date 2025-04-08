@@ -11,6 +11,7 @@ import { removeFromWishlist } from "../store/wishlistSlice";
 import { addToArchive, removeFromArchive } from "../store/archiveSlice";
 import { bakers } from "../constants/bakers";
 import Prompt from "./Prompt";
+import API_ENDPOINTS from "../utils/api";
 
 export default function RecipeCardArchive({ recipe }) {
   const dispatch = useDispatch();
@@ -95,8 +96,10 @@ export default function RecipeCardArchive({ recipe }) {
         onClick={() => setIsClicked(true)}
       >
         <Image
-          src={recipe.image}
+          src={`${API_ENDPOINTS.STORAGE_URL}${recipe.image}`}
           alt={recipe.title}
+          width={32}
+          height={32}
           className="w-32 h-32 rounded-lg object-cover transition-transform duration-300"
         />
         {!recipe.isPurchased && (
@@ -174,7 +177,7 @@ export default function RecipeCardArchive({ recipe }) {
               >
                 <FaShoppingCart className="text-gray-700 text-lg" />
                 <span className="font-medium text-sm text-gray-900">
-                  (${recipe.price.toFixed(2)})
+                  (${recipe.price})
                 </span>
               </button>
             </div>
