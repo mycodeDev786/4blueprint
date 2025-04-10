@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { assets } from "@/assets/assets";
-import recipes from "../constants/recipes";
 import Image from "next/image";
 export default function userProfile() {
   return (

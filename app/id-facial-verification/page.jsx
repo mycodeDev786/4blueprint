@@ -64,6 +64,7 @@ export default function IdFacialVerification() {
   const handleCreateArtistProfile = async () => {
     const formData1 = new FormData();
     formData1.append("user_id", user_id);
+    formData1.append("baker_name", formData.fullName);
     formData1.append("profile_image", selfie); // Assuming selectedFile is the chosen file
     formData1.append("country", formData.country);
     formData1.append("flag", getFlagUrl(formData.country));
@@ -241,6 +242,17 @@ export default function IdFacialVerification() {
               View Terms and Conditions
             </p>
           </div>
+          <div className="mt-4">
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                checked={isAccepted}
+                onChange={() => setIsAccepted(!isAccepted)}
+                className="mr-2"
+              />
+              I accept the terms and conditions
+            </label>
+          </div>
 
           {isTermsOpen && (
             <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
@@ -249,17 +261,7 @@ export default function IdFacialVerification() {
                 <p className="text-sm mt-2">
                   By proceeding, you agree to our terms and conditions...
                 </p>
-                <div className="mt-4">
-                  <label className="inline-flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={isAccepted}
-                      onChange={() => setIsAccepted(!isAccepted)}
-                      className="mr-2"
-                    />
-                    I accept the terms and conditions
-                  </label>
-                </div>
+
                 <button
                   onClick={() => setIsTermsOpen(false)}
                   className="mt-4 bg-gray-600 text-white px-4 py-2 rounded-md"

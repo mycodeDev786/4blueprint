@@ -54,6 +54,8 @@ const API_ENDPOINTS = {
       `${BASE_URL}/followers/count/by-user/${userId}`, // Get follower count for a user
     IS_FOLLOWING: (bakerId, followerId) =>
       `${BASE_URL}/followers/is-following/${bakerId}/${followerId}`, // Check if a user follows a baker
+    GET_FOLLOWED_BAKERS_WITH_NOTIFICATIONS: (userId) =>
+      `${BASE_URL}/followers/follower-notifications/${userId}`,
   },
 };
 

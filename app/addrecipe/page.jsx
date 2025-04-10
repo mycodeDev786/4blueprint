@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
 import { useSelector } from "react-redux";
@@ -15,10 +15,7 @@ export default function AddRecipe() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [ingredients, setIngredients] = useState("");
-  const [ingredientList, setIngredientList] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [ingredientCount, setIngredientCount] = useState("");
-  const [showTable, setShowTable] = useState(false);
+  const [stepInputs, setStepInputs] = useState([""]);
   const [ingredientInputs, setIngredientInputs] = useState([]);
 
   const [steps, setSteps] = useState("");
@@ -27,23 +24,47 @@ export default function AddRecipe() {
   const [additionalImages, setAdditionalImages] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleCountSubmit = () => {
-    const count = parseInt(ingredientCount);
-    if (!isNaN(count) && count > 0) {
-      setIngredientInputs(Array(count).fill(""));
-      setShowTable(true);
-    }
+  useEffect(() => {
+    const formattedSteps = stepInputs
+      .filter((step) => step.trim() !== "")
+      .map((step, idx) => `Step ${idx + 1}: ${step}`)
+      .join("\n");
+    setSteps(formattedSteps);
+  }, [stepInputs]);
+
+  const handleStepChange = (index, value) => {
+    const updated = [...stepInputs];
+    updated[index] = value;
+    setStepInputs(updated);
   };
 
-  const handleInputChange = (index, value) => {
-    const newInputs = [...ingredientInputs];
-    newInputs[index] = value;
-    setIngredientInputs(newInputs);
+  const addStepField = () => {
+    setStepInputs([...stepInputs, ""]);
   };
 
-  const handleSave = () => {
-    const savedIngredients = ingredientInputs.filter(Boolean);
-    setIngredients(savedIngredients.join(", "));
+  const removeStepField = (index) => {
+    const updated = stepInputs.filter((_, i) => i !== index);
+    setStepInputs(updated);
+  };
+
+  useEffect(() => {
+    const cleaned = ingredientInputs.filter((i) => i.trim() !== "");
+    setIngredients(cleaned.join(", "));
+  }, [ingredientInputs]);
+
+  const handleIngredientChange = (index, value) => {
+    const updated = [...ingredientInputs];
+    updated[index] = value;
+    setIngredientInputs(updated);
+  };
+
+  const addIngredientField = () => {
+    setIngredientInputs([...ingredientInputs, ""]);
+  };
+
+  const removeIngredientField = (index) => {
+    const updated = ingredientInputs.filter((_, i) => i !== index);
+    setIngredientInputs(updated);
   };
 
   const handleImageUpload = (e) => {
@@ -130,85 +151,110 @@ export default function AddRecipe() {
             className="w-full p-2 border rounded-md"
           ></textarea>
         </div>
-        <div className="space-y-4">
-          <label className="block text-gray-700 font-medium text-base">
-            Number of Ingredients <span className="text-red-500">*</span>
-          </label>
 
-          <div className="flex justify-between items-center gap-2">
-            <input
-              type="number"
-              value={ingredientCount}
-              onChange={(e) => setIngredientCount(e.target.value)}
-              className="p-1.5 border rounded-md w-28 text-sm"
-              placeholder="e.g. 4"
-            />
+        <div className="space-y-4">
+          {/* Ingredients Section */}
+          <div>
+            <label className="block font-medium text-gray-700 mb-2">
+              Ingredients <span className="text-red-500">*</span>
+            </label>
+            {ingredientInputs.map((value, index) => (
+              <div key={index} className="flex items-center gap-2 mb-2">
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) =>
+                    handleIngredientChange(index, e.target.value)
+                  }
+                  placeholder={`Ingredient ${index + 1}`}
+                  className="flex-1 p-2 border rounded-md text-sm"
+                  required
+                />
+                {ingredientInputs.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeIngredientField(index)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                  >
+                    ✖
+                  </button>
+                )}
+              </div>
+            ))}
             <button
-              onClick={handleCountSubmit}
-              className="bg-green-600 hover:bg-green-700 transition text-white px-4 py-1.5 rounded-md text-sm"
+              type="button"
+              onClick={addIngredientField}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm"
             >
-              Create Table
+              + Add Ingredient
             </button>
           </div>
 
-          {showTable && (
-            <>
-              <table className="w-full mt-4 border border-gray-300 rounded-lg overflow-hidden">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="border p-2 text-left text-gray-700 font-medium text-sm">
-                      Ingredient
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ingredientInputs.map((value, index) => (
-                    <tr key={index} className="even:bg-gray-50">
-                      <td className="border p-2">
-                        <input
-                          type="text"
-                          value={value}
-                          onChange={(e) =>
-                            handleInputChange(index, e.target.value)
-                          }
-                          className="w-full p-2 border rounded-md text-sm"
-                          placeholder={`Ingredient ${index + 1}`}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <button
-                onClick={handleSave}
-                className="mt-4 bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-2 rounded-md text-sm"
-              >
-                Save Ingredients
-              </button>
-            </>
-          )}
-
-          <textarea
-            required
-            value={ingredients}
-            onChange={(e) => setIngredients(e.target.value)}
-            className="w-full p-2 border rounded-md mt-4 text-sm"
-            readOnly
-            placeholder="Saved ingredients will appear here..."
-          ></textarea>
+          {/* Live-updated textarea */}
+          <div>
+            <label className="block font-medium text-gray-700 mt-4 mb-2">
+              All Ingredients
+            </label>
+            <textarea
+              required
+              value={ingredients}
+              onChange={(e) => setIngredients(e.target.value)}
+              className="w-full p-2 border rounded-md text-sm"
+              readOnly
+              placeholder="Saved ingredients will appear here..."
+            ></textarea>
+          </div>
         </div>
+        <div className="space-y-4 mt-6">
+          {/* Steps Section */}
+          <div>
+            <label className="block font-medium text-gray-700 mb-2">
+              Steps to Prepare <span className="text-red-500">*</span>
+            </label>
+            {stepInputs.map((value, index) => (
+              <div key={index} className="flex items-center gap-2 mb-2">
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) => handleStepChange(index, e.target.value)}
+                  placeholder={`Step ${index + 1}`}
+                  className="flex-1 p-2 border rounded-md text-sm"
+                  required
+                />
+                {stepInputs.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeStepField(index)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                  >
+                    ✖
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addStepField}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm"
+            >
+              + Add Step
+            </button>
+          </div>
 
-        <div>
-          <label className="block text-gray-700 font-medium">
-            Steps to prepare <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            required
-            value={steps}
-            onChange={(e) => setSteps(e.target.value)}
-            className="w-full p-2 border rounded-md"
-          ></textarea>
+          {/* Live-updated steps textarea */}
+          <div>
+            <label className="block font-medium text-gray-700 mt-4 mb-2">
+              All Steps (read-only)
+            </label>
+            <textarea
+              required
+              value={steps}
+              readOnly
+              onChange={(e) => setSteps(e.target.value)}
+              className="w-full p-2 border rounded-md text-sm"
+              placeholder="Saved steps will appear here..."
+            ></textarea>
+          </div>
         </div>
         <div>
           <label className="block text-gray-700 font-medium">
