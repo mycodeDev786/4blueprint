@@ -8,13 +8,13 @@ import {
 } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { logout } from "../store/authSlice";
+
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
-import { assets } from "@/assets/assets";
+
 import { FaShoppingCart, FaSearch } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import Prompt from "./Prompt";
+
 const Navbar = ({ cartCount }) => {
   const router = useRouter();
   const pathname = usePathname();
