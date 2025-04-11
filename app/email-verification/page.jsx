@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
+import { useSelector } from "react-redux";
 
 export default function EmailVerification() {
   const router = useRouter();
+  const user = useSelector((state) => state.auth.user);
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -25,8 +27,12 @@ export default function EmailVerification() {
         otp,
       });
 
-      alert("Email verified successfully!");
-      router.push("/"); // Redirect after successful verification
+      if (user?.userType === "baker") {
+        router.push("/id-facial-verification");
+      } else {
+        router.push("/");
+      }
+      // Redirect after successful verification
     } catch (err) {
       setError(err.message || "Invalid OTP. Please try again.");
     } finally {

@@ -69,8 +69,9 @@ export default function SignUp() {
         setLoading(false);
         router.push(`/email-verification?email=${encodeURIComponent(email)}`);
       } else {
+        handleRequestOTP();
         setLoading(false);
-        router.push("/id-facial-verification");
+        router.push(`/email-verification?email=${encodeURIComponent(email)}`);
       }
     } catch (error) {
       setError(error.message);
