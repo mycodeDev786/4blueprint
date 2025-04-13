@@ -10,7 +10,7 @@ import API_ENDPOINTS from "../utils/api";
 
 export default function Cart() {
   const cartItems = useSelector((state) => state.cart.items);
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
   const router = useRouter();
   const [showPrompt, setShowPrompt] = useState(false);
@@ -28,9 +28,13 @@ export default function Cart() {
   };
 
   const handleCheckout = () => {
-    if (isAuthenticated) alert("Proceeding to checkout...");
-    else {
+    if (isAuthenticated) {
+      router.push("/checkout");
+    } else {
       setShowPrompt(true);
+      setTimeout(() => {
+        setShowPrompt(false);
+      }, 2500);
     }
     // Implement actual checkout logic
   };

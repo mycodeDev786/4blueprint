@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 const BottomTab = () => {
   const user = useSelector((state) => state.auth.user);
   const userType = user?.userType;
+
   return (
     <nav className="fixed bottom-0 left-0 w-full bg-[#673AB7] text-white flex justify-between items-center px-4 py-2 md:hidden">
       <div className="flex justify-between w-full relative">
@@ -44,7 +45,14 @@ const BottomTab = () => {
         </Link>
 
         <Link
-          href={userType === "artist" ? "/artistProfile" : "/userProfile"}
+          href={
+            user
+              ? userType === "artist"
+                ? "/artistProfile"
+                : "/userProfile"
+              : ""
+          }
+          // onClick={handleClick}
           className="flex flex-col items-center flex-1"
         >
           <FaUser className="text-xl" />

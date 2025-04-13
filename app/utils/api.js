@@ -35,6 +35,7 @@ const API_ENDPOINTS = {
     CREATE: `${BASE_URL}/recipes`, // Create a new recipe
     GET: `${BASE_URL}/recipes`,
     GET_BY_ID: (id) => `${BASE_URL}/recipes/${id}`,
+    GET_RECIPE_BY_ID: (id) => `${BASE_URL}/recipes/recipes/${id}`,
     GETALL: `${BASE_URL}/recipes/all`,
   },
   BAKER: {

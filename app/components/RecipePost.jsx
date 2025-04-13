@@ -129,18 +129,21 @@ export default function RecipePost({
     }
   }, [date]);
   const handleFollow = async () => {
-    setIsFollowed((prev) => !prev);
-    try {
-      // Follow API call
-      await apiRequest(`${API_ENDPOINTS.FOLLOWERS.FOLLOW}`, "POST", {
-        baker_id: bakerId,
-        follower_id: user.id,
-      });
-      setIsFollowed(true);
-      router.push("/");
-    } catch (error) {
-      console.error("Error toggling follow status:", error);
-    } finally {
+    if (user) {
+      setIsFollowed((prev) => !prev);
+      try {
+        // Follow API call
+        await apiRequest(`${API_ENDPOINTS.FOLLOWERS.FOLLOW}`, "POST", {
+          baker_id: bakerId,
+          follower_id: user.id,
+        });
+        setIsFollowed(true);
+        router.push("/");
+      } catch (error) {
+        console.error("Error toggling follow status:", error);
+      } finally {
+      }
+    } else {
     }
   };
   const handleArtist = () => {
@@ -171,6 +174,10 @@ export default function RecipePost({
     setIsRatingModalOpen(true); // Open modal to display existing ratings
   };
 
+  const handleRecipeClick = () => {
+    router.push(`/recipe-page?id=${id}`);
+  };
+
   const closeRatingModal = () => {
     setIsRatingModalOpen(false);
   };
@@ -181,23 +188,26 @@ export default function RecipePost({
     setTimeout(() => {
       setShowPrompt(false);
     }, 2500);
-    if (isWishlisted) {
-      dispatch(removeFromWishlist(id));
+    if (user) {
+      if (isWishlisted) {
+        dispatch(removeFromWishlist(id));
+      } else {
+        dispatch(
+          addToWishlist({
+            id,
+            title,
+            description,
+            ingredients,
+            image,
+            price,
+            bakerId,
+            isPurchased,
+            artistName: bakerName,
+            // Default quantity
+          })
+        );
+      }
     } else {
-      dispatch(
-        addToWishlist({
-          id,
-          title,
-          description,
-          ingredients,
-          image,
-          price,
-          bakerId,
-          isPurchased,
-          artistName: bakerName,
-          // Default quantity
-        })
-      );
     }
   };
 
@@ -244,7 +254,7 @@ export default function RecipePost({
   };
 
   return !isHidden ? (
-    <div className="max-w-lg mx-auto p-4 bg-white shadow-lg rounded-2xl relative w-full sm:w-11/12 md:w-10/12 lg:w-9/12 xl:w-8/12">
+    <div className="max-w-lg  mx-auto p-4 bg-white shadow-lg rounded-2xl relative w-full sm:w-11/12 md:w-10/12 lg:w-9/12 xl:w-8/12">
       {/* Top Section */}
       <div className="flex justify-between items-center mb-2">
         <div className="text-[#673AB7] font-semibold text-xs sm:text-sm">
@@ -435,7 +445,10 @@ export default function RecipePost({
         {expanded ? "Show Less" : "See More"}
       </button>
       {/* Recipe Image with Overlay Content */}
-      <div className="mt-4 aspect-video overflow-hidden relative">
+      <div
+        onClick={handleRecipeClick}
+        className="mt-4 cursor-pointer aspect-video overflow-hidden relative"
+      >
         <Image
           src={`${API_ENDPOINTS.STORAGE_URL}${image}`}
           alt={title}
@@ -540,10 +553,12 @@ export default function RecipePost({
       {/* Prompt Message */}
       {showPrompt && (
         <>
-          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-sm px-4 py-2 rounded shadow-md z-50 animate-fade-in-out">
-            {isWishlisted
-              ? "This recipe has been added to your Cookbook"
-              : "This recipe has been remove from your Cookbook"}
+          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-purple-700 text-white text-sm px-4 py-2 rounded shadow-md z-50 animate-fade-in-out">
+            {user
+              ? isWishlisted
+                ? "This recipe has been added to your Cookbook"
+                : "This recipe has been remove from your Cookbook"
+              : "Login to continue"}
           </div>
         </>
       )}
