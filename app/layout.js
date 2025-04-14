@@ -1,5 +1,6 @@
 "use client";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -71,8 +72,8 @@ export default function RootLayout({ children }) {
             <ReduxProvider>
               <AuthGuard>
                 <NavbarWithCart />
-                {!isMobile && ShowSidebars  && <Sidebar />}
-                {children}
+                {!isMobile && ShowSidebars && <Sidebar />}
+                <SessionProvider>{children}</SessionProvider>
                 {!isMobile && <Footer />}
                 <BottomTab />
                 {!isMobile && ShowSidebars && <RightSidebar />}
