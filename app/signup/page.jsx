@@ -8,7 +8,6 @@ import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-import { signIn } from "next-auth/react";
 import { setUser } from "../store/authSlice";
 import Loading from "../components/Loading";
 
@@ -301,10 +300,7 @@ export default function SignUp() {
 
         {/* Social Sign Up Buttons */}
         <div className="mt-4 space-y-2">
-          <button
-            onClick={() => signIn("google")}
-            className="w-full p-2 rounded-md bg-red-500 text-white"
-          >
+          <button className="w-full p-2 rounded-md bg-red-500 text-white">
             Sign Up with Google
           </button>
           <button className="w-full p-2 rounded-md bg-blue-600 text-white">
