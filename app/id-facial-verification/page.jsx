@@ -124,26 +124,25 @@ export default function IdFacialVerification() {
     formDataToSend.append("idCard", idCard);
     formDataToSend.append("selfie", selfie);
     handleCreateArtistProfile();
-    if (bakerCreated) {
-      try {
-        const response = await fetch(API_ENDPOINTS.AUTH.FACE_ID_VERIFICATION, {
-          method: "POST",
-          body: formDataToSend,
-        });
 
-        const data = await response.json();
+    try {
+      const response = await fetch(API_ENDPOINTS.AUTH.FACE_ID_VERIFICATION, {
+        method: "POST",
+        body: formDataToSend,
+      });
 
-        if (!response.ok) {
-          throw new Error(data.error || "Verification failed.");
-        }
+      const data = await response.json();
 
-        router.push("/submitted");
-      } catch (error) {
-        console.error("Error:", error);
-        alert("Verification failed. Please try again.");
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error(data.error || "Verification failed.");
       }
+
+      router.push("/submitted");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Verification failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
