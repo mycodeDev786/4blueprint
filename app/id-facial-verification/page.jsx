@@ -22,6 +22,7 @@ export default function IdFacialVerification() {
   const countries = countryList().getData();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [bakerCreated, setBakerCreated] = useState(false);
 
   // Get user_id and email from Redux state
   const user_id = useSelector((state) => state.auth.user.id);
@@ -85,9 +86,11 @@ export default function IdFacialVerification() {
 
       console.log("Done");
       // setSuccess("Baker created successfully!");
+      setBakerCreated(true);
     } catch (err) {
       console.error("Request Failed:", err); // Log error details
       setError(err.message);
+      setBakerCreated(false);
     } finally {
       setLoading(false);
     }
@@ -120,25 +123,27 @@ export default function IdFacialVerification() {
     formDataToSend.append("bankAccount", formData.bankAccount);
     formDataToSend.append("idCard", idCard);
     formDataToSend.append("selfie", selfie);
+    handleCreateArtistProfile();
+    if (bakerCreated) {
+      try {
+        const response = await fetch(API_ENDPOINTS.AUTH.FACE_ID_VERIFICATION, {
+          method: "POST",
+          body: formDataToSend,
+        });
 
-    try {
-      const response = await fetch(API_ENDPOINTS.AUTH.FACE_ID_VERIFICATION, {
-        method: "POST",
-        body: formDataToSend,
-      });
+        const data = await response.json();
 
-      const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || "Verification failed.");
+        }
 
-      if (!response.ok) {
-        throw new Error(data.error || "Verification failed.");
+        router.push("/submitted");
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Verification failed. Please try again.");
+      } finally {
+        setLoading(false);
       }
-      handleCreateArtistProfile();
-      router.push("/submitted");
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Verification failed. Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
 
