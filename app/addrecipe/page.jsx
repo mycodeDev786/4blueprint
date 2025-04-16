@@ -17,6 +17,8 @@ export default function AddRecipe() {
   const [ingredients, setIngredients] = useState("");
   const [stepInputs, setStepInputs] = useState([""]);
   const [ingredientInputs, setIngredientInputs] = useState([]);
+  const [units, setUnits] = useState([""]); // NEW state for units
+  const [combinedIngredients, setCombinedIngredients] = useState([]);
 
   const [steps, setSteps] = useState("");
   const [avoid, setAvoid] = useState("");
@@ -49,22 +51,33 @@ export default function AddRecipe() {
 
   useEffect(() => {
     const cleaned = ingredientInputs.filter((i) => i.trim() !== "");
-    setIngredients(cleaned.join(", "));
-  }, [ingredientInputs]);
+    setIngredients(cleaned.join(", ")); // your original live preview
 
+    // Optional: for backend use
+    const combined = ingredientInputs.map((ing, i) => {
+      const unit = units[i]?.trim();
+      return unit ? `${ing.trim()} (${unit})` : ing.trim();
+    });
+    setCombinedIngredients(combined);
+  }, [ingredientInputs, units]);
   const handleIngredientChange = (index, value) => {
     const updated = [...ingredientInputs];
     updated[index] = value;
     setIngredientInputs(updated);
   };
 
+  const handleUnitChange = (index, value) => {
+    const updated = [...units];
+    updated[index] = value;
+    setUnits(updated);
+  };
   const addIngredientField = () => {
     setIngredientInputs([...ingredientInputs, ""]);
+    setUnits([...units, ""]);
   };
-
   const removeIngredientField = (index) => {
-    const updated = ingredientInputs.filter((_, i) => i !== index);
-    setIngredientInputs(updated);
+    setIngredientInputs(ingredientInputs.filter((_, i) => i !== index));
+    setUnits(units.filter((_, i) => i !== index));
   };
 
   const handleImageUpload = (e) => {
@@ -91,6 +104,7 @@ export default function AddRecipe() {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("ingredients", ingredients);
+    formData.append("combinedIngredients", combinedIngredients);
     formData.append("avoid_tips", avoid);
     formData.append("mainImage", mainImage);
     formData.append("steps", steps);
@@ -159,7 +173,11 @@ export default function AddRecipe() {
               Ingredients <span className="text-red-500">*</span>
             </label>
             {ingredientInputs.map((value, index) => (
-              <div key={index} className="flex items-center gap-2 mb-2">
+              <div
+                key={index}
+                className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2"
+              >
+                <p className="text-sm font-medium">{index + 1}</p>
                 <input
                   type="text"
                   value={value}
@@ -167,8 +185,15 @@ export default function AddRecipe() {
                     handleIngredientChange(index, e.target.value)
                   }
                   placeholder={`Ingredient ${index + 1}`}
-                  className="flex-1 p-2 border rounded-md text-sm"
+                  className="flex-1 p-2 border rounded-md text-sm w-full"
                   required
+                />
+                <input
+                  type="text"
+                  value={units[index] || ""}
+                  onChange={(e) => handleUnitChange(index, e.target.value)}
+                  placeholder={`Unit ${index + 1}`}
+                  className="p-2 border rounded-md text-sm min-w-[6rem] w-full sm:w-auto"
                 />
                 {ingredientInputs.length > 1 && (
                   <button
@@ -181,6 +206,7 @@ export default function AddRecipe() {
                 )}
               </div>
             ))}
+
             <button
               type="button"
               onClick={addIngredientField}
@@ -199,12 +225,13 @@ export default function AddRecipe() {
               required
               value={ingredients}
               onChange={(e) => setIngredients(e.target.value)}
-              className="w-full p-2 border rounded-md text-sm"
+              className="w-full p-2 border py-4 h-40 rounded-md text-sm"
               readOnly
               placeholder="Saved ingredients will appear here..."
             ></textarea>
           </div>
         </div>
+
         <div className="space-y-4 mt-6">
           {/* Steps Section */}
           <div>
@@ -251,7 +278,7 @@ export default function AddRecipe() {
               value={steps}
               readOnly
               onChange={(e) => setSteps(e.target.value)}
-              className="w-full p-2 border rounded-md text-sm"
+              className="w-full p-2 border py-4 h-40 rounded-md text-sm"
               placeholder="Saved steps will appear here..."
             ></textarea>
           </div>
@@ -332,12 +359,17 @@ export default function AddRecipe() {
               <label className="block text-gray-700 font-medium">
                 How much are you selling this recipe for?
               </label>
-              <input
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="w-full p-2 border rounded-md"
-              />
+              <div className="flex items-center w-full border rounded-md overflow-hidden">
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  className="w-full p-2 outline-none"
+                />
+                <span className="px-3 bg-gray-100 text-gray-600 border-l">
+                  USD
+                </span>
+              </div>
             </div>
             <div>
               <label className="block text-gray-700 font-medium">
