@@ -91,7 +91,8 @@ export default function RecipePage() {
             {recipe.ingredients}
           </p>
           <p>
-            <span className="font-medium">Type:</span> {recipe.recipe_type}
+            <span className="font-medium">Type:</span>{" "}
+            {recipe.combinedIngredients}
           </p>
           <p>
             <span className="font-medium">Price:</span> ${recipe.price}
@@ -119,10 +120,6 @@ export default function RecipePage() {
           <p>
             <span className="font-medium">Baker Score:</span>{" "}
             {recipe.bakerScore}
-          </p>
-          <p>
-            <span className="font-medium">Baker Joined:</span>{" "}
-            {new Date(recipe.bakerCreatedAt).toLocaleDateString()}
           </p>
         </div>
       </div>

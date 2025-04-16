@@ -265,8 +265,8 @@ const Navbar = ({ cartCount }) => {
                         : assets.user_icon // Path to your fallback image in public/assets
                     }
                     alt="User"
-                    width={36}
-                    height={36}
+                    width={20}
+                    height={20}
                     className="rounded-full border"
                   />
                 </div>
