@@ -40,6 +40,7 @@ const Navbar = ({ cartCount }) => {
   };
   // const user = useSelector((state) => state.user.user);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const tempValue = useSelector((state) => state.temp.value);
 
   // Get page title from pathname
   const getPageTitle = () => {
@@ -58,6 +59,7 @@ const Navbar = ({ cartCount }) => {
   const ShowBackButton = pathname.includes("categories");
   const ShowAddRecipe = pathname === "/addrecipe";
   const ShowSignIn = pathname === "/signin";
+  const ShowRecipeTitle = pathname.includes("recipe-page");
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -451,7 +453,8 @@ const Navbar = ({ cartCount }) => {
         {!ShowUserTitle &&
           !ShowArtistTitle &&
           !ShowAddRecipe &&
-          !ShowSignIn && (
+          !ShowSignIn &&
+          !ShowRecipeTitle && (
             <span className="text-black font-semibold mx-2 md:mt-1 truncate">
               {getPageTitle().toUpperCase()}
             </span>
@@ -474,6 +477,11 @@ const Navbar = ({ cartCount }) => {
         {ShowSignIn && (
           <span className="text-black font-semibold mx-2 md:mt-1 truncate">
             SIGN IN
+          </span>
+        )}
+        {ShowRecipeTitle && (
+          <span className="text-black font-semibold mx-2 md:mt-1 truncate">
+            {tempValue}
           </span>
         )}
       </div>

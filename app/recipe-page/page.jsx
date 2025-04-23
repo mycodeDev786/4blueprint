@@ -46,6 +46,7 @@ export default function RecipePage() {
       fetchRecipe();
     }
   }, [id]);
+  const handleBakerClick = () => {};
 
   const handleAddReview = () => {
     if (!newReview.trim() || newRating === 0) return;
@@ -82,43 +83,54 @@ export default function RecipePage() {
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       {/* Baker Info */}
       <div className="flex items-center gap-4 bg-white shadow-md p-4 rounded-xl">
-        <img
-          src={`${API_ENDPOINTS.STORAGE_URL}${recipe.profileImage}`}
-          alt={recipe.bakerName}
-          className="w-20 h-20 rounded-full object-cover"
-        />
         <div>
-          <h2 className="text-xl font-semibold">{recipe.bakerName}</h2>
-          <div className="flex items-center gap-2 mt-1">
-            <img src={recipe.bakerFlag} alt="Flag" className="w-5 h-5" />
-            <span className="text-gray-500 text-sm">{recipe.bakerCountry}</span>
-          </div>
-          <div className="mt-2 text-sm text-gray-700">
-            <p>
-              <span className="font-medium">Followers:</span>{" "}
-              {recipe.followersCount}
-            </p>
-            <p>
-              <span className="font-medium">Top 10 Sales:</span>{" "}
-              {recipe.isTop10Sales ? "Yes" : "No"}
-            </p>
-            <p>
-              <span className="font-medium">Top 10 Followers:</span>{" "}
-              {recipe.isTop10Followers ? "Yes" : "No"}
-            </p>
-          </div>
+          <span
+            onClick={handleBakerClick}
+            className="text-xl font-semibold cursor-pointer flex items-center"
+          >
+            <span className="mr-1">Recipe By:</span>
+            <span className=" text-purple-700">{recipe.bakerName}</span>
+          </span>
         </div>
       </div>
-
       {/* Recipe Image */}
-      <div className="w-full h-[400px] overflow-hidden rounded-2xl shadow-md">
+      <div className="w-full h-[400px] overflow-hidden rounded-2xl shadow-md relative">
         <img
           src={`${API_ENDPOINTS.STORAGE_URL}${recipe.image}`}
           alt={recipe.title}
           className="w-full h-full object-cover"
         />
-      </div>
 
+        {/* Rating Display */}
+        <div className="absolute bottom-2 left-2 bg-white bg-opacity-80 px-3 py-2 rounded-lg shadow flex items-center space-x-2 text-sm font-medium">
+          {recipe.rating > 0 ? (
+            <>
+              {/* Stars */}
+              <div className="flex space-x-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <svg
+                    key={star}
+                    className={`w-5 h-5 ${
+                      recipe.rating >= star
+                        ? "text-yellow-400"
+                        : recipe.rating >= star - 0.5
+                        ? "text-yellow-300"
+                        : "text-gray-300"
+                    }`}
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.951a1 1 0 00.95.69h4.15c.969 0 1.371 1.24.588 1.81l-3.36 2.444a1 1 0 00-.364 1.118l1.287 3.951c.3.921-.755 1.688-1.54 1.118l-3.36-2.444a1 1 0 00-1.175 0l-3.36 2.444c-.785.57-1.84-.197-1.54-1.118l1.287-3.951a1 1 0 00-.364-1.118L2.075 9.378c-.783-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.286-3.951z" />
+                  </svg>
+                ))}
+              </div>
+              <span>{recipe.rating} / 5</span>
+            </>
+          ) : (
+            <span className="text-gray-600 italic">No rating available</span>
+          )}
+        </div>
+      </div>
       {/* Recipe Details */}
       <div className="bg-white shadow-md p-6 rounded-xl space-y-4">
         <h1 className="text-3xl font-bold mb-4">{recipe.title}</h1>
@@ -131,40 +143,17 @@ export default function RecipePage() {
             <span className="font-medium">Ingredients:</span>{" "}
             {recipe.ingredients}
           </p>
-          <p>
-            <span className="font-medium">Type:</span>{" "}
-            {recipe.combinedIngredients}
-          </p>
+
           <p>
             <span className="font-medium">Price:</span> ${recipe.price}
           </p>
-          <p>
-            <span className="font-medium">Category:</span>{" "}
-            {recipe.category_name}
-          </p>
-          <p>
-            <span className="font-medium">Subcategory:</span>{" "}
-            {recipe.subcategory_name}
-          </p>
+
           <p>
             <span className="font-medium">Created:</span>{" "}
             {new Date(recipe.date).toLocaleDateString()}
           </p>
-          <p>
-            <span className="font-medium">Rating:</span> {recipe.rating} (
-            {recipe.ratings_count} ratings)
-          </p>
-          <p>
-            <span className="font-medium">Baker Rating:</span>{" "}
-            {recipe.bakerRating}
-          </p>
-          <p>
-            <span className="font-medium">Baker Score:</span>{" "}
-            {recipe.bakerScore}
-          </p>
         </div>
       </div>
-
       {/* Dummy Video */}
       <div className="bg-white shadow-md p-6 rounded-xl">
         <h2 className="text-xl font-semibold mb-4">Watch Tutorial</h2>
@@ -179,7 +168,6 @@ export default function RecipePage() {
           ></iframe>
         </div>
       </div>
-
       {/* Reviews Section */}
       <div className="bg-white shadow-md p-6 rounded-xl space-y-4">
         <h2 className="text-xl font-semibold">Reviews</h2>

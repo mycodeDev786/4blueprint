@@ -5,6 +5,7 @@ import userSlice from "./userSlice";
 import archiveSlice from "./archiveSlice";
 import categoriesSlice from "./categoriesSlice";
 import authReducer from "./authSlice";
+import tempReducer from "./tempSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     category: categoriesSlice,
     archive: archiveSlice,
     auth: authReducer,
+    temp: tempReducer,
   },
 });

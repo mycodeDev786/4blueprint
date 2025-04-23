@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { addToCart } from "../store/cartSlice";
 import { ratings } from "../constants/rating";
 import { apiRequest } from "../utils/apiHelper";
+import { setTemp, clearTemp } from "../store/tempSlice";
 
 import { addToWishlist, removeFromWishlist } from "../store/wishlistSlice";
 import dayjs from "dayjs";
@@ -175,6 +176,8 @@ export default function RecipePost({
   };
 
   const handleRecipeClick = () => {
+    dispatch(clearTemp());
+    dispatch(setTemp(title));
     router.push(`/recipe-page?id=${id}`);
   };
 
