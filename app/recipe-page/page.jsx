@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
@@ -12,9 +12,11 @@ export default function RecipePage() {
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const [newReview, setNewReview] = useState("");
   const [newRating, setNewRating] = useState(0);
+  const [isPurchased, setIsPurchased] = useState(true);
   const [hoverRating, setHoverRating] = useState(0);
   const [dummyReviews, setDummyReviews] = useState([
     {
@@ -46,7 +48,9 @@ export default function RecipePage() {
       fetchRecipe();
     }
   }, [id]);
-  const handleBakerClick = () => {};
+  const handleBakerClick = () => {
+    router.push(`/artist-page?id=${recipe.bakerId}`);
+  };
 
   const handleAddReview = () => {
     if (!newReview.trim() || newRating === 0) return;
@@ -80,7 +84,7 @@ export default function RecipePage() {
   if (!recipe) return <div className="p-6 text-center">No recipe found.</div>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-4xl px-0 sm:px-6 md:px-12 lg:px-16 xl:px-24 space-y-6">
       {/* Baker Info */}
       <div className="flex items-center gap-4 bg-white shadow-md p-4 rounded-xl">
         <div>
@@ -162,7 +166,6 @@ export default function RecipePage() {
             className="w-full h-72 rounded-lg"
             src="https://www.youtube.com/embed/dQw4w9WgXcQ"
             title="Recipe Video"
-            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
@@ -171,43 +174,45 @@ export default function RecipePage() {
       {/* Reviews Section */}
       <div className="bg-white shadow-md p-6 rounded-xl space-y-4">
         <h2 className="text-xl font-semibold">Reviews</h2>
-
         {/* Add Review */}
-        <div className="flex flex-col gap-2">
-          <div className="flex gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <svg
-                key={star}
-                onClick={() => setNewRating(star)}
-                onMouseEnter={() => setHoverRating(star)}
-                onMouseLeave={() => setHoverRating(0)}
-                className={`w-6 h-6 cursor-pointer ${
-                  (hoverRating || newRating) >= star
-                    ? "text-yellow-400"
-                    : "text-gray-300"
-                }`}
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.951a1 1 0 00.95.69h4.15c.969 0 1.371 1.24.588 1.81l-3.36 2.444a1 1 0 00-.364 1.118l1.287 3.951c.3.921-.755 1.688-1.54 1.118l-3.36-2.444a1 1 0 00-1.175 0l-3.36 2.444c-.785.57-1.84-.197-1.54-1.118l1.287-3.951a1 1 0 00-.364-1.118L2.075 9.378c-.783-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.286-3.951z" />
-              </svg>
-            ))}
-          </div>
+        {recipe.type === "hidden" ||
+          (isPurchased && (
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <svg
+                    key={star}
+                    onClick={() => setNewRating(star)}
+                    onMouseEnter={() => setHoverRating(star)}
+                    onMouseLeave={() => setHoverRating(0)}
+                    className={`w-6 h-6 cursor-pointer ${
+                      (hoverRating || newRating) >= star
+                        ? "text-yellow-400"
+                        : "text-gray-300"
+                    }`}
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.951a1 1 0 00.95.69h4.15c.969 0 1.371 1.24.588 1.81l-3.36 2.444a1 1 0 00-.364 1.118l1.287 3.951c.3.921-.755 1.688-1.54 1.118l-3.36-2.444a1 1 0 00-1.175 0l-3.36 2.444c-.785.57-1.84-.197-1.54-1.118l1.287-3.951a1 1 0 00-.364-1.118L2.075 9.378c-.783-.57-.38-1.81.588-1.81h4.15a1 1 0 00.95-.69l1.286-3.951z" />
+                  </svg>
+                ))}
+              </div>
 
-          <textarea
-            value={newReview}
-            onChange={(e) => setNewReview(e.target.value)}
-            placeholder="Write your review..."
-            className="w-full border rounded-md p-2 text-sm"
-            rows={3}
-          ></textarea>
-          <button
-            onClick={handleAddReview}
-            className="self-end bg-[#FFB703] text-white px-4 py-2 rounded-md hover:bg-[#FFA500]"
-          >
-            Submit Review
-          </button>
-        </div>
+              <textarea
+                value={newReview}
+                onChange={(e) => setNewReview(e.target.value)}
+                placeholder="Write your review..."
+                className="w-full border rounded-md p-2 text-sm"
+                rows={3}
+              ></textarea>
+              <button
+                onClick={handleAddReview}
+                className="self-end bg-[#FFB703] text-white px-4 py-2 rounded-md hover:bg-[#FFA500]"
+              >
+                Submit Review
+              </button>
+            </div>
+          ))}
 
         {/* Show Reviews */}
         <div className="space-y-2">
