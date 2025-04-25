@@ -60,6 +60,7 @@ const Navbar = ({ cartCount }) => {
   const ShowAddRecipe = pathname === "/addrecipe";
   const ShowSignIn = pathname === "/signin";
   const ShowRecipeTitle = pathname.includes("recipe-page");
+  const ShowArtistPageTitle = pathname.includes("artist-page");
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -454,7 +455,8 @@ const Navbar = ({ cartCount }) => {
           !ShowArtistTitle &&
           !ShowAddRecipe &&
           !ShowSignIn &&
-          !ShowRecipeTitle && (
+          !ShowRecipeTitle &&
+          !ShowArtistPageTitle && (
             <span className="text-black font-semibold mx-2 md:mt-1 truncate">
               {getPageTitle().toUpperCase()}
             </span>
@@ -482,6 +484,11 @@ const Navbar = ({ cartCount }) => {
         {ShowRecipeTitle && (
           <span className="text-black font-semibold mx-2 md:mt-1 truncate">
             {tempValue}
+          </span>
+        )}
+        {ShowArtistPageTitle && (
+          <span className="text-black font-semibold mx-2 md:mt-1 truncate">
+            Kitchen Credentials
           </span>
         )}
       </div>

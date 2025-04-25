@@ -148,7 +148,7 @@ export default function RecipePost({
     }
   };
   const handleArtist = () => {
-    router.push(`artistProfile?name=${encodeURIComponent(baker.name)}`);
+    router.push(`/artist-page?id=${bakerId}`);
   };
 
   const handleHide = () => {
