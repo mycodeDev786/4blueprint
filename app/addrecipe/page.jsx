@@ -19,12 +19,21 @@ export default function AddRecipe() {
   const [ingredientInputs, setIngredientInputs] = useState([]);
   const [units, setUnits] = useState([""]); // NEW state for units
   const [combinedIngredients, setCombinedIngredients] = useState([]);
+  const [currentStep, setCurrentStep] = useState(1);
 
   const [steps, setSteps] = useState("");
   const [avoid, setAvoid] = useState("");
   const [mainImage, setMainImage] = useState(null);
   const [additionalImages, setAdditionalImages] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const nextStep = () => {
+    if (currentStep < 4) setCurrentStep(currentStep + 1);
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
+  };
 
   useEffect(() => {
     const formattedSteps = stepInputs
@@ -139,261 +148,339 @@ export default function AddRecipe() {
       <h1 className="text-2xl font-bold text-center text-[#673AB7] mb-4">
         Add Recipe
       </h1>
+
+      {/* Fancy Progress Bar */}
+      <div className="flex items-center mb-10">
+        {["Step 1", "Step 2", "Step 3"].map((label, index) => (
+          <div key={index} className="flex items-center relative flex-1">
+            <div
+              className={`
+          flex justify-center items-center py-3 font-semibold text-center w-full
+          ${
+            currentStep === index
+              ? "bg-blue-600 text-white"
+              : currentStep > index
+              ? "bg-blue-400 text-white shadow-md"
+              : "bg-white text-black border"
+          }
+        `}
+              style={{
+                clipPath:
+                  index !== 2
+                    ? "polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%)"
+                    : "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+                borderTopLeftRadius: index === 0 ? "8px" : "0",
+                borderBottomLeftRadius: index === 0 ? "8px" : "0",
+                borderTopRightRadius: index === 2 ? "8px" : "0",
+                borderBottomRightRadius: index === 2 ? "8px" : "0",
+              }}
+            >
+              {label}
+            </div>
+          </div>
+        ))}
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-gray-700 font-medium">
-            What is the name of your creation?{" "}
-            <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            required
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 border rounded-md"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-700 font-medium">
-            Please provide a brief introduction{" "}
-            <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            required
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border rounded-md"
-          ></textarea>
-        </div>
-
-        <div className="space-y-4">
-          {/* Ingredients Section */}
-          <div>
-            <label className="block font-medium text-gray-700 mb-2">
-              Ingredients <span className="text-red-500">*</span>
-            </label>
-            {ingredientInputs.map((value, index) => (
-              <div
-                key={index}
-                className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2"
-              >
-                <p className="text-sm font-medium">{index + 1}</p>
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) =>
-                    handleIngredientChange(index, e.target.value)
-                  }
-                  placeholder={`Ingredient ${index + 1}`}
-                  className="flex-1 p-2 border rounded-md text-sm w-full"
-                  required
-                />
-                <input
-                  type="text"
-                  value={units[index] || ""}
-                  onChange={(e) => handleUnitChange(index, e.target.value)}
-                  placeholder={`Unit ${index + 1}`}
-                  className="p-2 border rounded-md text-sm min-w-[6rem] w-full sm:w-auto"
-                />
-                {ingredientInputs.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeIngredientField(index)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
-                  >
-                    ✖
-                  </button>
-                )}
-              </div>
-            ))}
-
-            <button
-              type="button"
-              onClick={addIngredientField}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm"
-            >
-              + Add Ingredient
-            </button>
-          </div>
-
-          {/* Live-updated textarea */}
-          <div>
-            <label className="block font-medium text-gray-700 mt-4 mb-2">
-              All Ingredients
-            </label>
-            <textarea
-              required
-              value={ingredients}
-              onChange={(e) => setIngredients(e.target.value)}
-              className="w-full p-2 border py-4 h-40 rounded-md text-sm"
-              readOnly
-              placeholder="Saved ingredients will appear here..."
-            ></textarea>
-          </div>
-        </div>
-
-        <div className="space-y-4 mt-6">
-          {/* Steps Section */}
-          <div>
-            <label className="block font-medium text-gray-700 mb-2">
-              Steps to Prepare <span className="text-red-500">*</span>
-            </label>
-            {stepInputs.map((value, index) => (
-              <div key={index} className="flex items-center gap-2 mb-2">
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) => handleStepChange(index, e.target.value)}
-                  placeholder={`Step ${index + 1}`}
-                  className="flex-1 p-2 border rounded-md text-sm"
-                  required
-                />
-                {stepInputs.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeStepField(index)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
-                  >
-                    ✖
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={addStepField}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm"
-            >
-              + Add Step
-            </button>
-          </div>
-
-          {/* Live-updated steps textarea */}
-          <div>
-            <label className="block font-medium text-gray-700 mt-4 mb-2">
-              All Steps (read-only)
-            </label>
-            <textarea
-              required
-              value={steps}
-              readOnly
-              onChange={(e) => setSteps(e.target.value)}
-              className="w-full p-2 border py-4 h-40 rounded-md text-sm"
-              placeholder="Saved steps will appear here..."
-            ></textarea>
-          </div>
-        </div>
-        <div>
-          <label className="block text-gray-700 font-medium">
-            Things to avoid (optional)
-          </label>
-          <textarea
-            value={avoid}
-            onChange={(e) => setAvoid(e.target.value)}
-            className="w-full p-2 border rounded-md"
-          ></textarea>
-        </div>
-        <div>
-          <label className="block text-gray-700 font-medium">
-            Upload primary photo <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="file"
-            required
-            accept="image/*"
-            onChange={(e) => setMainImage(e.target.files[0])}
-            className="w-full p-2 border rounded-md"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-700 font-medium">
-            Upload additional photos (Optional, max 3)
-          </label>
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="w-full p-2 border rounded-md"
-          />
-          <div className="mt-4 flex gap-2">
-            {additionalImages.length > 0 &&
-              additionalImages.map((image, index) => (
-                <img
-                  key={index}
-                  src={URL.createObjectURL(image)}
-                  alt={`Uploaded ${index + 1}`}
-                  className="w-24 h-24 object-cover rounded-md border"
-                />
-              ))}
-          </div>
-        </div>
-        <div>
-          <label className="block text-gray-700 font-medium">Recipe Type</label>
-          <div className="flex gap-4 mt-2">
-            <label className="flex items-center">
-              <input
-                type="radio"
-                value="free"
-                checked={recipeType === "free"}
-                onChange={() => setRecipeType("free")}
-                className="mr-2"
-              />
-              Free Recipe
-            </label>
-            <label className="flex items-center">
-              <input
-                type="radio"
-                value="hidden"
-                checked={recipeType === "hidden"}
-                onChange={() => setRecipeType("hidden")}
-                className="mr-2"
-              />
-              Hidden Recipe
-            </label>
-          </div>
-        </div>
-        {recipeType === "hidden" && (
-          <div className="space-y-4 p-4 border rounded-md bg-gray-50">
+        {currentStep === 1 && (
+          <>
             <div>
               <label className="block text-gray-700 font-medium">
-                How much are you selling this recipe for?
+                What is the name of your creation?{" "}
+                <span className="text-red-500">*</span>
               </label>
-              <div className="flex items-center w-full border rounded-md overflow-hidden">
-                <input
-                  type="number"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  className="w-full p-2 outline-none"
-                />
-                <span className="px-3 bg-gray-100 text-gray-600 border-l">
-                  USD
-                </span>
-              </div>
-            </div>
-            <div>
-              <label className="block text-gray-700 font-medium">
-                To whom do you want to sell?
-              </label>
-              <select
-                value={buyerRestriction}
-                onChange={(e) => setBuyerRestriction(e.target.value)}
+              <input
+                type="text"
+                required
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 className="w-full p-2 border rounded-md"
-              >
-                <option value="anyone">Anyone</option>
-                <option value="non-national">
-                  Anyone who does not share my nationality
-                </option>
-              </select>
+              />
             </div>
-          </div>
+            <div>
+              <label className="block text-gray-700 font-medium">
+                Please provide a brief introduction{" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                required
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full p-5 border rounded-md"
+              ></textarea>
+            </div>
+          </>
         )}
-        <button
-          type="submit"
-          className="w-full bg-[#673AB7] text-white p-2 rounded-md hover:bg-[#5A2EA6]"
-        >
-          Submit Recipe
-        </button>
+
+        {/* Step 2 - Ingredients */}
+        {currentStep === 2 && (
+          <>
+            <div className=" w-full p-2 space-y-4">
+              {/* Ingredients Section */}
+              <div>
+                <label className="block font-medium text-gray-700 mb-2">
+                  Ingredients <span className="text-red-500">*</span>
+                </label>
+                {ingredientInputs.map((value, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2"
+                  >
+                    <p className="text-sm font-medium">{index + 1}</p>
+                    <input
+                      type="text"
+                      value={value}
+                      onChange={(e) =>
+                        handleIngredientChange(index, e.target.value)
+                      }
+                      placeholder={`Ingredient ${index + 1}`}
+                      className="flex-1 p-2 border rounded-md text-sm w-full"
+                      required
+                    />
+                    <input
+                      type="text"
+                      value={units[index] || ""}
+                      onChange={(e) => handleUnitChange(index, e.target.value)}
+                      placeholder={`Unit ${index + 1}`}
+                      className="p-2 border rounded-md text-sm min-w-[6rem] w-full sm:w-auto"
+                    />
+                    {ingredientInputs.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeIngredientField(index)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                      >
+                        ✖
+                      </button>
+                    )}
+                  </div>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={addIngredientField}
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm"
+                >
+                  + Add Ingredient
+                </button>
+              </div>
+
+              {/* Live-updated textarea */}
+              <div>
+                <label className="block font-medium text-gray-700 mt-4 mb-2">
+                  All Ingredients
+                </label>
+                <textarea
+                  required
+                  value={ingredients}
+                  onChange={(e) => setIngredients(e.target.value)}
+                  className="w-full p-2 border py-4 h-40 rounded-md text-sm"
+                  readOnly
+                  placeholder="Saved ingredients will appear here..."
+                ></textarea>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Step 3 - Instructions */}
+        {currentStep === 3 && (
+          <>
+            <div className="space-y-4 w-full p-4 mt-6">
+              {/* Steps Section */}
+              <div>
+                <label className="block font-medium text-gray-700 mb-2">
+                  Steps to Prepare <span className="text-red-500">*</span>
+                </label>
+                {stepInputs.map((value, index) => (
+                  <div key={index} className="flex items-center gap-2 mb-2">
+                    <input
+                      type="text"
+                      value={value}
+                      onChange={(e) => handleStepChange(index, e.target.value)}
+                      placeholder={`Step ${index + 1}`}
+                      className="flex-1 p-2 border rounded-md text-sm"
+                      required
+                    />
+                    {stepInputs.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeStepField(index)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                      >
+                        ✖
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={addStepField}
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm"
+                >
+                  + Add Step
+                </button>
+              </div>
+
+              {/* Live-updated steps textarea */}
+              <div>
+                <label className="block font-medium text-gray-700 mt-4 mb-2">
+                  All Steps (read-only)
+                </label>
+                <textarea
+                  required
+                  value={steps}
+                  readOnly
+                  onChange={(e) => setSteps(e.target.value)}
+                  className="w-full p-2 border py-4 h-40 rounded-md text-sm"
+                  placeholder="Saved steps will appear here..."
+                ></textarea>
+              </div>
+            </div>
+            <div>
+              <label className="block text-gray-700 font-medium">
+                Things to avoid (optional)
+              </label>
+              <textarea
+                value={avoid}
+                onChange={(e) => setAvoid(e.target.value)}
+                className="w-full p-2 border rounded-md"
+              ></textarea>
+            </div>
+          </>
+        )}
+
+        {/* Step 4 - Upload Photos */}
+        {currentStep === 4 && (
+          <>
+            <div>
+              <label className="block text-gray-700 font-medium">
+                Upload primary photo <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="file"
+                required
+                accept="image/*"
+                onChange={(e) => setMainImage(e.target.files[0])}
+                className="w-full p-2 border rounded-md"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 font-medium">
+                Upload additional photos (Optional, max 3)
+              </label>
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="w-full p-2 border rounded-md"
+              />
+              <div className="mt-4 flex gap-2">
+                {additionalImages.length > 0 &&
+                  additionalImages.map((image, index) => (
+                    <img
+                      key={index}
+                      src={URL.createObjectURL(image)}
+                      alt={`Uploaded ${index + 1}`}
+                      className="w-24 h-24 object-cover rounded-md border"
+                    />
+                  ))}
+              </div>
+            </div>
+            <div>
+              <label className="block text-gray-700 font-medium">
+                Recipe Type
+              </label>
+              <div className="flex gap-4 mt-2">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    value="free"
+                    checked={recipeType === "free"}
+                    onChange={() => setRecipeType("free")}
+                    className="mr-2"
+                  />
+                  Free Recipe
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    value="hidden"
+                    checked={recipeType === "hidden"}
+                    onChange={() => setRecipeType("hidden")}
+                    className="mr-2"
+                  />
+                  Hidden Recipe
+                </label>
+              </div>
+            </div>
+            {recipeType === "hidden" && (
+              <div className="space-y-4 p-4 border rounded-md bg-gray-50">
+                <div>
+                  <label className="block text-gray-700 font-medium">
+                    How much are you selling this recipe for?
+                  </label>
+                  <div className="flex items-center w-full border rounded-md overflow-hidden">
+                    <input
+                      type="number"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      className="w-full p-2 outline-none"
+                    />
+                    <span className="px-3 bg-gray-100 text-gray-600 border-l">
+                      USD
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium">
+                    To whom do you want to sell?
+                  </label>
+                  <select
+                    value={buyerRestriction}
+                    onChange={(e) => setBuyerRestriction(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option value="anyone">Anyone</option>
+                    <option value="non-national">
+                      Anyone who does not share my nationality
+                    </option>
+                  </select>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Navigation Buttons */}
+        <div className="flex justify-between pt-6">
+          {currentStep > 1 && (
+            <button
+              type="button"
+              onClick={prevStep}
+              className="px-6 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+            >
+              Previous
+            </button>
+          )}
+          {currentStep < 4 ? (
+            <button
+              type="button"
+              onClick={nextStep}
+              className="ml-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Next
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="ml-auto px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            >
+              Submit Recipe
+            </button>
+          )}
+        </div>
       </form>
       <Prompt
         showPrompt={showPrompt}

@@ -57,18 +57,7 @@ export default function BakerProfileCard({ baker }) {
 
       {/* Follow Button */}
       <div className="flex items-center justify-between mt-2">
-        <button
-          onClick={handleFollow}
-          className={`px-2 py-1 text-[10px] rounded transition ${
-            isFollowed
-              ? "bg-gray-300 text-gray-600"
-              : "bg-purple-500 text-white"
-          }`}
-          disabled={isFollowed}
-        >
-          {isFollowed ? "Following" : "Follow"}
-        </button>
-        <p className="text-[10px] text-gray-600">{followers} followers</p>
+        <p className="text-[10px] text-gray-600">{followers} recipes</p>
       </div>
     </div>
   );

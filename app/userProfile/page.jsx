@@ -6,7 +6,7 @@ import { assets } from "@/assets/assets";
 import Image from "next/image";
 export default function userProfile() {
   return (
-    <div className="max-w-md md:max-w-6xl mx-auto  rounded-xl shadow-lg overflow-hidden p-6">
+    <div className="max-w-4xl px-0 sm:px-6 md:px-12 lg:px-16 xl:px-24 space-y-6">
       {/* Artist Section */}
       <div className="relative h-64 rounded-xl overflow-hidden">
         {/* Background Image */}
