@@ -1,11 +1,16 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function BakerProfileCard({ baker }) {
   const [isFollowed, setIsFollowed] = useState(baker?.isFollowed);
   const [followers, setFollowers] = useState(baker.followers);
+  const router = useRouter();
 
+  const handleBakerClick = () => {
+    router.push(`/artist-page?id=${baker.id}`);
+  };
   const handleFollow = () => {
     setIsFollowed(true);
     setFollowers((prev) => prev + 1);
@@ -51,7 +56,10 @@ export default function BakerProfileCard({ baker }) {
       </div>
 
       {/* Baker Name */}
-      <p className="text-xm text-left font-semibold text-purple-800 mb-2">
+      <p
+        onClick={handleBakerClick}
+        className="text-xm cursor-pointer text-left font-semibold text-purple-800 mb-2"
+      >
         {baker.name}
       </p>
 

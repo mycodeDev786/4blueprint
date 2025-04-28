@@ -72,7 +72,7 @@ const Sidebar = () => {
       {user?.userType === "baker" ? (
         <button
           onClick={() => {
-            router.push("/addrecipe");
+            router.push("/add-your-recipe");
           }}
           className="mt-6 w-full bg-[#673AB7] hover:bg-green-600 text-white flex items-center justify-center space-x-2 py-2 rounded"
         >

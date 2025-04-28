@@ -84,21 +84,11 @@ export default function RecipePage() {
   if (!recipe) return <div className="p-6 text-center">No recipe found.</div>;
 
   return (
-    <div className="max-w-4xl px-0 sm:px-6 md:px-12 lg:px-16 xl:px-24 space-y-6">
+    <div className="max-w-4xl w-full mx-auto px-0 sm:px-6 md:px-12 lg:px-16 xl:px-24 space-y-6">
       {/* Baker Info */}
-      <div className="flex items-center gap-4 bg-white shadow-md p-4 rounded-xl">
-        <div>
-          <span
-            onClick={handleBakerClick}
-            className="text-xl font-semibold cursor-pointer flex items-center"
-          >
-            <span className="mr-1">Recipe By:</span>
-            <span className=" text-purple-700">{recipe.bakerName}</span>
-          </span>
-        </div>
-      </div>
+
       {/* Recipe Image */}
-      <div className="w-full h-[400px] overflow-hidden rounded-2xl shadow-md relative">
+      <div className="w-full mt-5  overflow-hidden rounded-2xl shadow-md relative">
         <img
           src={`${API_ENDPOINTS.STORAGE_URL}${recipe.image}`}
           alt={recipe.title}

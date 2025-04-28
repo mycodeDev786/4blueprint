@@ -177,7 +177,7 @@ export default function RecipePost({
 
   const handleRecipeClick = () => {
     dispatch(clearTemp());
-    dispatch(setTemp(title));
+    dispatch(setTemp(title + " by:" + bakerName));
     router.push(`/recipe-page?id=${id}`);
   };
 

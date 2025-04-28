@@ -25,7 +25,7 @@ const BottomTab = () => {
         {/* Placeholder for the center item to maintain spacing */}
         <div className="flex-1 relative">
           <Link
-            href={userType === "baker" ? "/addrecipe" : "/"}
+            href={userType === "baker" ? "/add-your-recipe" : "/"}
             className="absolute left-1/2 transform -translate-x-1/2 bg-white text-gray-500 p-3 rounded-full shadow-lg -top-5"
           >
             <FaPlus

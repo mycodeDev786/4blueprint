@@ -144,31 +144,38 @@ export default function AddRecipe() {
   };
 
   return (
-    <div className="max-w-3xl w-full mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+    <div className="max-w-3xl w-full  mx-auto px-1 py-1 bg-white shadow-md rounded-lg mt-1">
       {/* Fancy Progress Bar */}
-      <div className="flex items-center mb-10">
-        {["Step 1", "Step 2", "Step 3"].map((label, index) => (
-          <div key={index} className="flex items-center relative flex-1">
+      <div className="flex w-full items-center">
+        {["Step 1", "Step 2", "Step 3", "Step 4"].map((label, index, array) => (
+          <div
+            key={index}
+            className="flex items-center relative flex-1 overflow-hidden"
+          >
             <div
               className={`
           flex justify-center items-center py-3 font-semibold text-center w-full
+          transition-colors duration-300
           ${
             currentStep === index
               ? "bg-blue-600 text-white"
               : currentStep > index
-              ? "bg-blue-400 text-white shadow-md"
-              : "bg-white text-black border"
+              ? "bg-blue-400 text-white"
+              : "bg-gray-100 text-gray-500"
           }
         `}
               style={{
                 clipPath:
-                  index !== 2
-                    ? "polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%)"
-                    : "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+                  index === 0
+                    ? "polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%)" // first: flat left, key right
+                    : index === array.length - 1
+                    ? "polygon(20px 0, 100% 0, 100% 100%, 20px 100%, 0 50%)" // last: lock left, flat right
+                    : "polygon(20px 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 20px 100%, 0% 50%)", // middle: lock left, key right
                 borderTopLeftRadius: index === 0 ? "8px" : "0",
                 borderBottomLeftRadius: index === 0 ? "8px" : "0",
-                borderTopRightRadius: index === 2 ? "8px" : "0",
-                borderBottomRightRadius: index === 2 ? "8px" : "0",
+                borderTopRightRadius: index === array.length - 1 ? "8px" : "0",
+                borderBottomRightRadius:
+                  index === array.length - 1 ? "8px" : "0",
               }}
             >
               {label}
@@ -177,10 +184,10 @@ export default function AddRecipe() {
         ))}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className=" block w-full  mx-0 space-y-4">
         {currentStep === 1 && (
           <>
-            <div className=" w-full mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+            <div className="w-full  shadow-md rounded-lg mt-10">
               <label className="block text-gray-700 font-medium">
                 What is the name of your creation?{" "}
                 <span className="text-red-500">*</span>
@@ -211,7 +218,7 @@ export default function AddRecipe() {
         {/* Step 2 - Ingredients */}
         {currentStep === 2 && (
           <>
-            <div className=" w-full mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+            <div className=" w-full p-1 bg-white shadow-md rounded-lg mt-10">
               {/* Ingredients Section */}
               <div>
                 <label className="block font-medium text-gray-700 mb-2">
@@ -282,7 +289,7 @@ export default function AddRecipe() {
         {/* Step 3 - Instructions */}
         {currentStep === 3 && (
           <>
-            <div className=" w-full mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+            <div className=" w-full  p-1 bg-white shadow-md rounded-lg mt-10">
               {/* Steps Section */}
               <div>
                 <label className="block font-medium text-gray-700 mb-2">
@@ -464,7 +471,7 @@ export default function AddRecipe() {
             <button
               type="button"
               onClick={nextStep}
-              className="ml-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className="ml-auto px-6 py-2 bg-purple-700 text-white rounded hover:bg-purple-800"
             >
               Next
             </button>
