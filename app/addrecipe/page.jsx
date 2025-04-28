@@ -144,11 +144,7 @@ export default function AddRecipe() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
-      <h1 className="text-2xl font-bold text-center text-[#673AB7] mb-4">
-        Add Recipe
-      </h1>
-
+    <div className="max-w-3xl w-full mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
       {/* Fancy Progress Bar */}
       <div className="flex items-center mb-10">
         {["Step 1", "Step 2", "Step 3"].map((label, index) => (
@@ -184,7 +180,7 @@ export default function AddRecipe() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {currentStep === 1 && (
           <>
-            <div>
+            <div className=" w-full mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
               <label className="block text-gray-700 font-medium">
                 What is the name of your creation?{" "}
                 <span className="text-red-500">*</span>
@@ -215,7 +211,7 @@ export default function AddRecipe() {
         {/* Step 2 - Ingredients */}
         {currentStep === 2 && (
           <>
-            <div className=" w-full p-2 space-y-4">
+            <div className=" w-full mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
               {/* Ingredients Section */}
               <div>
                 <label className="block font-medium text-gray-700 mb-2">
@@ -286,7 +282,7 @@ export default function AddRecipe() {
         {/* Step 3 - Instructions */}
         {currentStep === 3 && (
           <>
-            <div className="space-y-4 w-full p-4 mt-6">
+            <div className=" w-full mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
               {/* Steps Section */}
               <div>
                 <label className="block font-medium text-gray-700 mb-2">
