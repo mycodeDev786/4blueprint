@@ -146,42 +146,52 @@ export default function AddRecipe() {
   return (
     <div className="max-w-3xl w-full  mx-auto px-1 py-1 bg-white shadow-md rounded-lg mt-1">
       {/* Fancy Progress Bar */}
-      <div className="flex w-full items-center">
-        {["Step 1", "Step 2", "Step 3", "Step 4"].map((label, index, array) => (
-          <div
-            key={index}
-            className="flex items-center relative flex-1 overflow-hidden"
-          >
+      <div className="flex items-center justify-between w-full relative">
+        {["Step 1", "Step 2", "Step 3", "Step 4"].map((label, index, array) => {
+          const isActive = currentStep === index;
+          const isCompleted = currentStep > index;
+
+          return (
             <div
-              className={`
-          flex justify-center items-center py-3 font-semibold text-center w-full
-          transition-colors duration-300
-          ${
-            currentStep === index
-              ? "bg-blue-600 text-white"
-              : currentStep > index
-              ? "bg-blue-400 text-white"
-              : "bg-gray-100 text-gray-500"
-          }
-        `}
-              style={{
-                clipPath:
-                  index === 0
-                    ? "polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%)" // first: flat left, key right
-                    : index === array.length - 1
-                    ? "polygon(20px 0, 100% 0, 100% 100%, 20px 100%, 0 50%)" // last: lock left, flat right
-                    : "polygon(20px 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 20px 100%, 0% 50%)", // middle: lock left, key right
-                borderTopLeftRadius: index === 0 ? "8px" : "0",
-                borderBottomLeftRadius: index === 0 ? "8px" : "0",
-                borderTopRightRadius: index === array.length - 1 ? "8px" : "0",
-                borderBottomRightRadius:
-                  index === array.length - 1 ? "8px" : "0",
-              }}
+              key={index}
+              className="flex-1 flex flex-col items-center relative z-10"
             >
-              {label}
+              {/* Connecting Line */}
+              {index < array.length - 1 && (
+                <div
+                  className={`absolute top-5  w-full h-1 z-0 ${
+                    isCompleted ? "bg-purple-500" : "bg-gray-300"
+                  }`}
+                  style={{ transform: "translateX(50%)", zIndex: -1 }}
+                />
+              )}
+
+              {/* Step Circle */}
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2
+            ${
+              isCompleted
+                ? "bg-amber-500 text-white"
+                : isActive
+                ? "bg-amber-600 text-white"
+                : "bg-gray-300 text-gray-700"
+            }
+          `}
+              >
+                {isCompleted ? "✓" : index + 1}
+              </div>
+
+              {/* Label */}
+              <span
+                className={`text-xs font-medium ${
+                  isActive ? "text-blue-600" : "text-gray-600"
+                }`}
+              >
+                {label}
+              </span>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <form onSubmit={handleSubmit} className=" block w-full  mx-0 space-y-4">
@@ -209,7 +219,7 @@ export default function AddRecipe() {
                 required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full p-5 border rounded-md"
+                className="w-full h-44 p-5 border rounded-md"
               ></textarea>
             </div>
           </>
@@ -237,7 +247,7 @@ export default function AddRecipe() {
                         handleIngredientChange(index, e.target.value)
                       }
                       placeholder={`Ingredient ${index + 1}`}
-                      className="flex-1 p-2 border rounded-md text-sm w-full"
+                      className="flex-1   p-6 border rounded-md text-sm w-full"
                       required
                     />
                     <input
@@ -297,12 +307,12 @@ export default function AddRecipe() {
                 </label>
                 {stepInputs.map((value, index) => (
                   <div key={index} className="flex items-center gap-2 mb-2">
-                    <input
-                      type="text"
+                    <textarea
                       value={value}
                       onChange={(e) => handleStepChange(index, e.target.value)}
                       placeholder={`Step ${index + 1}`}
-                      className="flex-1 p-2 border rounded-md text-sm"
+                      className="flex-1 p-6 border rounded-md text-sm resize-none"
+                      rows={3}
                       required
                     />
                     {stepInputs.length > 1 && (
@@ -328,7 +338,7 @@ export default function AddRecipe() {
               {/* Live-updated steps textarea */}
               <div>
                 <label className="block font-medium text-gray-700 mt-4 mb-2">
-                  All Steps (read-only)
+                  All Steps (preview)
                 </label>
                 <textarea
                   required
