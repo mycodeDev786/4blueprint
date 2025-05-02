@@ -42,6 +42,9 @@ export default function AddRecipe() {
     alert("Draft cleared!");
     window.location.reload();
   };
+  const loadDraft = () => {
+    setShowDraft(true);
+  };
 
   const saveDraft = () => {
     const draft = {
@@ -64,7 +67,7 @@ export default function AddRecipe() {
 
   useEffect(() => {
     const savedDraft = localStorage.getItem("recipeDraft");
-    if (savedDraft) {
+    if (showDraft) {
       setShowDraft(true);
       const draft = JSON.parse(savedDraft);
       setRecipeType(draft.recipeType);
@@ -86,7 +89,7 @@ export default function AddRecipe() {
       }
       setCurrentStep(draft.currentStep || 0);
     }
-  }, []);
+  }, [showDraft]);
 
   useEffect(() => {
     const formattedSteps = stepInputs
@@ -253,21 +256,12 @@ export default function AddRecipe() {
 
         {/* Draft button positioned under Step 4 */}
         <div className="absolute w-1/4 left-[77%] top-[100%]  mt-4 flex justify-center">
-          {showDraft ? (
-            <button
-              onClick={clearDraft}
-              className="text-red-700 underline  px-4 py-1"
-            >
-              Clear Draft
-            </button>
-          ) : (
-            <button
-              onClick={saveDraft}
-              className="text-green-700 underline  px-4 py-1"
-            >
-              Save Draft
-            </button>
-          )}
+          <button
+            onClick={loadDraft}
+            className="text-red-700 underline  px-4 py-1"
+          >
+            Draft
+          </button>
         </div>
       </div>
 
@@ -654,6 +648,13 @@ export default function AddRecipe() {
               Previous
             </button>
           )}
+          <button
+            type="button"
+            onClick={saveDraft}
+            className="ml-auto px-6 py-2 bg-purple-700 text-white rounded hover:bg-purple-800"
+          >
+            Save Draft
+          </button>
           {currentStep < 4 ? (
             <button
               type="button"

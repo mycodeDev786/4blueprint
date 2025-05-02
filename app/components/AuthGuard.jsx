@@ -28,13 +28,9 @@ export default function AuthGuard({ children }) {
           }
         );
 
-        console.log("Raw response:", response);
-
         const text = await response.text();
-        console.log("Response text:", text); // Debug raw response
 
         const data = JSON.parse(text); // Ensure JSON format
-        console.log("Parsed JSON:", data);
 
         setIsVerified(data.isVerified);
         console.log(isVerified);

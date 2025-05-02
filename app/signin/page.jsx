@@ -24,58 +24,51 @@ export default function SignIn() {
 
   const [status, setStatus] = useState(null);
 
-  const fetchStatus = async (userId) => {
+  const fetchVerificationStatus = async () => {
     try {
       const response = await apiRequest(
-        API_ENDPOINTS.AUTH.GET_STATUS(userId),
+        API_ENDPOINTS.AUTH.GET_STATUS(auth.user?.id),
         "GET",
         null
       );
-      console.log(response.status);
-      setStatus(response.status);
+
+      console.log("Verification Status:", response.status);
+      console.log("Testing");
+
+      if (response.status === "approved") {
+        router.push("/");
+      } else {
+        router.push("/submitted");
+      }
+      setLoading(false);
     } catch (error) {
+      router.push("id-facial-verification");
       console.error("Error fetching verification status:", error);
-      throw error;
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    console.log("Updated status:", status);
-  }, [status]);
-  useEffect(() => {
-    // Redirect if user is already logged in
-    if (auth.token) {
-      console.log(auth.user);
-      if (auth.user.userType === "customer") {
-        router.push("/");
-      } else {
-        // Define an async function inside useEffect
-        const fetchVerificationStatus = async () => {
-          try {
-            const response = await apiRequest(
-              API_ENDPOINTS.AUTH.GET_STATUS(auth.user?.id),
-              "GET",
-              null
-            );
-
-            console.log("Verification Status:", response.status);
-
-            if (response.status === "approved") {
-              router.push("/");
-            } else {
-              router.push("/submitted");
-            }
-          } catch (error) {
-            console.error("Error fetching verification status:", error);
-          }
-        };
-
-        if (auth.user.id) {
-          fetchVerificationStatus(); // Call the async function
+  const checkVerification = async (email) => {
+    try {
+      const response = await fetch(
+        `${API_ENDPOINTS.AUTH.CHECK_VERIFICATION}?email=${email}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
         }
+      );
+      const text = await response.text();
+
+      const data = JSON.parse(text);
+      if (data.isVerified) {
+        router.push("/");
       }
+    } catch (err) {
+      console.error("Error fetching verification status:", err.message || err);
+    } finally {
+      setLoading(false);
     }
-  }, [auth.token, auth.user?.userType, auth.user?.id, router]);
+  };
 
   useEffect(() => {
     setIsClient(true); // Ensures client-side rendering
@@ -90,7 +83,7 @@ export default function SignIn() {
         email,
         password,
       });
-      console.log(response);
+
       if (response.token) {
         // Save user data in Redux
         dispatch(setUser({ token: response.token, user: response.user }));
@@ -98,8 +91,12 @@ export default function SignIn() {
         // Save session in local storage
         localStorage.setItem("token", response.token);
         localStorage.setItem("user", JSON.stringify(response.user));
-        fetchStatus(response.user?.id);
-        setLoading(false);
+        if (response.user?.userType === "customer") {
+          checkVerification(response.user.email);
+        }
+        if (response.user?.userType === "baker") {
+          fetchVerificationStatus();
+        }
       }
     } catch (error) {
       setError(error.message);
