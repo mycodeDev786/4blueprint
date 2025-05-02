@@ -6,6 +6,7 @@ import { apiRequest } from "../utils/apiHelper";
 import { useSelector } from "react-redux";
 import Prompt from "../components/Prompt";
 import Loading from "../components/Loading";
+import { useRouter } from "next/navigation";
 
 export default function AddRecipe() {
   const [recipeType, setRecipeType] = useState("free");
@@ -19,26 +20,78 @@ export default function AddRecipe() {
   const [ingredientInputs, setIngredientInputs] = useState([]);
   const [units, setUnits] = useState([""]); // NEW state for units
   const [combinedIngredients, setCombinedIngredients] = useState([]);
-  const [currentStep, setCurrentStep] = useState(1);
-
+  const [currentStep, setCurrentStep] = useState(0);
+  const [showDraft, setShowDraft] = useState(false);
   const [steps, setSteps] = useState("");
   const [avoid, setAvoid] = useState("");
   const [mainImage, setMainImage] = useState(null);
   const [additionalImages, setAdditionalImages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const nextStep = () => {
-    if (currentStep < 4) setCurrentStep(currentStep + 1);
+    if (currentStep < 5) setCurrentStep(currentStep + 1);
   };
 
   const prevStep = () => {
-    if (currentStep > 1) setCurrentStep(currentStep - 1);
+    if (currentStep > 0) setCurrentStep(currentStep - 1);
   };
+
+  const clearDraft = () => {
+    localStorage.removeItem("recipeDraft");
+    alert("Draft cleared!");
+    window.location.reload();
+  };
+
+  const saveDraft = () => {
+    const draft = {
+      recipeType,
+      price,
+      buyerRestriction,
+      title,
+      description,
+      ingredients: ingredientInputs,
+      units,
+      steps: stepInputs,
+      avoid,
+      mainImage: mainImage ? URL.createObjectURL(mainImage) : null,
+      additionalImages: additionalImages.map((img) => URL.createObjectURL(img)),
+      currentStep,
+    };
+    localStorage.setItem("recipeDraft", JSON.stringify(draft));
+    alert("Draft saved successfully!");
+  };
+
+  useEffect(() => {
+    const savedDraft = localStorage.getItem("recipeDraft");
+    if (savedDraft) {
+      setShowDraft(true);
+      const draft = JSON.parse(savedDraft);
+      setRecipeType(draft.recipeType);
+      setPrice(draft.price);
+      setBuyerRestriction(draft.buyerRestriction);
+      setTitle(draft.title);
+      setDescription(draft.description);
+      setIngredientInputs(draft.ingredients);
+      setUnits(draft.units);
+      setStepInputs(draft.steps);
+      setAvoid(draft.avoid);
+      if (draft.mainImage) {
+        setMainImage(draft.mainImage);
+      }
+      if (draft.additionalImages) {
+        setAdditionalImages(
+          draft.additionalImages.map((img) => new File([img], "image"))
+        );
+      }
+      setCurrentStep(draft.currentStep || 0);
+    }
+  }, []);
 
   useEffect(() => {
     const formattedSteps = stepInputs
       .filter((step) => step.trim() !== "")
-      .map((step, idx) => `Step ${idx + 1}: ${step}`)
+      .map((step, idx) => ` ${idx + 1}: ${step}`)
       .join("\n");
     setSteps(formattedSteps);
   }, [stepInputs]);
@@ -146,56 +199,80 @@ export default function AddRecipe() {
   return (
     <div className="max-w-3xl w-full  mx-auto px-1 py-1 bg-white shadow-md rounded-lg mt-1">
       {/* Fancy Progress Bar */}
-      <div className="flex items-center justify-between w-full relative">
-        {["Step 1", "Step 2", "Step 3", "Step 4"].map((label, index, array) => {
-          const isActive = currentStep === index;
-          const isCompleted = currentStep > index;
+      <div className="relative w-full max-w-4xl mx-auto">
+        {/* Progress bar row */}
+        <div className="flex items-center justify-between relative">
+          {["Step 1", "Step 2", "Step 3", "Step 4", "Review"].map(
+            (label, index, array) => {
+              const isActive = currentStep === index;
+              const isCompleted = currentStep > index;
 
-          return (
-            <div
-              key={index}
-              className="flex-1 flex flex-col items-center relative z-10"
-            >
-              {/* Connecting Line */}
-              {index < array.length - 1 && (
+              return (
                 <div
-                  className={`absolute top-5  w-full h-1 z-0 ${
-                    isCompleted ? "bg-purple-500" : "bg-gray-300"
-                  }`}
-                  style={{ transform: "translateX(50%)", zIndex: -1 }}
-                />
-              )}
+                  key={index}
+                  className="flex-1 flex flex-col items-center relative z-10"
+                >
+                  {/* Connecting Line */}
+                  {index < array.length - 1 && (
+                    <div
+                      className={`absolute top-5 w-full h-1 z-0 ${
+                        isCompleted ? "bg-purple-500" : "bg-gray-300"
+                      }`}
+                      style={{ transform: "translateX(50%)", zIndex: -1 }}
+                    />
+                  )}
 
-              {/* Step Circle */}
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2
-            ${
-              isCompleted
-                ? "bg-amber-500 text-white"
-                : isActive
-                ? "bg-amber-600 text-white"
-                : "bg-gray-300 text-gray-700"
+                  {/* Step Circle */}
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2
+              ${
+                isCompleted
+                  ? "bg-amber-500 text-white"
+                  : isActive
+                  ? "bg-amber-600 text-white"
+                  : "bg-gray-300 text-gray-700"
+              }
+            `}
+                  >
+                    {isCompleted ? "✓" : index + 1}
+                  </div>
+
+                  {/* Label */}
+                  <span
+                    className={`text-xs font-medium ${
+                      isActive ? "text-blue-600" : "text-gray-600"
+                    }`}
+                  >
+                    {label}
+                  </span>
+                </div>
+              );
             }
-          `}
-              >
-                {isCompleted ? "✓" : index + 1}
-              </div>
+          )}
+        </div>
 
-              {/* Label */}
-              <span
-                className={`text-xs font-medium ${
-                  isActive ? "text-blue-600" : "text-gray-600"
-                }`}
-              >
-                {label}
-              </span>
-            </div>
-          );
-        })}
+        {/* Draft button positioned under Step 4 */}
+        <div className="absolute w-1/4 left-[77%] top-[100%]  mt-4 flex justify-center">
+          {showDraft ? (
+            <button
+              onClick={clearDraft}
+              className="text-red-700 underline  px-4 py-1"
+            >
+              Clear Draft
+            </button>
+          ) : (
+            <button
+              onClick={saveDraft}
+              className="text-green-700 underline  px-4 py-1"
+            >
+              Save Draft
+            </button>
+          )}
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className=" block w-full  mx-0 space-y-4">
-        {currentStep === 1 && (
+        {currentStep === 0 && (
           <>
             <div className="w-full  shadow-md rounded-lg mt-10">
               <label className="block text-gray-700 font-medium">
@@ -226,7 +303,7 @@ export default function AddRecipe() {
         )}
 
         {/* Step 2 - Ingredients */}
-        {currentStep === 2 && (
+        {currentStep === 1 && (
           <>
             <div className=" w-full p-1 bg-white shadow-md rounded-lg mt-10">
               {/* Ingredients Section */}
@@ -287,7 +364,7 @@ export default function AddRecipe() {
                   required
                   value={ingredients}
                   onChange={(e) => setIngredients(e.target.value)}
-                  className="w-full p-2 border py-4 h-40 rounded-md text-sm"
+                  className="w-full p-2 border  h-40 rounded-md text-sm"
                   readOnly
                   placeholder="Saved ingredients will appear here..."
                 ></textarea>
@@ -297,7 +374,7 @@ export default function AddRecipe() {
         )}
 
         {/* Step 3 - Instructions */}
-        {currentStep === 3 && (
+        {currentStep === 2 && (
           <>
             <div className=" w-full  p-1 bg-white shadow-md rounded-lg mt-10">
               {/* Steps Section */}
@@ -364,10 +441,10 @@ export default function AddRecipe() {
         )}
 
         {/* Step 4 - Upload Photos */}
-        {currentStep === 4 && (
+        {currentStep === 3 && (
           <>
             <div>
-              <label className="block text-gray-700 font-medium">
+              <label className="block mt-10 text-gray-700 font-medium">
                 Upload primary photo <span className="text-red-500">*</span>
               </label>
               <input
@@ -466,9 +543,109 @@ export default function AddRecipe() {
           </>
         )}
 
+        {currentStep === 4 && (
+          <div className="p-4 bg-white border rounded mt-12 space-y-4">
+            <h2 className="text-xl font-semibold mb-4 text-gray-700">
+              Review Your Recipe
+            </h2>
+
+            <div>
+              <p>
+                <strong>Title:</strong> {title}
+              </p>
+              <p>
+                <strong>Description:</strong> {description}
+              </p>
+              <p>
+                <strong>Ingredients:</strong>
+              </p>
+              <ul className="list-disc list-inside">
+                {combinedIngredients.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <p>
+                <strong>Steps:</strong>
+              </p>
+              <ol className="list-decimal list-inside whitespace-pre-line">
+                {stepInputs.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ol>
+            </div>
+
+            {avoid && (
+              <div>
+                <p>
+                  <strong>Things to Avoid:</strong> {avoid}
+                </p>
+              </div>
+            )}
+
+            <div>
+              <p>
+                <strong>Recipe Type:</strong> {recipeType}
+              </p>
+              {recipeType === "hidden" && (
+                <>
+                  <p>
+                    <strong>Price:</strong> ${price}
+                  </p>
+                  <p>
+                    <strong>Buyer Restriction:</strong> {buyerRestriction}
+                  </p>
+                </>
+              )}
+            </div>
+
+            <div>
+              <p>
+                <strong>Main Image:</strong>
+              </p>
+              {mainImage && (
+                <img
+                  src={URL.createObjectURL(mainImage)}
+                  alt="Main"
+                  className="w-32 h-32 object-cover border rounded"
+                />
+              )}
+            </div>
+
+            {additionalImages.length > 0 && (
+              <div>
+                <p>
+                  <strong>Additional Images:</strong>
+                </p>
+                <div className="flex gap-2 mt-2">
+                  {additionalImages.map((image, index) => (
+                    <img
+                      key={index}
+                      src={URL.createObjectURL(image)}
+                      alt={`Additional ${index + 1}`}
+                      className="w-20 h-20 object-cover rounded-md border"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="mt-6 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            >
+              Submit Recipe
+            </button>
+          </div>
+        )}
+
         {/* Navigation Buttons */}
         <div className="flex justify-between pt-6">
-          {currentStep > 1 && (
+          {currentStep > 0 && (
             <button
               type="button"
               onClick={prevStep}
@@ -485,14 +662,7 @@ export default function AddRecipe() {
             >
               Next
             </button>
-          ) : (
-            <button
-              type="submit"
-              className="ml-auto px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-            >
-              Submit Recipe
-            </button>
-          )}
+          ) : null}
         </div>
       </form>
       <Prompt

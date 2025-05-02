@@ -57,6 +57,7 @@ const Navbar = ({ cartCount }) => {
   const ShowUserTitle = pathname === "/cookbook";
   const ShowArtistTitle = pathname === "/artistProfile";
   const ShowBackButton = pathname.includes("categories");
+  const hideBackButton = pathname === "/categories";
   const ShowAddRecipe = pathname === "/addrecipe";
   const ShowSignIn = pathname === "/signin";
   const ShowRecipeTitle = pathname.includes("recipe-page");
@@ -426,7 +427,7 @@ const Navbar = ({ cartCount }) => {
           md:static md:translate-y-0 md:h-24 md:pt-16`}
         style={{ transition: "transform 0.3s ease-in-out" }}
       >
-        {ShowBackButton && (
+        {ShowBackButton && !hideBackButton && (
           <div className="absolute left-4 md:hidden">
             <button
               onClick={() => {
