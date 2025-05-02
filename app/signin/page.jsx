@@ -53,7 +53,7 @@ export default function SignIn() {
         const fetchVerificationStatus = async () => {
           try {
             const response = await apiRequest(
-              API_ENDPOINTS.AUTH.GET_STATUS(auth.user.id),
+              API_ENDPOINTS.AUTH.GET_STATUS(auth.user?.id),
               "GET",
               null
             );
@@ -98,7 +98,7 @@ export default function SignIn() {
         // Save session in local storage
         localStorage.setItem("token", response.token);
         localStorage.setItem("user", JSON.stringify(response.user));
-        fetchStatus(response.user.id);
+        fetchStatus(response.user?.id);
         setLoading(false);
       }
     } catch (error) {

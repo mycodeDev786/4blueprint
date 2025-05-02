@@ -110,7 +110,7 @@ const Navbar = ({ cartCount }) => {
     async function fetchData() {
       try {
         const bakerData = await apiRequest(
-          API_ENDPOINTS.BAKER.GET_BY_ID(user.id)
+          API_ENDPOINTS.BAKER.GET_BY_ID(user?.id)
         );
         setBaker(bakerData);
       } catch (error) {

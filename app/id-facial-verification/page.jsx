@@ -25,7 +25,7 @@ export default function IdFacialVerification() {
   const [bakerCreated, setBakerCreated] = useState(false);
 
   // Get user_id and email from Redux state
-  const user_id = useSelector((state) => state.auth.user.id);
+  const user_id = useSelector((state) => state.auth.user?.id);
   const email = useSelector((state) => state.auth.user?.email);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -92,7 +92,6 @@ export default function IdFacialVerification() {
       setError(err.message);
       setBakerCreated(false);
     } finally {
-      setLoading(false);
     }
   };
 

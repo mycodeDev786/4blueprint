@@ -149,7 +149,7 @@ export default function AddRecipe() {
       return newImages;
     });
   };
-  const user_id = useSelector((state) => state.auth.user.id);
+  const user_id = useSelector((state) => state.auth.user?.id);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

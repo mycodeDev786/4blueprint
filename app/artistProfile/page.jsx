@@ -18,7 +18,7 @@ const ArtistProfile = () => {
   useEffect(() => {
     async function fetchRecipes() {
       try {
-        const Data = await apiRequest(API_ENDPOINTS.RECIPE.GET_BY_ID(user.id));
+        const Data = await apiRequest(API_ENDPOINTS.RECIPE.GET_BY_ID(user?.id));
         setRecipes(Data);
         console.log(Data);
       } catch (error) {
@@ -35,7 +35,7 @@ const ArtistProfile = () => {
     async function fetchData() {
       try {
         const bakerData = await apiRequest(
-          API_ENDPOINTS.BAKER.GET_BY_ID(user.id)
+          API_ENDPOINTS.BAKER.GET_BY_ID(user?.id)
         );
         setBaker(bakerData);
       } catch (error) {
@@ -65,7 +65,7 @@ const ArtistProfile = () => {
 
     try {
       await apiRequest(
-        API_ENDPOINTS.BAKER.UPDATE_PROFILE_IMAGE(user.id),
+        API_ENDPOINTS.BAKER.UPDATE_PROFILE_IMAGE(user?.id),
         "POST",
         formData
       );
