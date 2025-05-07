@@ -27,10 +27,11 @@ export default function IdFacialVerification() {
   // Get user_id and email from Redux state
   const user_id = useSelector((state) => state.auth.user?.id);
   const email = useSelector((state) => state.auth.user?.email);
+  const country_name = useSelector((state) => state.auth.user?.country);
   const [formData, setFormData] = useState({
     fullName: "",
     age: "",
-    country: "",
+    country: country_name,
     phone: "",
     address: "",
     bankName: "",
@@ -168,20 +169,6 @@ export default function IdFacialVerification() {
             className="w-full border p-2 rounded-md mt-1"
           />
 
-          <select
-            name="country"
-            value={formData.country}
-            onChange={handleInputChange}
-            required
-            className="w-full border p-2 rounded-md mt-1"
-          >
-            <option value="">Select your country</option>
-            {countries.map((c) => (
-              <option key={c.value} value={c.label}>
-                {c.label}
-              </option>
-            ))}
-          </select>
           <PhoneInput
             country={"us"}
             searchPlaceholder="search"

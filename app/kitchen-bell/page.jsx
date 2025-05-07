@@ -110,7 +110,7 @@ export default function Notifications() {
             ))
           ) : (
             <li className="text-center text-gray-500 py-4">
-              No Notifications were received at this time{" "}
+              No notifications were received at this time{" "}
             </li>
           )}
         </ul>

@@ -8,7 +8,7 @@ import { setUser } from "../store/authSlice";
 import Link from "next/link";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
-import { getVerificationStatus } from "../utils/apiHelper";
+
 import Loading from "../components/Loading";
 
 export default function SignIn() {
@@ -24,10 +24,10 @@ export default function SignIn() {
 
   const [status, setStatus] = useState(null);
 
-  const fetchVerificationStatus = async () => {
+  const fetchVerificationStatus = async (id) => {
     try {
       const response = await apiRequest(
-        API_ENDPOINTS.AUTH.GET_STATUS(auth.user?.id),
+        API_ENDPOINTS.AUTH.GET_STATUS(id),
         "GET",
         null
       );
@@ -92,10 +92,10 @@ export default function SignIn() {
         localStorage.setItem("token", response.token);
         localStorage.setItem("user", JSON.stringify(response.user));
         if (response.user?.userType === "customer") {
-          checkVerification(response.user.email);
+          checkVerification(response.user?.email);
         }
         if (response.user?.userType === "baker") {
-          fetchVerificationStatus();
+          fetchVerificationStatus(response.user?.id);
         }
       }
     } catch (error) {

@@ -44,7 +44,7 @@ const Navbar = ({ cartCount }) => {
 
   // Get page title from pathname
   const getPageTitle = () => {
-    if (pathname === "/") return "Home";
+    if (pathname === "/") return "Prep Room";
     const segments = pathname.split("/").filter((segment) => segment);
     const lastSegment = segments[segments.length - 1];
     return lastSegment
@@ -103,7 +103,7 @@ const Navbar = ({ cartCount }) => {
   }, [lastScrollY]);
 
   const handleCart = () => {
-    router.push("/cart");
+    router.push("/order-summary");
   };
 
   useEffect(() => {
@@ -155,10 +155,7 @@ const Navbar = ({ cartCount }) => {
             Categories
           </Link>
 
-          <Link
-            href="/verified-artists"
-            className="hover:text-orange-300 transition"
-          >
+          <Link href="/artist-hub" className="hover:text-orange-300 transition">
             Verified Artists
           </Link>
           <Link
@@ -356,7 +353,7 @@ const Navbar = ({ cartCount }) => {
             </Link>
 
             <Link
-              href="/verified-artists"
+              href="/artist-hub"
               className="py-2 px-6 hover:bg-gray-100"
               onClick={() => setMenuOpen(false)}
             >
@@ -489,7 +486,7 @@ const Navbar = ({ cartCount }) => {
         )}
         {ShowArtistPageTitle && (
           <span className="text-black font-semibold mx-2 md:mt-1 truncate">
-            Kitchen Credentials
+            KITCHEN CREDENTIALS
           </span>
         )}
       </div>

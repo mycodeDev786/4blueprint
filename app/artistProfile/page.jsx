@@ -2,9 +2,11 @@
 import { assets } from "@/assets/assets";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
+import { useRouter } from "next/navigation";
+import { clearTemp, setTemp } from "../store/tempSlice";
 
 const ArtistProfile = () => {
   const [loading, setLoading] = useState(true);
@@ -12,7 +14,8 @@ const ArtistProfile = () => {
   const [recipes, setRecipes] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const dispatch = useDispatch();
+  const router = useRouter();
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
@@ -102,7 +105,7 @@ const ArtistProfile = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 z-10 p-4 text-white">
           <div className="flex items-center gap-2">
-            <h1 className="text-lg font-bold">{user?.name}</h1>
+            <h1 className="text-lg font-bold">{baker?.baker_name}</h1>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4 text-blue-400"
@@ -130,7 +133,15 @@ const ArtistProfile = () => {
         <h3 className="text-lg font-semibold">New Recipes</h3>
         <div className="mt-4 space-y-4">
           {recipes.map((album, index) => (
-            <div key={index} className="flex items-center gap-4">
+            <div
+              onClick={() => {
+                dispatch(clearTemp());
+                dispatch(setTemp(album.title + " by " + baker.baker_name));
+                router.push(`/recipe-page?id=${album.id}`);
+              }}
+              key={index}
+              className="flex cursor-pointer  items-center gap-4"
+            >
               <Image
                 src={`${API_ENDPOINTS.STORAGE_URL}${album.mainImage}`}
                 alt={album.title}

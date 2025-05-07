@@ -45,7 +45,7 @@ export default function Cart() {
   );
 
   return (
-    <div className="w-full md:max-w-xl mx-0 md:mx-auto p-4  min-h-screen border border-gray-300 rounded-lg shadow-sm">
+    <div className="w-full md:max-w-xl mx-0 md:mx-auto p-2  min-h-screen border border-gray-300 rounded-lg shadow-sm">
       {cartItems.length === 0 ? (
         <p className="text-center text-gray-600">Your cart is empty.</p>
       ) : (
@@ -53,9 +53,10 @@ export default function Cart() {
           {cartItems.map((item) => (
             <div
               key={item.id}
-              className="flex flex-col w-full md:flex-row items-center gap-4 bg-white p-4 shadow-md rounded-lg border border-gray-200"
+              className="flex flex-row items-center gap-1 bg-white p-4 shadow-md rounded-lg border border-gray-200"
             >
               <Image
+                q
                 src={`${API_ENDPOINTS.STORAGE_URL}${item.image}`}
                 alt={item.title}
                 width={100}
@@ -65,7 +66,7 @@ export default function Cart() {
               <div className="flex-1 text-center md:text-left">
                 <h2 className="text-lg font-semibold">{item.title}</h2>
                 <p className="text-gray-700">${item.price}</p>
-                <div className="flex items-center justify-center md:justify-start gap-2 mt-3">
+                {/* <div className="flex items-center justify-center md:justify-start gap-2 mt-3">
                   <label htmlFor={`quantity-${item.id}`} className="text-sm">
                     Qty:
                   </label>
@@ -95,7 +96,7 @@ export default function Cart() {
                       +
                     </button>
                   </div>
-                </div>
+                </div> */}
               </div>
               <button
                 onClick={() => handleRemove(item.id)}

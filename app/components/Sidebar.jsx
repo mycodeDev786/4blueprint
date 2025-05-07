@@ -37,7 +37,7 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
-            href="/notifications"
+            href="/kitchen-bell"
             className="flex items-center space-x-3 hover:text-gray-300"
           >
             <FaBell /> <span>Notification</span>
@@ -45,7 +45,7 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
-            href="/followed-artists"
+            href="/my-favorite-artists"
             className="flex items-center space-x-3 hover:text-gray-300"
           >
             <FaHeart /> <span>Followed Artist</span>

@@ -199,6 +199,41 @@ export default function AddRecipe() {
     }
   };
 
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      saveDraft();
+      e.preventDefault();
+      e.returnValue = ""; // For modern browsers to show confirmation
+    };
+
+    const handleRouteChange = () => {
+      saveDraft();
+    };
+
+    // Add listeners
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    router.events?.on("routeChangeStart", handleRouteChange);
+
+    // Cleanup on unmount
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      router.events?.off("routeChangeStart", handleRouteChange);
+    };
+  }, [
+    recipeType,
+    price,
+    buyerRestriction,
+    title,
+    description,
+    ingredientInputs,
+    units,
+    stepInputs,
+    avoid,
+    mainImage,
+    additionalImages,
+    currentStep,
+  ]);
+
   return (
     <div className="max-w-3xl w-full  mx-auto px-1 py-1 bg-white shadow-md rounded-lg mt-1">
       {/* Fancy Progress Bar */}
@@ -352,7 +387,7 @@ export default function AddRecipe() {
               {/* Live-updated textarea */}
               <div>
                 <label className="block font-medium text-gray-700 mt-4 mb-2">
-                  All Ingredients
+                  All Ingredients (Preview)
                 </label>
                 <textarea
                   required

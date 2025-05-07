@@ -4,10 +4,19 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import ArtistProfile from "../artistProfile/page";
 export default function userProfile() {
-  return (
+  const user = useSelector((state) => state.auth.user);
+  const userType = user?.userType;
+  return userType === "baker" ? (
+    <>
+      {" "}
+      <ArtistProfile />
+    </>
+  ) : (
     <div className="max-w-4xl px-0 sm:px-6 md:px-12 lg:px-16 xl:px-24 space-y-6">
       {/* Artist Section */}
+
       <div className="relative h-64 rounded-xl overflow-hidden">
         {/* Background Image */}
         <Image
@@ -26,13 +35,13 @@ export default function userProfile() {
           <div className="flex items-center gap-2">
             <h1 className="text-lg font-bold">Taylor Swift</h1>
             {/* <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-blue-400"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-            </svg> */}
+           xmlns="http://www.w3.org/2000/svg"
+           className="h-4 w-4 text-blue-400"
+           viewBox="0 0 24 24"
+           fill="currentColor"
+         >
+           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+         </svg> */}
           </div>
         </div>
       </div>

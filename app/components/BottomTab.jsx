@@ -15,7 +15,7 @@ const BottomTab = () => {
         </Link>
 
         <Link
-          href="/notifications"
+          href="/kitchen-bell"
           className="flex flex-col items-center flex-1"
         >
           <FaBell className="text-xl" />
@@ -37,7 +37,7 @@ const BottomTab = () => {
         </div>
 
         <Link
-          href="/followed-artists"
+          href="/my-favorite-artists"
           className="flex flex-col items-center flex-1"
         >
           <FaHeart className="text-xl" />
@@ -45,13 +45,7 @@ const BottomTab = () => {
         </Link>
 
         <Link
-          href={
-            user
-              ? userType === "artist"
-                ? "/artistProfile"
-                : "/userProfile"
-              : ""
-          }
+          href={"/my-profile"}
           // onClick={handleClick}
           className="flex flex-col items-center flex-1"
         >
