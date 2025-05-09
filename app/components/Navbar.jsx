@@ -56,8 +56,8 @@ const Navbar = ({ cartCount }) => {
   };
   const ShowUserTitle = pathname === "/cookbook";
   const ShowArtistTitle = pathname === "/artistProfile";
-  const ShowBackButton = pathname.includes("categories");
-  const hideBackButton = pathname === "/categories";
+  const ShowBackButton = pathname.includes("menu");
+  const hideBackButton = pathname === "/menu";
   const ShowAddRecipe = pathname === "/addrecipe";
   const ShowSignIn = pathname === "/signin";
   const ShowRecipeTitle = pathname.includes("recipe-page");
@@ -151,12 +151,12 @@ const Navbar = ({ cartCount }) => {
 
         {/* Desktop Elements */}
         <div className="hidden md:flex items-center gap-6 text-[16px] font-medium text-white">
-          <Link href="/categories" className="hover:text-orange-300 transition">
-            Categories
+          <Link href="/menu" className="hover:text-orange-300 transition">
+            Menu
           </Link>
 
           <Link href="/artist-hub" className="hover:text-orange-300 transition">
-            Verified Artists
+            Artist Hub
           </Link>
           <Link
             href="/leaderboard"
@@ -345,11 +345,11 @@ const Navbar = ({ cartCount }) => {
             className="md:hidden absolute top-16 left-0 w-full bg-white shadow-md flex flex-col py-4 z-50"
           >
             <Link
-              href="/categories"
+              href="/menu"
               className="py-2 px-6 hover:bg-gray-100"
               onClick={() => setMenuOpen(false)}
             >
-              Categories
+              Menu
             </Link>
 
             <Link
@@ -357,7 +357,7 @@ const Navbar = ({ cartCount }) => {
               className="py-2 px-6 hover:bg-gray-100"
               onClick={() => setMenuOpen(false)}
             >
-              Verified Artists
+              Artist Hub
             </Link>
             <Link
               href="/leaderboard"
@@ -428,7 +428,7 @@ const Navbar = ({ cartCount }) => {
           <div className="absolute left-4 md:hidden">
             <button
               onClick={() => {
-                router.push("/categories");
+                router.push("/menu");
               }}
               className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
             >

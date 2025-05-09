@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import recipes from "@/app/constants/recipes";
 import AllRecipePageCard from "@/app/components/AllRecipePageCard";
 
-export default function PiesAndTarts() {
+export default function CookiesAndBiscuits() {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -50,9 +50,7 @@ export default function PiesAndTarts() {
 
             // Navigate to category page
 
-            router.push(
-              `/categories/${formattedCategory}/${formattedSubcategory}`
-            );
+            router.push(`/menu/${formattedCategory}/${formattedSubcategory}`);
             dispatch(setActiveTab(tab));
           }}
           onCountryChange={(country) =>

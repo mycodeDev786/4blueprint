@@ -145,6 +145,13 @@ export default function AddRecipe() {
     setUnits(units.filter((_, i) => i !== index));
   };
 
+  const handleDeleteImage = (indexToDelete) => {
+    const updatedImages = additionalImages.filter(
+      (_, index) => index !== indexToDelete
+    );
+    setAdditionalImages(updatedImages);
+  };
+
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files).slice(0, 3); // Convert to array and limit to 3
     setAdditionalImages((prev) => {
@@ -384,19 +391,15 @@ export default function AddRecipe() {
                 </button>
               </div>
 
-              {/* Live-updated textarea */}
               <div>
                 <label className="block font-medium text-gray-700 mt-4 mb-2">
                   All Ingredients (Preview)
                 </label>
-                <textarea
-                  required
-                  value={ingredients}
-                  onChange={(e) => setIngredients(e.target.value)}
-                  className="w-full p-2 border  h-40 rounded-md text-sm"
-                  readOnly
-                  placeholder="Saved ingredients will appear here..."
-                ></textarea>
+                <ul className="list-disc list-inside bg-gray-50 p-4 border rounded-md text-sm">
+                  {ingredientInputs.map((ingredient, index) => (
+                    <li key={index}>{ingredient}</li>
+                  ))}
+                </ul>
               </div>
             </div>
           </>
@@ -498,12 +501,23 @@ export default function AddRecipe() {
               <div className="mt-4 flex gap-2">
                 {additionalImages.length > 0 &&
                   additionalImages.map((image, index) => (
-                    <img
+                    <div
                       key={index}
-                      src={URL.createObjectURL(image)}
-                      alt={`Uploaded ${index + 1}`}
-                      className="w-24 h-24 object-cover rounded-md border"
-                    />
+                      className="relative inline-block mr-2 mb-2"
+                    >
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt={`Uploaded ${index + 1}`}
+                        className="w-24 h-24 object-cover rounded-md border"
+                      />
+                      <button
+                        onClick={() => handleDeleteImage(index)}
+                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center -mt-1 -mr-1"
+                        title="Remove image"
+                      >
+                        ✕
+                      </button>
+                    </div>
                   ))}
               </div>
             </div>

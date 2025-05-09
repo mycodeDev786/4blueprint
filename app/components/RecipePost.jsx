@@ -455,13 +455,12 @@ export default function RecipePost({
         <Image
           src={`${API_ENDPOINTS.STORAGE_URL}${image}`}
           alt={title}
-          width={600}
-          height={400}
-          className={`w-full h-full object-cover rounded-lg transition-all duration-300 ${
+          fill
+          className={`object-cover transition-all duration-300 ${
             expanded ? "opacity-30 scale-90" : ""
           }`}
+          style={{ borderRadius: "0.5rem" }}
         />
-
         {/* Expanded Content Overlay */}
         {expanded && (
           <div className="absolute inset-0 p-4 flex flex-col">

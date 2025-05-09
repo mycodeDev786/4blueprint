@@ -11,12 +11,12 @@ import { removeFromWishlist } from "../store/wishlistSlice";
 import { addToArchive, removeFromArchive } from "../store/archiveSlice";
 import { bakers } from "../constants/bakers";
 import API_ENDPOINTS from "../utils/api";
+import { clearTemp, setTemp } from "../store/tempSlice";
 
 export default function RecipeCard({ recipe }) {
   const dispatch = useDispatch();
   const [isClicked, setIsClicked] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const baker = bakers.find((b) => b.id === recipe.bakerId);
   const wishlist = useSelector((state) => state.archive.items);
   const isWishlisted = wishlist.some((item) => item.id === recipe.id);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -71,6 +71,12 @@ export default function RecipeCard({ recipe }) {
         })
       );
     }
+  };
+
+  const handleRecipeClick = () => {
+    dispatch(clearTemp());
+    dispatch(setTemp(recipe.title + " by " + recipe.artistName));
+    router.push(`/recipe-page?id=${recipe.id}`);
   };
 
   const handleBuyNow = () => {
@@ -198,7 +204,10 @@ export default function RecipeCard({ recipe }) {
             <FaShareAlt className="text-gray-700 text-lg" />
           </button>
           <div className="ml-auto">
-            <button className="w-20 h-20 flex items-center justify-center font-bold border-2 hover:bg-gray-200 rounded-full transition-transform transform hover:scale-105">
+            <button
+              onClick={handleRecipeClick}
+              className="w-20 h-20 flex items-center justify-center font-bold border-2 hover:bg-gray-200 rounded-full transition-transform transform hover:scale-105"
+            >
               <Image src={assets.read_icon} alt="read icon" />
             </button>
           </div>
