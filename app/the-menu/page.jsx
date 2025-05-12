@@ -62,7 +62,7 @@ export default function AllCategories() {
     const formattedSubcategory = sub.name.replace(/\s+/g, "-").toLowerCase();
 
     // Navigate to category page
-    router.push(`/menu/${formattedCategory}/${formattedSubcategory}`);
+    router.push(`/the-menu/${formattedCategory}/${formattedSubcategory}`);
   };
 
   // Close menu when clicking outside

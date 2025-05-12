@@ -32,12 +32,9 @@ const HomePage = () => {
     setCustomPostContent("Updated custom post content!");
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="container w-full mx-0 sm:max-w-3xl sm:mx-auto my-0 sm:my-6 space-y-6">
+      <Loading isLoading={loading} />
       {recipes?.map((recipe, index) => (
         <div key={recipe.id}>
           <RecipePost

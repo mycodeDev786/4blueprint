@@ -151,8 +151,8 @@ const Navbar = ({ cartCount }) => {
 
         {/* Desktop Elements */}
         <div className="hidden md:flex items-center gap-6 text-[16px] font-medium text-white">
-          <Link href="/menu" className="hover:text-orange-300 transition">
-            Menu
+          <Link href="/the-menu" className="hover:text-orange-300 transition">
+            The Menu
           </Link>
 
           <Link href="/artist-hub" className="hover:text-orange-300 transition">
@@ -284,10 +284,10 @@ const Navbar = ({ cartCount }) => {
               {dropdownOpen && user && (
                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md p-2">
                   <Link
-                    href="/profile"
+                    href="/my-profile"
                     className="block px-4 py-2 hover:bg-gray-100"
                   >
-                    Profile
+                    My Profile
                   </Link>
                   <button
                     onClick={() => {
@@ -345,11 +345,11 @@ const Navbar = ({ cartCount }) => {
             className="md:hidden absolute top-16 left-0 w-full bg-white shadow-md flex flex-col py-4 z-50"
           >
             <Link
-              href="/menu"
+              href="/the-menu"
               className="py-2 px-6 hover:bg-gray-100"
               onClick={() => setMenuOpen(false)}
             >
-              Menu
+              The Menu
             </Link>
 
             <Link
@@ -384,11 +384,11 @@ const Navbar = ({ cartCount }) => {
             {user ? (
               <>
                 <Link
-                  href="/profile"
+                  href="/my-profile"
                   className="py-2 px-6 hover:bg-gray-100"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Profile
+                  My Profile
                 </Link>
                 <button
                   onClick={() => {

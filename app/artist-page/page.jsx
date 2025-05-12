@@ -13,6 +13,7 @@ const ArtistProfile = () => {
   const [recipes, setRecipes] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isFollowed, setIsFollowed] = useState(false);
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const user = useSelector((state) => state.auth.user);
@@ -34,6 +35,23 @@ const ArtistProfile = () => {
   }, [id]);
 
   useEffect(() => {
+    if (!user?.id) return; // Ensure user is logged in
+
+    apiRequest(
+      `${API_ENDPOINTS.FOLLOWERS.IS_FOLLOWING(id, user.id)}`,
+      "GET",
+      null
+    )
+      .then((response) => {
+        setIsFollowed(response.isFollowing);
+      })
+      .catch((error) => {
+        console.error("Error checking follow status:", error);
+      })
+      .finally(() => {});
+  }, [id, user?.id]);
+
+  useEffect(() => {
     async function fetchData() {
       try {
         const bakerData = await apiRequest(API_ENDPOINTS.BAKER.GET_BY_ID(id));
@@ -47,6 +65,32 @@ const ArtistProfile = () => {
 
     if (id) fetchData();
   }, [id]);
+
+  const handleFollowToggle = async () => {
+    setIsFollowed((prev) => !prev);
+    if (isFollowed) {
+      try {
+        // Dummy API call, replace with actual follow/unfollow API logic
+        await apiRequest(`${API_ENDPOINTS.FOLLOWERS.UNFOLLOW}`, "POST", {
+          baker_id: id,
+          follower_id: user.id,
+        });
+      } catch (error) {
+        console.error("Failed to toggle follow status:", error);
+      }
+    } else {
+      setIsFollowed((prev) => !prev);
+      try {
+        // Follow API call
+        await apiRequest(`${API_ENDPOINTS.FOLLOWERS.FOLLOW}`, "POST", {
+          baker_id: id,
+          follower_id: user.id,
+        });
+      } catch (error) {
+        console.error("Error toggling follow status:", error);
+      }
+    }
+  };
 
   const handleProfileClick = () => {
     setIsPopupOpen(true);
@@ -116,6 +160,17 @@ const ArtistProfile = () => {
             </div>
           ))}
         </div>
+      </div>
+      {/* Follow/Unfollow Button */}
+      <div className="mt-6 flex justify-end">
+        <button
+          onClick={handleFollowToggle}
+          className={`px-6 py-2 text-white font-semibold rounded-md ${
+            isFollowed ? "bg-gray-400" : "bg-purple-600 hover:bg-purple-700"
+          }`}
+        >
+          {isFollowed ? "Unfollow" : "Follow"}
+        </button>
       </div>
     </div>
   );

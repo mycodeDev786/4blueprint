@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import recipes from "@/app/constants/recipes";
 import AllRecipePageCard from "@/app/components/AllRecipePageCard";
 
-export default function IceCreamAndFrozen() {
+export default function CookiesAndBiscuits() {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -50,7 +50,9 @@ export default function IceCreamAndFrozen() {
 
             // Navigate to category page
 
-            router.push(`/menu/${formattedCategory}/${formattedSubcategory}`);
+            router.push(
+              `/the-menu/${formattedCategory}/${formattedSubcategory}`
+            );
             dispatch(setActiveTab(tab));
           }}
           onCountryChange={(country) =>
