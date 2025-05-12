@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
 import { useSearchParams } from "next/navigation";
+import Loading from "../components/Loading";
 
 const ArtistProfile = () => {
   const [loading, setLoading] = useState(true);
@@ -96,11 +97,11 @@ const ArtistProfile = () => {
     setIsPopupOpen(true);
   };
 
-  if (loading) return <p>Loading...</p>;
   if (!baker) return <p>Error loading data</p>;
 
   return (
     <div className="max-w-md md:max-w-3xl mx-2 rounded-xl justify-center shadow-lg overflow-hidden p-2 ">
+      <Loading isLoading={loading} />
       <div
         onClick={handleProfileClick}
         className="relative h-64 rounded-xl overflow-hidden"
