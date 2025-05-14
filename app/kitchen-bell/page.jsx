@@ -10,7 +10,7 @@ export default function Notifications() {
   const popupRef = useRef(null);
   const [bakers, setBakers] = useState([]);
   const user = useSelector((state) => state.auth.user);
-
+  //
   // Close popup when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import API_ENDPOINTS from "../utils/api";
 
 export default function BakerProfileCard({ baker }) {
   const [isFollowed, setIsFollowed] = useState(baker?.isFollowed);
@@ -22,7 +23,7 @@ export default function BakerProfileCard({ baker }) {
       <div className="absolute pl-3 top-4 left-0 flex items-center gap-1 backdrop-blur-sm py-1 rounded-full">
         <Image
           src={baker.flag}
-          alt={baker.country}
+          alt={""}
           width={16}
           height={12}
           className="w-4 h-3 rounded-sm"
@@ -32,8 +33,8 @@ export default function BakerProfileCard({ baker }) {
       {/* Profile Image */}
       <div className="relative left-0 mx-auto mb-1 w-32 h-32">
         <Image
-          src={baker.image}
-          alt={baker.name}
+          src={`${API_ENDPOINTS.STORAGE_URL}${baker.profile_image}`}
+          alt={baker.baker_name}
           width={150}
           height={150}
           className="rounded-full object-cover border-2 border-purple-100"
@@ -60,12 +61,14 @@ export default function BakerProfileCard({ baker }) {
         onClick={handleBakerClick}
         className="text-xm cursor-pointer text-left font-semibold text-purple-800 mb-2"
       >
-        {baker.name}
+        {baker.baker_name}
       </p>
 
       {/* Follow Button */}
       <div className="flex items-center justify-between mt-2">
-        <p className="text-[10px] text-gray-600">{followers} recipes</p>
+        <p className="text-[10px] text-gray-600">
+          {baker.new_recipe_count} recipes
+        </p>
       </div>
     </div>
   );

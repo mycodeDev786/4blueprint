@@ -40,7 +40,7 @@ const API_ENDPOINTS = {
   },
   BAKER: {
     CREATE: `${BASE_URL}/bakers`, // Create a new baker
-    GET_ALL: `${BASE_URL}/bakers`, // Get all bakers
+    GET_ALL: `${BASE_URL}/bakers/all_bakers`, // Get all bakers
     GET_BY_ID: (id) => `${BASE_URL}/bakers/${id}`, // Get baker by ID
     UPDATE: (id) => `${BASE_URL}/bakers/${id}`, // Update baker
     DELETE: (id) => `${BASE_URL}/bakers/${id}`, // Delete baker

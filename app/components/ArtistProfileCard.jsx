@@ -1,16 +1,9 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import API_ENDPOINTS from "../utils/api";
 
 export default function ArtistProfileCard({ artist }) {
-  const [isFollowed, setIsFollowed] = useState(artist?.isFollowed);
-  const [followers, setFollowers] = useState(artist.followers);
-
-  const handleFollow = () => {
-    setIsFollowed(true);
-    setFollowers((prev) => prev + 1);
-  };
-
   return (
     <div className="relative p-3 bg-white rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
       {/* Country Flag - Top Right */}
@@ -27,10 +20,10 @@ export default function ArtistProfileCard({ artist }) {
       {/* Profile Image */}
       <div className="relative left-0 mx-auto mb-1 w-32 h-32">
         <Image
-          src={artist.image}
-          alt={artist.name}
-          width={150}
-          height={150}
+          src={`${API_ENDPOINTS.STORAGE_URL}${artist.profile_image}`}
+          alt={artist.baker_name}
+          width={100}
+          height={100}
           className="rounded-full object-cover border-2 border-purple-100"
         />
         {artist?.isVerified && (
@@ -52,7 +45,7 @@ export default function ArtistProfileCard({ artist }) {
 
       {/* Artist Name */}
       <p className="text-xm text-left font-semibold text-purple-800 mb-2">
-        {artist.name}
+        {artist.baker_name}
       </p>
       {/* Artist Bio */}
       <div className="  flex items-start space-x-2 max-w-xs mx-auto sm:max-w-sm">
