@@ -7,6 +7,7 @@ import { FaHeart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { addToWishlist, removeFromWishlist } from "../store/wishlistSlice";
+import API_ENDPOINTS from "../utils/api";
 
 export default function AllRecipePageCard({
   id,
@@ -18,6 +19,9 @@ export default function AllRecipePageCard({
   price,
   rating,
   isPurchased,
+  bakerCountry,
+  bakerFlag,
+  bakerName,
 }) {
   const baker = bakers.find((b) => b.id === bakerId);
   const wishlist = useSelector((state) => state.wishlist.items);
@@ -56,7 +60,13 @@ export default function AllRecipePageCard({
     <div className="max-w-sm cursor-pointer w-full bg-white shadow-lg rounded-2xl overflow-hidden sm:mx-auto mx-0 relative">
       <div className="w-full h-48 sm:h-56 relative">
         {/* Image */}
-        <Image src={image} alt={title} className="w-full h-full object-cover" />
+        <Image
+          src={`${API_ENDPOINTS.STORAGE_URL}${image}`}
+          alt={title}
+          width={100}
+          height={100}
+          className="w-full h-full object-cover"
+        />
 
         {/* Top right wishlist icon */}
         <button
@@ -83,23 +93,23 @@ export default function AllRecipePageCard({
         <div className="absolute bottom-2 left-2 bg-white bg-opacity-80 px-2 py-1 rounded-md flex items-center text-[#9c51ac] gap-1 font-bold">
           <span className="text-[10px] sm:text-xs">★</span>
           <span className="text-gray-600 text-[8px] sm:text-xs">
-            {rating.toFixed(1)}/5.0
+            {rating}/5.0
           </span>
         </div>
 
         {/* Bottom right country flag and name */}
         <div className="absolute bottom-2 right-2 bg-white bg-opacity-80 px-2 py-1 rounded-md flex items-center gap-1 font-bold">
-          {baker?.flag && (
+          {bakerFlag && (
             <Image
-              src={baker?.flag}
-              alt={baker?.country}
+              src={bakerFlag}
+              alt={bakerCountry}
               width={16}
               height={12}
               className="rounded-sm flex-shrink-0"
             />
           )}
           <span className="text-[10px] sm:text-xs truncate">
-            {baker?.country}
+            {bakerCountry}
           </span>
         </div>
       </div>
@@ -108,7 +118,7 @@ export default function AllRecipePageCard({
           {title}
         </h2>
         <p className="text-purple-700 font-bold text-xs sm:text-sm">
-          By: {baker.name}
+          By: {bakerName}
         </p>
         <div className="flex items-center justify-center mt-2">
           <span className="text-base sm:text-lg font-bold text-green-600">

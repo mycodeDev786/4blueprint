@@ -133,10 +133,14 @@ export default function RecipePage() {
             <span className="font-medium">Description:</span>{" "}
             {recipe.description}
           </p>
-          <p>
-            <span className="font-medium">Ingredients:</span>{" "}
-            {recipe.ingredients}
-          </p>
+          <div>
+            <span className="font-medium">Ingredients:</span>
+            <ul className="list-disc list-inside mt-1">
+              {recipe.ingredients.split(",").map((ingredient, index) => (
+                <li key={index}>{ingredient.trim()}</li>
+              ))}
+            </ul>
+          </div>
 
           <p>
             <span className="font-medium">Price:</span> ${recipe.price}

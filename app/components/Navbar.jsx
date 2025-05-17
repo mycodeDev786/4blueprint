@@ -428,7 +428,7 @@ const Navbar = ({ cartCount }) => {
           <div className="absolute left-4 md:hidden">
             <button
               onClick={() => {
-                router.push("/menu");
+                router.push("/the-menu");
               }}
               className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
             >

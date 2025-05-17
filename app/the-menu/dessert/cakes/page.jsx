@@ -1,12 +1,13 @@
 "use client";
 
 import { Header } from "@/app/components/CategoryHeaderComponent";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setActiveTab } from "../../../store/categoriesSlice";
 import { useRouter } from "next/navigation";
-import recipes from "@/app/constants/recipes";
+
 import AllRecipePageCard from "@/app/components/AllRecipePageCard";
+import API_ENDPOINTS from "@/app/utils/api";
 
 export default function CakesPage() {
   const dispatch = useDispatch();
@@ -26,11 +27,31 @@ export default function CakesPage() {
     }
   }, [subcategories, activeTab, dispatch]);
 
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(API_ENDPOINTS.RECIPE.GETALL);
+        const data = await res.json();
+        setRecipes(data);
+      } catch (error) {
+        console.error("Error fetching recipes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecipes();
+  }, []);
+
   // ✅ Updated Filtering Logic
   const filteredRecipes = recipes.filter((recipe) => {
-    const isSameCategory = recipe.categoryName === selectedCategory;
+    const isSameCategory = recipe.category_name === selectedCategory;
     const isAllTab = activeTab === "All";
-    const isSameSubcategory = recipe.subcategoryName === activeTab;
+    const isSameSubcategory = recipe.subcategory_name === activeTab;
 
     return isSameCategory && (isAllTab || isSameSubcategory);
   });
@@ -73,8 +94,12 @@ export default function CakesPage() {
             image={recipe.image}
             bakerId={recipe.bakerId}
             rating={recipe.rating}
+            followersCount={recipe.followersCount}
             price={recipe.price}
             isPurchased={recipe.isPurchased}
+            bakerCountry={recipe.bakerCountry}
+            bakerFlag={recipe.bakerFlag}
+            bakerName={recipe.bakerName}
           />
         ))}
       </div>

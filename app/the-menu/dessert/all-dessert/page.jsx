@@ -1,17 +1,36 @@
 "use client";
 import { Header } from "@/app/components/CategoryHeaderComponent";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setActiveTab } from "../../../store/categoriesSlice";
 import { useRouter } from "next/navigation";
-import recipes from "@/app/constants/recipes";
+
 import AllRecipePageCard from "@/app/components/AllRecipePageCard";
+import API_ENDPOINTS from "@/app/utils/api";
 
 export default function AllRecipes() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Get category, subcategories, and active tab from Redux
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(API_ENDPOINTS.RECIPE.GETALL);
+        const data = await res.json();
+        setRecipes(data);
+      } catch (error) {
+        console.error("Error fetching recipes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecipes();
+  }, []);
+
   const selectedCategory = useSelector(
     (state) => state.category.selectedCategory
   );
@@ -25,14 +44,16 @@ export default function AllRecipes() {
     }
   }, [subcategories, activeTab, dispatch]);
 
-  // ✅ Updated Filtering Logic
   const filteredRecipes = recipes.filter((recipe) => {
-    const isSameCategory = recipe.categoryName === selectedCategory;
-    const isAllTab = activeTab === "All " + selectedCategory;
-    const isSameSubcategory = recipe.subcategoryName === activeTab;
+    const isSameCategory = recipe.category_name === selectedCategory;
+    const isAllTab = activeTab.trim() === ("All " + selectedCategory).trim();
+    const isSameSubcategory = recipe.subcategory_name === activeTab.trim();
 
     return isSameCategory && (isAllTab || isSameSubcategory);
   });
+  // Get category, subcategories, and active tab from Redux
+
+  // ✅ Updated Filtering Logic
 
   return (
     <div className="px-0  mt-5 sm:px-6 md:px-12 lg:px-16 xl:px-24">
@@ -72,8 +93,12 @@ export default function AllRecipes() {
             image={recipe.image}
             bakerId={recipe.bakerId}
             rating={recipe.rating}
+            followersCount={recipe.followersCount}
             price={recipe.price}
             isPurchased={recipe.isPurchased}
+            bakerCountry={recipe.bakerCountry}
+            bakerFlag={recipe.bakerFlag}
+            bakerName={recipe.bakerName}
           />
         ))}
       </div>
