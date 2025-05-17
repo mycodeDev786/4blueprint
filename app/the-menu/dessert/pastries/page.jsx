@@ -55,6 +55,7 @@ export default function Pastries() {
 
     return isSameCategory && (isAllTab || isSameSubcategory);
   });
+
   return (
     <div className="px-0 mt-5 sm:px-6 md:px-12 lg:px-16 xl:px-24">
       <div className="bg-gray-50 flex justify-center">
@@ -93,8 +94,12 @@ export default function Pastries() {
             image={recipe.image}
             bakerId={recipe.bakerId}
             rating={recipe.rating}
+            followersCount={recipe.followersCount}
             price={recipe.price}
             isPurchased={recipe.isPurchased}
+            bakerCountry={recipe.bakerCountry}
+            bakerFlag={recipe.bakerFlag}
+            bakerName={recipe.bakerName}
           />
         ))}
       </div>

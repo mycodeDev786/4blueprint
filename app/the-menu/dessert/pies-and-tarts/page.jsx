@@ -92,8 +92,12 @@ export default function PiesAndTarts() {
             image={recipe.image}
             bakerId={recipe.bakerId}
             rating={recipe.rating}
+            followersCount={recipe.followersCount}
             price={recipe.price}
             isPurchased={recipe.isPurchased}
+            bakerCountry={recipe.bakerCountry}
+            bakerFlag={recipe.bakerFlag}
+            bakerName={recipe.bakerName}
           />
         ))}
       </div>

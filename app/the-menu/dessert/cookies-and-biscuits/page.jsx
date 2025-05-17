@@ -7,6 +7,7 @@ import { setActiveTab } from "../../../store/categoriesSlice";
 import { useRouter } from "next/navigation";
 
 import AllRecipePageCard from "@/app/components/AllRecipePageCard";
+import API_ENDPOINTS from "@/app/utils/api";
 
 export default function CookiesAndBiscuits() {
   const dispatch = useDispatch();
