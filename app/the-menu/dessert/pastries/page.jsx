@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import recipes from "@/app/constants/recipes";
 import AllRecipePageCard from "@/app/components/AllRecipePageCard";
 import API_ENDPOINTS from "@/app/utils/api";
+import Loading from "@/app/components/Loading";
 
 export default function Pastries() {
   const dispatch = useDispatch();
@@ -58,6 +59,7 @@ export default function Pastries() {
 
   return (
     <div className="px-0 mt-5 sm:px-6 md:px-12 lg:px-16 xl:px-24">
+      <Loading isLoading={loading} />
       <div className="bg-gray-50 flex justify-center">
         <Header
           category={selectedCategory}

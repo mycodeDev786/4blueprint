@@ -49,7 +49,7 @@ export default function AllRecipePageCard({
           price,
           bakerId,
           isPurchased,
-          artistName: baker.name,
+          artistName: bakerName,
           // Default quantity
         })
       );
