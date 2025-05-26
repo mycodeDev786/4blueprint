@@ -56,7 +56,6 @@ export default function Cart() {
               className="flex flex-row items-center gap-1 bg-white p-4 shadow-md rounded-lg border border-gray-200"
             >
               <Image
-                q
                 src={`${API_ENDPOINTS.STORAGE_URL}${item.image}`}
                 alt={item.title}
                 width={100}

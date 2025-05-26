@@ -58,6 +58,12 @@ const API_ENDPOINTS = {
     GET_FOLLOWED_BAKERS_WITH_NOTIFICATIONS: (userId) =>
       `${BASE_URL}/followers/follower-notifications/${userId}`,
   },
+  PAYMENT: {
+    CREATE_PAYMENT: `${BASE_URL}/create-payment/create-payment-intent`,
+  },
+  PURCHASES: {
+    SAVE_PURCHASE: `${BASE_URL}/purchases/`,
+  },
 };
 
 export default API_ENDPOINTS;

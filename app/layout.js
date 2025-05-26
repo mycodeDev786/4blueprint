@@ -1,4 +1,5 @@
 "use client";
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
@@ -12,6 +13,7 @@ import { Provider, useSelector, useDispatch } from "react-redux";
 import { store } from "./store/store";
 import { hydrateAuth } from "../app/store/authSlice";
 import { useEffect, useState, Suspense } from "react";
+import StripeProvider from "./components/StripeProvider"; // Import the StripeProvider
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -70,12 +72,14 @@ export default function RootLayout({ children }) {
           <Provider store={store}>
             <ReduxProvider>
               <AuthGuard>
-                <NavbarWithCart />
-                {!isMobile && ShowSidebars && <Sidebar />}
-                {children}
-                {!isMobile && <Footer />}
-                <BottomTab />
-                {!isMobile && ShowSidebars && <RightSidebar />}
+                <StripeProvider>
+                  <NavbarWithCart />
+                  {!isMobile && ShowSidebars && <Sidebar />}
+                  {children}
+                  {!isMobile && <Footer />}
+                  <BottomTab />
+                  {!isMobile && ShowSidebars && <RightSidebar />}
+                </StripeProvider>
               </AuthGuard>
             </ReduxProvider>
           </Provider>
