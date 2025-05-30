@@ -143,7 +143,7 @@ export default function RecipePage() {
           </div>
 
           <p>
-            <span className="font-medium">Price:</span> ${recipe.price}
+            <span className="font-medium"> Recipe Price:</span> ${recipe.price}
           </p>
 
           <p>

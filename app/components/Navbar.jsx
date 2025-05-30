@@ -44,7 +44,7 @@ const Navbar = ({ cartCount }) => {
 
   // Get page title from pathname
   const getPageTitle = () => {
-    if (pathname === "/") return "Prep Room";
+    if (pathname === "/") return "The Prep Room";
     const segments = pathname.split("/").filter((segment) => segment);
     const lastSegment = segments[segments.length - 1];
     return lastSegment

@@ -22,6 +22,7 @@ export default function FollowedArtists() {
           )
         );
         const data = await res.json();
+        console.log(data);
         setBakers(data);
       } catch (error) {
         console.error("Error fetching bakers:", error);

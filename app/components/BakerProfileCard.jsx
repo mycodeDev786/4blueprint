@@ -10,7 +10,7 @@ export default function BakerProfileCard({ baker }) {
   const router = useRouter();
 
   const handleBakerClick = () => {
-    router.push(`/artist-page?id=${baker.id}`);
+    router.push(`/artist-page?id=${baker.baker_id}`);
   };
   const handleFollow = () => {
     setIsFollowed(true);

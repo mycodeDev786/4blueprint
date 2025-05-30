@@ -81,7 +81,7 @@ export default function AllCategories() {
   return (
     <div className="flex justify-center mt-5 px-4 sm:px-6 md:px-12 lg:px-16 xl:px-24">
       <div
-        className="max-w-2xl w-full bg-gray-100 p-4 rounded-lg shadow-md flex space-x-6 mx-auto lg:ml-[250px] lg:mr-[250px]"
+        className="max-w-2xl w-full bg-purple-100 p-4 rounded-lg shadow-md flex space-x-6 mx-auto lg:ml-[250px] lg:mr-[250px]"
         ref={menuRef}
       >
         {categories.length > 0 ? (

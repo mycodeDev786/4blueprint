@@ -2,11 +2,12 @@
 import { assets } from "@/assets/assets";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Loading from "../components/Loading";
+import { clearTemp, setTemp } from "../store/tempSlice";
 
 const ArtistProfile = () => {
   const [loading, setLoading] = useState(true);
@@ -18,7 +19,8 @@ const ArtistProfile = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const user = useSelector((state) => state.auth.user);
-
+  const dispatch = useDispatch();
+  const router = useRouter();
   useEffect(() => {
     async function fetchRecipes() {
       try {
@@ -56,6 +58,7 @@ const ArtistProfile = () => {
     async function fetchData() {
       try {
         const bakerData = await apiRequest(API_ENDPOINTS.BAKER.GET_BY_ID(id));
+        console.log(bakerData);
         setBaker(bakerData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -117,7 +120,7 @@ const ArtistProfile = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 z-10 p-4 text-white">
           <div className="flex items-center gap-2">
-            <h1 className="text-lg font-bold">{user?.name}</h1>
+            <h1 className="text-lg font-bold">{baker?.baker_name}</h1>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4 text-blue-400"
@@ -144,22 +147,37 @@ const ArtistProfile = () => {
       <div className="mt-6">
         <h3 className="text-lg font-semibold">New Recipes</h3>
         <div className="mt-4 space-y-4">
-          {recipes.map((album, index) => (
-            <div key={index} className="flex items-center gap-4">
-              <Image
-                src={`${API_ENDPOINTS.STORAGE_URL}${album.mainImage}`}
-                alt={album.title}
-                width={50}
-                height={50}
-                className="rounded-lg"
-              />
-              <div className="flex-1">
-                <h4 className="font-medium">{album.title}</h4>
-                <p className="text-gray-500 text-sm">Recipe</p>
+          {recipes.length > 0 ? (
+            recipes.map((album, index) => (
+              <div key={index} className="flex items-center gap-4">
+                <Image
+                  src={`${API_ENDPOINTS.STORAGE_URL}${album.mainImage}`}
+                  alt={album.title}
+                  width={50}
+                  height={50}
+                  className="rounded-lg"
+                />
+                <div className="flex-1  ">
+                  <h4
+                    onClick={() => {
+                      dispatch(clearTemp());
+                      dispatch(
+                        setTemp(album.title + " by " + baker.baker_name)
+                      );
+                      router.push(`/recipe-page?id=${album.id}`);
+                    }}
+                    className="font-medium cursor-pointer "
+                  >
+                    {album.title}
+                  </h4>
+                  <p className="text-gray-500 text-sm">Recipe</p>
+                </div>
+                <button className="text-gray-500">⋮</button>
               </div>
-              <button className="text-gray-500">⋮</button>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-center text-purple-500">No recipes found</p>
+          )}
         </div>
       </div>
       {/* Follow/Unfollow Button */}
