@@ -23,10 +23,10 @@ const ArtistProfile = () => {
   const router = useRouter();
   useEffect(() => {
     async function fetchRecipes() {
+      setLoading(true);
       try {
         const Data = await apiRequest(API_ENDPOINTS.RECIPE.GET_BY_ID(id));
         setRecipes(Data);
-        console.log(Data);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -56,6 +56,7 @@ const ArtistProfile = () => {
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       try {
         const bakerData = await apiRequest(API_ENDPOINTS.BAKER.GET_BY_ID(id));
         console.log(bakerData);
@@ -100,7 +101,7 @@ const ArtistProfile = () => {
     setIsPopupOpen(true);
   };
 
-  if (!baker) return <p>Error loading data</p>;
+  if (!baker) return <Loading isLoading={loading} />;
 
   return (
     <div className="max-w-md md:max-w-3xl mx-2 rounded-xl justify-center shadow-lg overflow-hidden p-2 ">
