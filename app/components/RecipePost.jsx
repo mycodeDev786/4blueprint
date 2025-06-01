@@ -461,13 +461,17 @@ export default function RecipePost({
           }`}
           style={{ borderRadius: "0.5rem" }}
         />
+
         {/* Expanded Content Overlay */}
         {expanded && (
           <div className="absolute inset-0 p-4 flex flex-col">
             {/* Close Button */}
             <button
-              onClick={() => setExpanded(false)}
-              className="absolute top-2 right-2 rounded-full p-1 shadow-sm hover:bg-gray-100 transition-colors z-10 "
+              onClick={(e) => {
+                e.stopPropagation(); // prevent triggering handleRecipeClick
+                setExpanded(false);
+              }}
+              className="absolute top-2 right-2 rounded-full p-1 shadow-sm hover:bg-gray-100 transition-colors z-10"
             >
               <svg
                 className="w-8 h-8 ml-1"
@@ -487,10 +491,13 @@ export default function RecipePost({
             {/* Overlay Content */}
             <div className="bg-white/30 backdrop-blur-sm p-4 rounded-lg overflow-auto flex-1">
               <h4 className="font-semibold mb-2">Ingredients:</h4>
-              <p className="text-gray-700 font-medium whitespace-pre-line">
-                {ingredients}
-              </p>
-              <p className="mt-3 text-gray-600  italic text-sm">
+              <ul className="text-gray-700 font-medium list-disc list-inside">
+                {ingredients.split(",").map((item, index) => (
+                  <li key={index}>{item.trim()}</li> // trim() removes extra spaces
+                ))}
+              </ul>
+
+              <p className="mt-3 text-gray-600 italic text-sm">
                 If you’d like to know how to prepare this delicious recipe, just
                 purchase it from this artist. We really appreciate your support!
               </p>
@@ -498,6 +505,7 @@ export default function RecipePost({
           </div>
         )}
       </div>
+
       {/* Action Buttons */}
       <div className="flex items-center gap-3 mt-4 w-full overflow-x-auto sm:overflow-visible pb-1">
         {/* Share Button */}

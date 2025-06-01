@@ -7,11 +7,13 @@ import { useSelector } from "react-redux";
 import Prompt from "../components/Prompt";
 import Loading from "../components/Loading";
 import { useRouter } from "next/navigation";
+import { FaInfoCircle } from "react-icons/fa";
 
 export default function AddRecipe() {
   const [recipeType, setRecipeType] = useState("free");
   const [showPrompt, setShowPrompt] = useState(false);
   const [price, setPrice] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
   const [buyerRestriction, setBuyerRestriction] = useState("anyone");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -411,8 +413,16 @@ export default function AddRecipe() {
             <div className=" w-full  p-1 bg-white shadow-md rounded-lg mt-10">
               {/* Steps Section */}
               <div>
-                <label className="block font-medium text-gray-700 mb-2">
+                <label className=" font-medium text-gray-700 mb-2 flex items-center gap-2">
                   Steps to Prepare <span className="text-red-500">*</span>
+                  {/* Icon to show popup */}
+                  <button
+                    onClick={() => setShowPopup(true)}
+                    className="text-gray-500 hover:text-gray-700"
+                    aria-label="Info about units"
+                  >
+                    <FaInfoCircle size={18} />
+                  </button>
                 </label>
                 {stepInputs.map((value, index) => (
                   <div key={index} className="flex items-center gap-2 mb-2">
@@ -468,6 +478,32 @@ export default function AddRecipe() {
                 onChange={(e) => setAvoid(e.target.value)}
                 className="w-full p-2 border rounded-md"
               ></textarea>
+              {/* Popup */}
+              {showPopup && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                  <div className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full">
+                    <div className="flex justify-between items-center">
+                      <h2 className="text-lg font-medium text-gray-800">
+                        Information
+                      </h2>
+                      <button
+                        onClick={() => setShowPopup(false)}
+                        className="text-gray-500 hover:text-gray-700"
+                        aria-label="Close popup"
+                      >
+                        ✖
+                      </button>
+                    </div>
+                    <p className="mt-2 text-sm text-gray-600">
+                      It’s best to avoid vague phrases like "fry until golden."
+                      Instead, be a bit more specific, like saying "Fry for
+                      about 10 minutes until golden." This extra detail can help
+                      users connect with your recipes and have a great cooking
+                      experience!
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </>
         )}

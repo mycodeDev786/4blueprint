@@ -4,6 +4,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import API_ENDPOINTS from "../utils/api";
 import { apiRequest } from "../utils/apiHelper";
+import Loading from "../components/Loading";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+// Import React components from Swiper
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
 
 export default function RecipePage() {
   const searchParams = useSearchParams();
@@ -78,9 +86,12 @@ export default function RecipePage() {
   };
 
   if (loading)
-    return <div className="p-6 text-center text-gray-500">Loading...</div>;
-  if (error)
-    return <div className="p-6 text-red-600 text-center">Error: {error}</div>;
+    return (
+      <div className="p-6 text-center text-gray-500">
+        <Loading isLoading={loading} />
+      </div>
+    );
+
   if (!recipe) return <div className="p-6 text-center">No recipe found.</div>;
 
   return (
@@ -89,11 +100,27 @@ export default function RecipePage() {
 
       {/* Recipe Image */}
       <div className="w-full mt-5  overflow-hidden rounded-2xl shadow-md relative">
-        <img
-          src={`${API_ENDPOINTS.STORAGE_URL}${recipe.image}`}
-          alt={recipe.title}
-          className="w-full h-full object-cover"
-        />
+        {recipe.allImages && recipe.allImages.length > 0 ? (
+          <Swiper
+            modules={[Navigation, Pagination]}
+            navigation
+            pagination={{ clickable: true }}
+            loop={true}
+            className="w-full h-64 rounded-lg overflow-hidden"
+          >
+            {recipe.allImages.map((imgSrc, index) => (
+              <SwiperSlide key={index}>
+                <img
+                  src={`${API_ENDPOINTS.STORAGE_URL}${imgSrc}`}
+                  alt={`${recipe.title} image ${index + 1}`}
+                  className="w-full h-64 object-contain"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <p>No images available</p>
+        )}
 
         {/* Rating Display */}
         <div className="absolute bottom-2 left-2 bg-white bg-opacity-80 px-3 py-2 rounded-lg shadow flex items-center space-x-2 text-sm font-medium">
