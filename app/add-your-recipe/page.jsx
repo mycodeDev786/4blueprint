@@ -30,6 +30,7 @@ export default function AddRecipe() {
   const [additionalImages, setAdditionalImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [difficultyLevel, setDifficultyLevel] = useState("");
 
   const nextStep = () => {
     if (currentStep < 5) setCurrentStep(currentStep + 1);
@@ -185,9 +186,10 @@ export default function AddRecipe() {
     formData.append("recipe_type", recipeType);
     formData.append("price", recipeType === "hidden" ? price : 0);
     formData.append("buyer_restriction", buyerRestriction),
-      additionalImages.forEach((file, index) => {
-        formData.append(`additionalImages`, file);
-      });
+      formData.append("difficulty_level", difficultyLevel);
+    additionalImages.forEach((file, index) => {
+      formData.append(`additionalImages`, file);
+    });
 
     try {
       // Replace with actual token
@@ -343,44 +345,71 @@ export default function AddRecipe() {
         {/* Step 2 - Ingredients */}
         {currentStep === 1 && (
           <>
-            <div className=" w-full p-1 bg-white shadow-md rounded-lg mt-10">
+            <div className="w-full p-1 bg-white shadow-md rounded-lg mt-10">
               {/* Ingredients Section */}
               <div>
                 <label className="block font-medium text-gray-700 mb-2">
                   Ingredients <span className="text-red-500">*</span>
                 </label>
+
                 {ingredientInputs.map((value, index) => (
                   <div
                     key={index}
-                    className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2"
+                    className="flex flex-col sm:flex-row sm:items-center gap-2 mb-4"
                   >
-                    <p className="text-sm font-medium">{index + 1}</p>
-                    <input
-                      type="text"
-                      value={value}
-                      onChange={(e) =>
-                        handleIngredientChange(index, e.target.value)
-                      }
-                      placeholder={`Ingredient ${index + 1}`}
-                      className="flex-1   p-6 border rounded-md text-sm w-full"
-                      required
-                    />
-                    <input
-                      type="text"
-                      value={units[index] || ""}
-                      onChange={(e) => handleUnitChange(index, e.target.value)}
-                      placeholder={`Unit ${index + 1}`}
-                      className="p-2 border rounded-md text-sm min-w-[6rem] w-full sm:w-auto"
-                    />
-                    {ingredientInputs.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeIngredientField(index)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
-                      >
-                        ✖
-                      </button>
-                    )}
+                    {/* Row for index and ✖ on mobile only */}
+                    <div className="flex justify-between sm:hidden">
+                      <p className="text-sm font-medium">{index + 1}</p>
+                      {ingredientInputs.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeIngredientField(index)}
+                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                        >
+                          ✖
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Inputs */}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                      {/* Index on desktop */}
+                      <p className="hidden sm:block text-sm font-medium">
+                        {index + 1}
+                      </p>
+
+                      <input
+                        type="text"
+                        value={value}
+                        onChange={(e) =>
+                          handleIngredientChange(index, e.target.value)
+                        }
+                        placeholder={`Ingredient ${index + 1}`}
+                        className="flex-1 p-6 border rounded-md text-sm w-full"
+                        required
+                      />
+
+                      <input
+                        type="text"
+                        value={units[index] || ""}
+                        onChange={(e) =>
+                          handleUnitChange(index, e.target.value)
+                        }
+                        placeholder={`Unit ${index + 1}`}
+                        className="p-6 border rounded-md text-sm min-w-[6rem] w-full sm:w-auto"
+                      />
+
+                      {/* ✖ on desktop */}
+                      {ingredientInputs.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeIngredientField(index)}
+                          className="hidden sm:inline-block bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                        >
+                          ✖
+                        </button>
+                      )}
+                    </div>
                   </div>
                 ))}
 
@@ -398,7 +427,7 @@ export default function AddRecipe() {
                   All Ingredients (Preview)
                 </label>
                 <ul className="list-disc list-inside bg-gray-50 p-4 border rounded-md text-sm">
-                  {ingredientInputs.map((ingredient, index) => (
+                  {combinedIngredients.map((ingredient, index) => (
                     <li key={index}>{ingredient}</li>
                   ))}
                 </ul>
@@ -584,6 +613,7 @@ export default function AddRecipe() {
                 </label>
               </div>
             </div>
+
             {recipeType === "hidden" && (
               <div className="space-y-4 p-4 border rounded-md bg-gray-50">
                 <div>
@@ -619,6 +649,23 @@ export default function AddRecipe() {
                 </div>
               </div>
             )}
+
+            {/* ✅ New Select dropdown after recipe type */}
+            <div className="mt-4">
+              <label className="block ml-2  text-gray-700 font-medium">
+                Select Difficulties level
+              </label>
+              <select
+                value={difficultyLevel}
+                onChange={(e) => setDifficultyLevel(e.target.value)}
+                className="md:w-64 w-full p-2 border rounded-md mt-1"
+              >
+                <option value="">Select a Difficulty</option>
+                <option value="Beginner-friendly">Beginner-friendly</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
           </>
         )}
 

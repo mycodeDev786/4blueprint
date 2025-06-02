@@ -123,7 +123,7 @@ export default function RecipePage() {
         )}
 
         {/* Rating Display */}
-        <div className="absolute bottom-2 left-2 bg-white bg-opacity-80 px-3 py-2 rounded-lg shadow flex items-center space-x-2 text-sm font-medium">
+        <div className="absolute bottom-2 z-10 left-2 bg-white bg-opacity-80 px-3 py-2 rounded-lg shadow flex items-center space-x-2 text-sm font-medium">
           {recipe.rating > 0 ? (
             <>
               {/* Stars */}
