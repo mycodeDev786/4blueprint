@@ -31,6 +31,10 @@ export default function AddRecipe() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [difficultyLevel, setDifficultyLevel] = useState("");
+  const [preparationMethod, setPreparationMethod] = useState("");
+  const [convertedIngredients, setConvertedIngredients] = useState([]);
+  const [stepImages, setStepImages] = useState([]);
+  const [fullVideo, setFullVideo] = useState(null);
 
   const nextStep = () => {
     if (currentStep < 5) setCurrentStep(currentStep + 1);
@@ -67,6 +71,43 @@ export default function AddRecipe() {
     localStorage.setItem("recipeDraft", JSON.stringify(draft));
     alert("Draft saved successfully!");
   };
+
+  const handleStepImageUpload = (index, file) => {
+    const newImages = [...stepImages];
+    newImages[index] = {
+      file,
+      previewUrl: URL.createObjectURL(file),
+    };
+    setStepImages(newImages);
+  };
+
+  const convertIngredient = async (input) => {
+    try {
+      const res = await fetch(API_ENDPOINTS.RECIPE.CONVERT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ input }),
+      });
+
+      const data = await res.json();
+      console.log(data);
+      return data.result || "Conversion failed";
+    } catch (err) {
+      console.error("Conversion error:", err);
+      return "Error converting";
+    }
+  };
+
+  useEffect(() => {
+    const convertAll = async () => {
+      const conversions = await Promise.all(
+        ingredientInputs.map((input) => convertIngredient(input))
+      );
+      setConvertedIngredients(conversions);
+    };
+
+    convertAll();
+  }, [ingredientInputs]);
 
   useEffect(() => {
     const savedDraft = localStorage.getItem("recipeDraft");
@@ -167,32 +208,57 @@ export default function AddRecipe() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !description || !ingredients || !steps || !mainImage) {
+    if (
+      !title ||
+      !description ||
+      !ingredients ||
+      stepInputs.length === 0 ||
+      !mainImage
+    ) {
       alert("Please fill in all required fields.");
       return;
     }
+
     setLoading(true);
+
     const formData = new FormData();
-    formData.append("user_id", user_id); // Replace with actual user ID
-    formData.append("category_name", "1"); // Replace with actual category ID
-    formData.append("subcategory_name", "1"); // Replace with actual subcategory ID
+    formData.append("user_id", user_id);
+    formData.append("category_name", "1");
+    formData.append("subcategory_name", "1");
     formData.append("title", title);
     formData.append("description", description);
     formData.append("ingredients", ingredients);
     formData.append("combinedIngredients", combinedIngredients);
     formData.append("avoid_tips", avoid);
     formData.append("mainImage", mainImage);
-    formData.append("steps", steps);
     formData.append("recipe_type", recipeType);
     formData.append("price", recipeType === "hidden" ? price : 0);
-    formData.append("buyer_restriction", buyerRestriction),
-      formData.append("difficulty_level", difficultyLevel);
-    additionalImages.forEach((file, index) => {
-      formData.append(`additionalImages`, file);
+    formData.append("buyer_restriction", buyerRestriction);
+    formData.append("difficulty_level", difficultyLevel);
+
+    // Step-by-step with optional images
+    const formattedSteps = stepInputs.map((stepText, i) => ({
+      text: stepText,
+      imageIndex: stepImages[i] ? i : null,
+    }));
+    formData.append("steps", JSON.stringify(formattedSteps));
+
+    // Upload step images
+    stepImages.forEach((img) => {
+      formData.append("stepImages", img);
     });
 
+    // Upload additional images
+    additionalImages.forEach((img) => {
+      formData.append("additionalImages", img);
+    });
+
+    // Upload full video if available
+    if (fullVideo) {
+      formData.append("fullVideo", fullVideo);
+    }
+
     try {
-      // Replace with actual token
       const response = await apiRequest(
         API_ENDPOINTS.RECIPE.CREATE,
         "POST",
@@ -314,7 +380,7 @@ export default function AddRecipe() {
       <form onSubmit={handleSubmit} className=" block w-full  mx-0 space-y-4">
         {currentStep === 0 && (
           <>
-            <div className="w-full  shadow-md rounded-lg mt-10">
+            <div className="w-full shadow-md rounded-lg mt-10">
               <label className="block text-gray-700 font-medium">
                 What is the name of your creation?{" "}
                 <span className="text-red-500">*</span>
@@ -327,7 +393,8 @@ export default function AddRecipe() {
                 className="w-full p-2 border rounded-md"
               />
             </div>
-            <div>
+
+            <div className="mt-6">
               <label className="block text-gray-700 font-medium">
                 Please provide a brief introduction{" "}
                 <span className="text-red-500">*</span>
@@ -339,96 +406,142 @@ export default function AddRecipe() {
                 className="w-full h-44 p-5 border rounded-md"
               ></textarea>
             </div>
+
+            <div className="mt-6">
+              <label className="block text-gray-700 font-medium mb-2">
+                How will you add steps of Preparation of your creation?{" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <div className="space-y-2">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="preparationMethod"
+                    value="pictures"
+                    checked={preparationMethod === "pictures"}
+                    onChange={(e) => setPreparationMethod(e.target.value)}
+                  />
+                  <span>Step by step pictures</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="preparationMethod"
+                    value="video"
+                    checked={preparationMethod === "video"}
+                    onChange={(e) => setPreparationMethod(e.target.value)}
+                  />
+                  <span>Full video</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="preparationMethod"
+                    value="both"
+                    checked={preparationMethod === "both"}
+                    onChange={(e) => setPreparationMethod(e.target.value)}
+                  />
+                  <span>Both step by step pictures and full video</span>
+                </label>
+              </div>
+            </div>
           </>
         )}
 
         {/* Step 2 - Ingredients */}
         {currentStep === 1 && (
           <>
-            <div className="w-full p-1 bg-white shadow-md rounded-lg mt-10">
+            <div className="w-full p-4 bg-white shadow-md rounded-lg mt-10">
               {/* Ingredients Section */}
               <div>
-                <label className="block font-medium text-gray-700 mb-2">
+                <label className="block font-medium text-gray-700 mb-4 text-lg">
                   Ingredients <span className="text-red-500">*</span>
                 </label>
 
                 {ingredientInputs.map((value, index) => (
                   <div
                     key={index}
-                    className="flex flex-col sm:flex-row sm:items-center gap-2 mb-4"
+                    className="flex items-center gap-2 bg-gray-100 px-4 py-3 rounded-md mb-3"
                   >
-                    {/* Row for index and ✖ on mobile only */}
-                    <div className="flex justify-between sm:hidden">
-                      <p className="text-sm font-medium">{index + 1}</p>
-                      {ingredientInputs.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeIngredientField(index)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
-                        >
-                          ✖
-                        </button>
-                      )}
+                    {/* Reorder Icon (static visual) */}
+                    <div className="text-gray-400 cursor-default">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8 9h8M8 15h8"
+                        />
+                      </svg>
                     </div>
 
-                    {/* Inputs */}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                      {/* Index on desktop */}
-                      <p className="hidden sm:block text-sm font-medium">
-                        {index + 1}
-                      </p>
+                    {/* Index (hidden on mobile) */}
+                    <p className="hidden sm:block text-sm font-medium w-5 text-gray-600">
+                      {index + 1}
+                    </p>
 
-                      <input
-                        type="text"
-                        value={value}
-                        onChange={(e) =>
-                          handleIngredientChange(index, e.target.value)
-                        }
-                        placeholder={`Ingredient ${index + 1}`}
-                        className="flex-1 p-6 border rounded-md text-sm w-full"
-                        required
-                      />
+                    {/* Input */}
+                    <input
+                      type="text"
+                      value={value}
+                      onChange={(e) =>
+                        handleIngredientChange(index, e.target.value)
+                      }
+                      placeholder={`Ingredient ${index + 1}`}
+                      className="flex-grow p-2 bg-white border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
 
-                      <input
-                        type="text"
-                        value={units[index] || ""}
-                        onChange={(e) =>
-                          handleUnitChange(index, e.target.value)
-                        }
-                        placeholder={`Unit ${index + 1}`}
-                        className="p-6 border rounded-md text-sm min-w-[6rem] w-full sm:w-auto"
-                      />
-
-                      {/* ✖ on desktop */}
-                      {ingredientInputs.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeIngredientField(index)}
-                          className="hidden sm:inline-block bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
-                        >
-                          ✖
-                        </button>
-                      )}
-                    </div>
+                    {/* ✖ Remove Button */}
+                    {ingredientInputs.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeIngredientField(index)}
+                        className="text-red-500 hover:text-red-700 text-lg"
+                        title="Remove"
+                      >
+                        ✖
+                      </button>
+                    )}
                   </div>
                 ))}
 
+                {/* Add Ingredient Button */}
                 <button
                   type="button"
                   onClick={addIngredientField}
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm"
+                  className="mt-2 flex items-center text-blue-600 hover:text-blue-800 text-sm"
                 >
-                  + Add Ingredient
+                  <span className="text-lg mr-1">+</span> Add Ingredient
                 </button>
               </div>
 
-              <div>
-                <label className="block font-medium text-gray-700 mt-4 mb-2">
-                  All Ingredients (Preview)
+              {/* Original Preview */}
+              <div className="mt-6">
+                <label className="block font-medium text-gray-700 mb-2">
+                  Original Ingredients Preview
                 </label>
                 <ul className="list-disc list-inside bg-gray-50 p-4 border rounded-md text-sm">
-                  {combinedIngredients.map((ingredient, index) => (
+                  {ingredientInputs.map((ingredient, index) => (
                     <li key={index}>{ingredient}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Converted Preview */}
+              <div className="mt-4">
+                <label className="block font-medium text-gray-700 mb-2">
+                  Converted Ingredients Preview
+                </label>
+                <ul className="list-disc list-inside bg-gray-50 p-4 border rounded-md text-sm">
+                  {convertedIngredients.map((converted, index) => (
+                    <li key={index}>{converted}</li>
                   ))}
                 </ul>
               </div>
@@ -439,66 +552,186 @@ export default function AddRecipe() {
         {/* Step 3 - Instructions */}
         {currentStep === 2 && (
           <>
-            <div className=" w-full  p-1 bg-white shadow-md rounded-lg mt-10">
-              {/* Steps Section */}
-              <div>
-                <label className=" font-medium text-gray-700 mb-2 flex items-center gap-2">
-                  Steps to Prepare <span className="text-red-500">*</span>
-                  {/* Icon to show popup */}
-                  <button
-                    onClick={() => setShowPopup(true)}
-                    className="text-gray-500 hover:text-gray-700"
-                    aria-label="Info about units"
-                  >
-                    <FaInfoCircle size={18} />
-                  </button>
-                </label>
-                {stepInputs.map((value, index) => (
-                  <div key={index} className="flex items-center gap-2 mb-2">
-                    <textarea
-                      value={value}
-                      onChange={(e) => handleStepChange(index, e.target.value)}
-                      placeholder={`Step ${index + 1}`}
-                      className="flex-1 p-6 border rounded-md text-sm resize-none"
-                      rows={3}
-                      required
-                    />
-                    {stepInputs.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeStepField(index)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
-                      >
-                        ✖
-                      </button>
-                    )}
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={addStepField}
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm"
-                >
-                  + Add Step
-                </button>
-              </div>
+            {/* Conditionally Render Step-by-Step UI */}
 
-              {/* Live-updated steps textarea */}
-              <div>
-                <label className="block font-medium text-gray-700 mt-4 mb-2">
-                  All Steps (preview)
-                </label>
-                <textarea
-                  required
-                  value={steps}
-                  readOnly
-                  onChange={(e) => setSteps(e.target.value)}
-                  className="w-full p-2 border py-4 h-40 rounded-md text-sm"
-                  placeholder="Saved steps will appear here..."
-                ></textarea>
+            {preparationMethod === "video" && (
+              <div className="w-full p-1 bg-white shadow-md rounded-lg mt-10">
+                <div>
+                  <label className="font-medium text-gray-700 mb-2 flex items-center gap-2">
+                    Steps to Prepare <span className="text-red-500">*</span>
+                    <button
+                      onClick={() => setShowPopup(true)}
+                      className="text-gray-500 hover:text-gray-700"
+                      aria-label="Info about units"
+                    >
+                      <FaInfoCircle size={18} />
+                    </button>
+                  </label>
+
+                  {stepInputs.map((value, index) => (
+                    <div key={index} className="mb-4">
+                      <div className="flex items-start gap-2 mb-2">
+                        <textarea
+                          value={value}
+                          onChange={(e) =>
+                            handleStepChange(index, e.target.value)
+                          }
+                          placeholder={`Step ${index + 1}`}
+                          className="flex-1 p-4 border rounded-md text-sm resize-none"
+                          rows={3}
+                          required
+                        />
+                        {stepInputs.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeStepField(index)}
+                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                          >
+                            ✖
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={addStepField}
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm"
+                  >
+                    + Add Step
+                  </button>
+                </div>
+
+                <div>
+                  <label className="block font-medium text-gray-700 mt-4 mb-2">
+                    All Steps (preview)
+                  </label>
+                  <textarea
+                    required
+                    value={steps}
+                    readOnly
+                    className="w-full p-2 border py-4 h-40 rounded-md text-sm"
+                    placeholder="Saved steps will appear here..."
+                  ></textarea>
+                </div>
               </div>
-            </div>
-            <div>
+            )}
+
+            {(preparationMethod === "pictures" ||
+              preparationMethod === "both") && (
+              <div className="w-full p-1 bg-white shadow-md rounded-lg mt-10">
+                <div>
+                  <label className="font-medium text-gray-700 mb-2 flex items-center gap-2">
+                    Steps to Prepare <span className="text-red-500">*</span>
+                    <button
+                      onClick={() => setShowPopup(true)}
+                      className="text-gray-500 hover:text-gray-700"
+                      aria-label="Info about units"
+                    >
+                      <FaInfoCircle size={18} />
+                    </button>
+                  </label>
+
+                  {stepInputs.map((value, index) => (
+                    <div key={index} className="mb-4">
+                      <div className="flex items-start gap-2 mb-2">
+                        <textarea
+                          value={value}
+                          onChange={(e) =>
+                            handleStepChange(index, e.target.value)
+                          }
+                          placeholder={`Step ${index + 1}`}
+                          className="flex-1 p-4 border rounded-md text-sm resize-none"
+                          rows={3}
+                          required
+                        />
+                        {stepInputs.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeStepField(index)}
+                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                          >
+                            ✖
+                          </button>
+                        )}
+                      </div>
+
+                      {/* File Upload */}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) =>
+                          handleStepImageUpload(index, e.target.files[0])
+                        }
+                        className="block text-sm mb-2"
+                      />
+                    </div>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={addStepField}
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm"
+                  >
+                    + Add Step
+                  </button>
+                </div>
+
+                <div className="mt-6">
+                  <label className="block font-medium text-gray-700 mb-2">
+                    All Steps (Preview)
+                  </label>
+
+                  <div className="w-full p-4 border rounded-md bg-gray-50 space-y-4 max-h-96 overflow-y-auto">
+                    {stepInputs.map((stepText, index) => (
+                      <div
+                        key={index}
+                        className="flex items-start gap-4 bg-white p-3 rounded shadow-sm"
+                      >
+                        {/* Step Image Preview */}
+                        {stepImages[index]?.previewUrl && (
+                          <img
+                            src={stepImages[index].previewUrl}
+                            alt={`Step ${index + 1}`}
+                            className="w-24 h-24 object-cover rounded border"
+                          />
+                        )}
+
+                        {/* Step Text */}
+                        <div>
+                          <p className="text-sm font-semibold text-gray-700 mb-1">
+                            Step {index + 1}
+                          </p>
+                          <p className="text-sm text-gray-600 whitespace-pre-line">
+                            {stepText}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Full Video Upload */}
+            {(preparationMethod === "video" ||
+              preparationMethod === "both") && (
+              <div className="mt-6">
+                <label className="block text-gray-700 font-medium mb-2">
+                  Upload Full Video <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="file"
+                  accept="video/*"
+                  onChange={(e) => handleVideoUpload(e.target.files[0])}
+                  className="block w-full text-sm"
+                />
+              </div>
+            )}
+
+            {/* Optional Section */}
+            <div className="mt-6">
               <label className="block text-gray-700 font-medium">
                 Things to avoid (optional)
               </label>
@@ -507,33 +740,32 @@ export default function AddRecipe() {
                 onChange={(e) => setAvoid(e.target.value)}
                 className="w-full p-2 border rounded-md"
               ></textarea>
-              {/* Popup */}
-              {showPopup && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                  <div className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full">
-                    <div className="flex justify-between items-center">
-                      <h2 className="text-lg font-medium text-gray-800">
-                        Information
-                      </h2>
-                      <button
-                        onClick={() => setShowPopup(false)}
-                        className="text-gray-500 hover:text-gray-700"
-                        aria-label="Close popup"
-                      >
-                        ✖
-                      </button>
-                    </div>
-                    <p className="mt-2 text-sm text-gray-600">
-                      It’s best to avoid vague phrases like "fry until golden."
-                      Instead, be a bit more specific, like saying "Fry for
-                      about 10 minutes until golden." This extra detail can help
-                      users connect with your recipes and have a great cooking
-                      experience!
-                    </p>
-                  </div>
-                </div>
-              )}
             </div>
+
+            {/* Info Popup */}
+            {showPopup && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full">
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-lg font-medium text-gray-800">
+                      Information
+                    </h2>
+                    <button
+                      onClick={() => setShowPopup(false)}
+                      className="text-gray-500 hover:text-gray-700"
+                      aria-label="Close popup"
+                    >
+                      ✖
+                    </button>
+                  </div>
+                  <p className="mt-2 text-sm text-gray-600">
+                    Avoid vague phrases like "fry until golden." Instead, use
+                    details such as "Fry for about 10 minutes until golden
+                    brown." This helps users follow your recipe accurately.
+                  </p>
+                </div>
+              </div>
+            )}
           </>
         )}
 

@@ -85,14 +85,19 @@ export default function IdFacialVerification() {
         throw new Error("Failed to create baker profile");
       }
 
-      console.log("Done");
-      // setSuccess("Baker created successfully!");
-      setBakerCreated(true);
+      const data = await response.json(); // Parse JSON
+
+      if (data.stripe_onboarding_url) {
+        // Redirect the baker to Stripe onboarding
+        window.location.href = data.stripe_onboarding_url;
+      } else {
+        console.log("Baker created without Stripe onboarding link.");
+        setBakerCreated(true);
+      }
     } catch (err) {
-      console.error("Request Failed:", err); // Log error details
+      console.error("Request Failed:", err);
       setError(err.message);
       setBakerCreated(false);
-    } finally {
     }
   };
 
