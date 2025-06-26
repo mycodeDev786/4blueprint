@@ -451,7 +451,7 @@ export default function AddRecipe() {
         {/* Step 2 - Ingredients */}
         {currentStep === 1 && (
           <>
-            <div className="w-full p-4 bg-white shadow-md rounded-lg mt-10">
+            <div className="w-full py-4 px-1  shadow-md rounded-lg mt-10">
               {/* Ingredients Section */}
               <div>
                 <label className="block font-medium text-gray-700 mb-4 text-lg">
@@ -461,7 +461,7 @@ export default function AddRecipe() {
                 {ingredientInputs.map((value, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-2 bg-gray-100 px-4 py-3 rounded-md mb-3"
+                    className="flex items-center w-full gap-2 border-1 border-cyan-900 bg-gray-100 px-4 py-3 rounded-md "
                   >
                     {/* Reorder Icon (static visual) */}
                     <div className="text-gray-400 cursor-default">
@@ -486,15 +486,16 @@ export default function AddRecipe() {
                       {index + 1}
                     </p>
 
-                    {/* Input */}
-                    <input
-                      type="text"
+                    <textarea
                       value={value}
-                      onChange={(e) =>
-                        handleIngredientChange(index, e.target.value)
-                      }
+                      onChange={(e) => {
+                        handleIngredientChange(index, e.target.value);
+                        e.target.style.height = "auto";
+                        e.target.style.height = `${e.target.scrollHeight}px`;
+                      }}
                       placeholder={`Ingredient ${index + 1}`}
-                      className="flex-grow p-2 bg-white border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 bg-white border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={1}
                       required
                     />
 
