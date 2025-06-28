@@ -461,7 +461,7 @@ export default function AddRecipe() {
                 {ingredientInputs.map((value, index) => (
                   <div
                     key={index}
-                    className="flex items-center w-full gap-2 border-1 border-cyan-900 bg-gray-100 px-4 py-3 rounded-md "
+                    className="flex items-center w-full gap-2 px-4 py-3 rounded-md "
                   >
                     {/* Reorder Icon (static visual) */}
                     <div className="text-gray-400 cursor-default">
@@ -494,7 +494,7 @@ export default function AddRecipe() {
                         e.target.style.height = `${e.target.scrollHeight}px`;
                       }}
                       placeholder={`Ingredient ${index + 1}`}
-                      className="w-full p-2 bg-white border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2  rounded-md text-sm resize-none "
                       rows={1}
                       required
                     />
