@@ -220,6 +220,21 @@ export default function AddRecipe() {
     }
 
     setLoading(true);
+    console.log({
+      user_id,
+      title,
+      description,
+      ingredients,
+      convertedIngredients,
+      avoid,
+      stepInputs,
+      stepImages,
+      mainImage,
+      recipeType,
+      price,
+      buyerRestriction,
+      difficultyLevel,
+    });
 
     const formData = new FormData();
     formData.append("user_id", user_id);
@@ -228,7 +243,7 @@ export default function AddRecipe() {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("ingredients", ingredients);
-    formData.append("combinedIngredients", combinedIngredients);
+    formData.append("combinedIngredients", convertedIngredients);
     formData.append("avoid_tips", avoid);
     formData.append("mainImage", mainImage);
     formData.append("recipe_type", recipeType);
@@ -482,9 +497,6 @@ export default function AddRecipe() {
                     </div>
 
                     {/* Index (hidden on mobile) */}
-                    <p className="hidden sm:block text-sm font-medium w-5 text-gray-600">
-                      {index + 1}
-                    </p>
 
                     <textarea
                       value={value}
@@ -494,7 +506,7 @@ export default function AddRecipe() {
                         e.target.style.height = `${e.target.scrollHeight}px`;
                       }}
                       placeholder={`Ingredient ${index + 1}`}
-                      className="w-full p-2  rounded-md text-sm resize-none "
+                      className="w-full p-2 rounded-md text-sm resize-none outline-none focus:ring-0 focus:border-transparent"
                       rows={1}
                       required
                     />
@@ -570,28 +582,63 @@ export default function AddRecipe() {
                   </label>
 
                   {stepInputs.map((value, index) => (
-                    <div key={index} className="mb-4">
-                      <div className="flex items-start gap-2 mb-2">
+                    <div key={index} className="w-full px-4 py-3 rounded-md">
+                      {/* Flex row for step text input + remove button */}
+                      <div className="flex items-center gap-2 w-full">
+                        {/* Static reorder icon */}
+                        <div className="text-gray-400 cursor-default">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M8 9h8M8 15h8"
+                            />
+                          </svg>
+                        </div>
+
+                        {/* Step text input */}
                         <textarea
                           value={value}
-                          onChange={(e) =>
-                            handleStepChange(index, e.target.value)
-                          }
+                          onChange={(e) => {
+                            handleStepChange(index, e.target.value);
+                            e.target.style.height = "auto";
+                            e.target.style.height = `${e.target.scrollHeight}px`;
+                          }}
                           placeholder={`Step ${index + 1}`}
-                          className="flex-1 p-4 border rounded-md text-sm resize-none"
-                          rows={3}
+                          className="w-full p-2 rounded-md text-sm resize-none outline-none focus:ring-0 focus:border-transparent"
+                          rows={1}
                           required
                         />
+
+                        {/* Remove button */}
                         {stepInputs.length > 1 && (
                           <button
                             type="button"
                             onClick={() => removeStepField(index)}
-                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                            className="text-red-500 hover:text-red-700 text-lg"
+                            title="Remove"
                           >
                             ✖
                           </button>
                         )}
                       </div>
+
+                      {/* File upload (below the flex row) */}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) =>
+                          handleStepImageUpload(index, e.target.files[0])
+                        }
+                        className="mt-2 text-sm"
+                      />
                     </div>
                   ))}
 
@@ -635,37 +682,62 @@ export default function AddRecipe() {
                   </label>
 
                   {stepInputs.map((value, index) => (
-                    <div key={index} className="mb-4">
-                      <div className="flex items-start gap-2 mb-2">
+                    <div key={index} className="w-full px-4 py-3 rounded-md">
+                      {/* Flex row for step text input + remove button */}
+                      <div className="flex items-center gap-2 w-full">
+                        {/* Static reorder icon */}
+                        <div className="text-gray-400 cursor-default">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M8 9h8M8 15h8"
+                            />
+                          </svg>
+                        </div>
+
+                        {/* Step text input */}
                         <textarea
                           value={value}
-                          onChange={(e) =>
-                            handleStepChange(index, e.target.value)
-                          }
+                          onChange={(e) => {
+                            handleStepChange(index, e.target.value);
+                            e.target.style.height = "auto";
+                            e.target.style.height = `${e.target.scrollHeight}px`;
+                          }}
                           placeholder={`Step ${index + 1}`}
-                          className="flex-1 p-4 border rounded-md text-sm resize-none"
-                          rows={3}
+                          className="w-full p-2 rounded-md text-sm resize-none outline-none focus:ring-0 focus:border-transparent"
+                          rows={1}
                           required
                         />
+
+                        {/* Remove button */}
                         {stepInputs.length > 1 && (
                           <button
                             type="button"
                             onClick={() => removeStepField(index)}
-                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                            className="text-red-500 hover:text-red-700 text-lg"
+                            title="Remove"
                           >
                             ✖
                           </button>
                         )}
                       </div>
 
-                      {/* File Upload */}
+                      {/* File upload (below the flex row) */}
                       <input
                         type="file"
                         accept="image/*"
                         onChange={(e) =>
                           handleStepImageUpload(index, e.target.files[0])
                         }
-                        className="block text-sm mb-2"
+                        className="mt-2 text-sm"
                       />
                     </div>
                   ))}
