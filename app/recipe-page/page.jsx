@@ -183,13 +183,13 @@ export default function RecipePage() {
       <div className="bg-white shadow-md p-6 rounded-xl">
         <h2 className="text-xl font-semibold mb-4">Watch Tutorial</h2>
         <div className="aspect-w-16 aspect-h-9">
-          <iframe
-            className="w-full h-72 rounded-lg"
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-            title="Recipe Video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+          <video controls className="w-full h-72 rounded-lg">
+            <source
+              src={`${API_ENDPOINTS.STORAGE_URL}${recipe.fullVideo}`}
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
         </div>
       </div>
       {/* Reviews Section */}

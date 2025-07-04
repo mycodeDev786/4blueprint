@@ -35,6 +35,7 @@ export default function AddRecipe() {
   const [convertedIngredients, setConvertedIngredients] = useState([]);
   const [stepImages, setStepImages] = useState([]);
   const [fullVideo, setFullVideo] = useState(null);
+  const [videoPreviewUrl, setVideoPreviewUrl] = useState(null);
 
   const nextStep = () => {
     if (currentStep < 5) setCurrentStep(currentStep + 1);
@@ -96,6 +97,11 @@ export default function AddRecipe() {
       console.error("Conversion error:", err);
       return "Error converting";
     }
+  };
+
+  const handleVideoUpload = (file) => {
+    setFullVideo(file);
+    setVideoPreviewUrl(URL.createObjectURL(file));
   };
 
   useEffect(() => {
@@ -995,6 +1001,14 @@ export default function AddRecipe() {
                   <li key={i}>{item}</li>
                 ))}
               </ul>
+              <p>
+                <strong>Ingredients (Converted):</strong>
+              </p>
+              <ul className="list-disc list-inside">
+                {convertedIngredients.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
             </div>
 
             <div>
@@ -1002,9 +1016,39 @@ export default function AddRecipe() {
                 <strong>Steps:</strong>
               </p>
               <ol className="list-decimal list-inside whitespace-pre-line">
-                {stepInputs.map((s, i) => (
-                  <li key={i}>{s}</li>
+                {stepInputs.map((stepText, index) => (
+                  <div
+                    key={index}
+                    className="flex items-start gap-4 bg-white p-3 rounded shadow-sm"
+                  >
+                    {/* Step Image Preview */}
+                    {stepImages[index]?.previewUrl && (
+                      <img
+                        src={stepImages[index].previewUrl}
+                        alt={`Step ${index + 1}`}
+                        className="w-24 h-24 object-cover rounded border"
+                      />
+                    )}
+
+                    {/* Step Text */}
+                    <div>
+                      <p className="text-sm font-semibold text-gray-700 mb-1">
+                        Step {index + 1}
+                      </p>
+                      <p className="text-sm text-gray-600 whitespace-pre-line">
+                        {stepText}
+                      </p>
+                    </div>
+                  </div>
                 ))}
+                <p className="font-bold my-2"> Uploaded Video</p>
+                {videoPreviewUrl && (
+                  <video
+                    controls
+                    src={videoPreviewUrl}
+                    className="w-40 h-40 object-cover rounded border"
+                  />
+                )}
               </ol>
             </div>
 
